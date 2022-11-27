@@ -13,7 +13,7 @@
 </tr>
 
 <tr align="center">
-<td height="50px"><img alt="Turborepo" width="32px" src=""></td>
+<td height="50px"><img alt="Turborepo" width="32px" src="https://raw.githubusercontent.com/itispx/assets/c052cefbdd66dd1d2bac93ce601dd06e20c91764/svgs/turborepo.svg"></td>
 <td height="50px"><img alt="Typescript" width="32px" src="https://raw.githubusercontent.com/itispx/assets/dc816afd65e760d81800b337595dd7498f351119/svgs/typescript.svg"></td>
 <td height="50px"><img alt="NextJS" width="32px" src="https://raw.githubusercontent.com/itispx/assets/128f0eab23fb9497474f51fd3cac40664e8368db/svgs/nextjs.svg"></td>
 <td height="50px"><img alt="ReactJS" width="32px" src="https://raw.githubusercontent.com/itispx/assets/128f0eab23fb9497474f51fd3cac40664e8368db/svgs/react.svg"></td>
