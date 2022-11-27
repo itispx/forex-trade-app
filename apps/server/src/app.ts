@@ -13,6 +13,12 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Middleware
+import corsSetup from "./middleware/cors-setup";
+
+// Cors config
+app.use(corsSetup);
+
 app.use("/v1/ping", (req, res) => res.status(200).send("pong"));
 
 export default app;
