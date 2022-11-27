@@ -27,7 +27,7 @@
 <td>Express</td>
 <td>Webpack</td>
 <td>MongoDB</td>
-<td>Redux</td>
+<td>ESLint</td>
 </tr>
 
 <tr align="center">
@@ -35,7 +35,7 @@
 <td height="50px"><img alt="Express" width="32px" src="https://raw.githubusercontent.com/itispx/assets/128f0eab23fb9497474f51fd3cac40664e8368db/svgs/express.svg"></td>
 <td height="50px"><img alt="Webpack" width="32px" src="https://raw.githubusercontent.com/itispx/assets/128f0eab23fb9497474f51fd3cac40664e8368db/svgs/webpack.svg"></td>
 <td height="50px"><img alt="MongoDB" width="32px" src="https://raw.githubusercontent.com/itispx/assets/128f0eab23fb9497474f51fd3cac40664e8368db/svgs/mongodb.svg"></td>
-<td height="50px"><img alt="Redux" width="32px" src="https://raw.githubusercontent.com/itispx/assets/128f0eab23fb9497474f51fd3cac40664e8368db/svgs/redux.svg"></td>
+<td height="50px"><img alt="ESLint" width="32px" src="https://raw.githubusercontent.com/itispx/assets/c052cefbdd66dd1d2bac93ce601dd06e20c91764/svgs/eslint.svg"></td>
 
 </tr>
 
