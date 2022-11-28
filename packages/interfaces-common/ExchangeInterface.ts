@@ -1,12 +1,16 @@
+import { ObjectId } from "mongoose";
+
+import TCurrencies from "./CurrenciesTypes";
+
 interface IExchange {
-  _id: string;
-  userID: string;
+  _id: ObjectId;
+  userID: ObjectId;
   in: {
-    currency: "USD" | "GBP";
+    currency: TCurrencies;
     amount: number;
   };
   out: {
-    currency: "USD" | "GBP";
+    currency: TCurrencies;
     amount: number;
   };
   createdAt: string;
