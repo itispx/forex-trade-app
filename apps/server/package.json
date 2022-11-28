@@ -13,7 +13,9 @@
   "author": "Px",
   "license": "MIT",
   "dependencies": {
+    "@types/mongoose": "^5.11.97",
     "express": "^4.18.2",
+    "mongoose": "^6.7.3",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
@@ -23,6 +25,9 @@
     "clean-webpack-plugin": "^4.0.0",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.0.1",
+    "eslint": "8.28.0",
+    "eslint-config-custom": "*",
+    "interfaces-common": "*",
     "nodemon-webpack-plugin": "^4.8.1",
     "ts-loader": "^9.4.1",
     "tsconfig": "*",
@@ -30,8 +35,6 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0",
     "webpack-merge": "^5.8.0",
-    "webpack-node-externals": "^3.0.0",
-    "eslint": "8.28.0",
-    "eslint-config-custom": "*"
+    "webpack-node-externals": "^3.0.0"
   }
 }

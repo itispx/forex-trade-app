@@ -20,7 +20,7 @@ module.exports = {
     },
     "import/resolver": {
       node: {
-        extensions: [".js", ".ts"],
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
         moduleDirectory: ["node_modules", "src/"],
       },
       typescript: {
