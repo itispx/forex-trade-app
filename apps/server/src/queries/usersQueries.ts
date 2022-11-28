@@ -11,6 +11,7 @@ export const signUpQuery = async (
   hash: string,
 ): Promise<IQuery & { data: Document<unknown, unknown, IUser> }> => {
   try {
+    // TODO Remove password before returning to the user
     const data = await User.create({
       _id: new Types.ObjectId(),
       username: username,

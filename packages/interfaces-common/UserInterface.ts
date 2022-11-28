@@ -3,7 +3,7 @@ import { ObjectId } from "mongoose";
 interface IUser {
   _id: ObjectId;
   username: string;
-  password: string;
+  password: string | undefined;
   wallet: {
     USD: number;
     GBP: number;
