@@ -1,9 +1,11 @@
-import IUser from "./UserInterface";
-import IExchange from "./ExchangeInterface";
-import IAPIError from "./APIErrorInterface";
-import TCurrencies from "./CurrenciesTypes";
+import UserInterface from "./UserInterface";
+import ExchangeInterface from "./ExchangeInterface";
+import QueryInterface from "./QueryInterface";
+import APIErrorInterface from "./APIErrorInterface";
+import CurrenciesTypes from "./CurrenciesTypes";
 
-export { IUser };
-export { IExchange };
-export { IAPIError };
-export { TCurrencies };
+export type IUser = UserInterface;
+export type IExchange = ExchangeInterface;
+export type IQuery = QueryInterface;
+export type IAPIError = APIErrorInterface;
+export type TCurrencies = CurrenciesTypes;
