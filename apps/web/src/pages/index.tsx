@@ -1,5 +1,7 @@
 import Home from "./Home";
 
-export default () => {
+const LandingPage = () => {
   return <Home />;
 };
+
+export default LandingPage;
