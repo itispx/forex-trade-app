@@ -23,3 +23,21 @@ export const signUpQuery = async (
     throw catchErrorHandler(error as Error);
   }
 };
+
+export const getUserByUsernameQuery = async (
+  username: string,
+): Promise<
+  IQuery & { data: Document<unknown, unknown, Omit<IUser, "password">> | undefined }
+> => {
+  try {
+    const data = await User.find({ username }).select("-password");
+
+    if (data.length <= 0) {
+      return { status: { code: 404, ok: false }, data: undefined };
+    }
+
+    return { status: { code: 200, ok: true }, data: data[0] };
+  } catch (error) {
+    throw catchErrorHandler(error as Error);
+  }
+};

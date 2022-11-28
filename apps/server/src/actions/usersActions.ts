@@ -2,17 +2,24 @@ import { Document } from "mongoose";
 
 import bcrypt from "bcryptjs";
 
-import { signUpQuery } from "../queries/usersQueries";
+import { signUpQuery, getUserByUsernameQuery } from "../queries/usersQueries";
 
 import { IUser, IQuery } from "interfaces-common";
+import APIError from "../util/errors/APIError";
 
 export const signUpAction = async (
   username: string,
   password: string,
 ): Promise<IQuery & { success: { doc: Document<unknown, unknown, IUser> } }> => {
-  const hashed = await bcrypt.hash(password, 10);
+  const { status } = await getUserByUsernameQuery(username);
 
-  const { status, data } = await signUpQuery(username, hashed);
+  if (status.code === 404) {
+    const hashed = await bcrypt.hash(password, 10);
 
-  return { status, success: { doc: data } };
+    const { status, data } = await signUpQuery(username, hashed);
+
+    return { status, success: { doc: data } };
+  }
+
+  throw APIError.conflict();
 };
