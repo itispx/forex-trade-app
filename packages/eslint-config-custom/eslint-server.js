@@ -37,6 +37,10 @@ module.exports = {
       files: ["**/__tests__/**/*.[jt]s", "**/?(*.)+(spec|test).[jt]s"],
       extends: ["plugin:jest/recommended"],
       rules: {
+        "jest/expect-expect": [
+          "error",
+          { assertFunctionNames: ["expect", "request.**.expect"] },
+        ],
         "import/no-extraneous-dependencies": [
           "off",
           { devDependencies: ["**/?(*.)+(spec|test).[jt]s"] },

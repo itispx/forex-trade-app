@@ -2,7 +2,7 @@ import express, { Express } from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 
-dotenv.config();
+dotenv.config({ path: `${__dirname}/../.env.${process.env.NODE_ENV}` });
 
 const app: Express = express();
 
