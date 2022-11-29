@@ -2,7 +2,7 @@ import { ErrorRequestHandler } from "express";
 
 import APIError from "../util/errors/APIError";
 
-const APIErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
+const APIErrorHandler: ErrorRequestHandler = (error, req, res) => {
   if (error instanceof APIError) {
     return res.status(error.status.code).json(error);
   }

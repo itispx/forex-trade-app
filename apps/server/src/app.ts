@@ -15,13 +15,10 @@ app.use(express.json());
 
 // Middleware
 import corsSetup from "./middleware/cors-setup";
-import connectDB from "./middleware/connect-db";
 import APIErrorHandler from "./middleware/api-error-handler";
 
 // Cors config
 app.use(corsSetup);
-
-app.use(connectDB);
 
 app.use("/v1/ping", (req, res) => res.status(200).send("pong"));
 
