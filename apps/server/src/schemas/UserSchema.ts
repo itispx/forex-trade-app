@@ -5,7 +5,7 @@ import { IUser } from "interfaces-common";
 const UserSchema = new Schema<IUser>(
   {
     _id: { type: Schema.Types.ObjectId, required: true },
-    username: { type: String, required: true },
+    username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     wallet: {
       USD: { type: Number, default: 1000 },
