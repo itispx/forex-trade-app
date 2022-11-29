@@ -30,6 +30,8 @@ describe("users", () => {
       expect(response.body.status.code).toBe(201);
       expect(response.body.status.ok).toBe(true);
       expect(response.body.success.doc.username).toBe(userPayload.username);
+      expect(response.body.success.doc.wallet.USD).toBe(1000);
+      expect(response.body.success.doc.wallet.GBP).toBe(0);
     });
 
     it("should failed to sign up the same user twice", async () => {
@@ -37,6 +39,28 @@ describe("users", () => {
 
       expect(response.statusCode).toBe(409);
       expect(response.body.status.code).toBe(409);
+      expect(response.body.status.ok).toBe(false);
+    });
+  });
+
+  describe("sign in tests", () => {
+    it("should sign in the user", async () => {
+      const response = await request(app).post("/v1/users/signin").send(userPayload);
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body.status.code).toBe(200);
+      expect(response.body.status.ok).toBe(true);
+      expect(response.body.success.doc.username).toBe(userPayload.username);
+      expect(typeof response.body.success.token).toBe("string");
+    });
+
+    it("should fail to sign in user with wrong password", async () => {
+      const response = await request(app)
+        .post("/v1/users/signin")
+        .send({ username: userPayload.username, password: "wrong password" });
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body.status.code).toBe(401);
       expect(response.body.status.ok).toBe(false);
     });
   });

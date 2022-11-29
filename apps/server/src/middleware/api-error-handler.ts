@@ -2,7 +2,9 @@ import { ErrorRequestHandler } from "express";
 
 import APIError from "../util/errors/APIError";
 
-const APIErrorHandler: ErrorRequestHandler = (error, req, res) => {
+// "_next" needs to be there for express to know this is a error handling middleware
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const APIErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
   if (error instanceof APIError) {
     return res.status(error.status.code).json(error);
   }
