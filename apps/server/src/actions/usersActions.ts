@@ -30,20 +30,13 @@ export const signInAction = async (
 ): Promise<IQuery & { success: { doc: IUserDocument; token: string } }> => {
   const { data } = await getUserByUsernameQuery(username);
 
-  console.log(1);
-
   if (!data) {
     throw APIError.unauthorizedRequest();
   }
 
-  console.log(2);
-
   const correctPassword = await bcrypt.compare(password, data.password);
 
-  console.log(3, correctPassword);
-
   if (correctPassword) {
-    console.log(4);
     const token = jwt.sign(
       { userID: data._id, username: data.username },
       process.env.JWT_KEY as string,
@@ -52,12 +45,8 @@ export const signInAction = async (
       },
     );
 
-    console.log(5);
-
     return { status: { code: 200, ok: true }, success: { doc: data, token } };
   }
-
-  console.log(6);
 
   throw APIError.unauthorizedRequest();
 };
