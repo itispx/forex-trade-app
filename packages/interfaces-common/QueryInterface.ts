@@ -1,5 +1,5 @@
-interface IQuery {
+interface QueryInterface {
   status: { code: number; ok: boolean };
 }
 
-export default IQuery;
+export default QueryInterface;

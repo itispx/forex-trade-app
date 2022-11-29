@@ -1,3 +1,3 @@
-type TCurrencies = "USD" | "GBP";
+type CurrenciesTypes = "USD" | "GBP";
 
-export default TCurrencies;
+export default CurrenciesTypes;

@@ -1,8 +1,8 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, Document } from "mongoose";
 
 import TCurrencies from "./CurrenciesTypes";
 
-interface IExchange {
+interface ExchangeInterface {
   _id: ObjectId;
   userID: ObjectId;
   in: {
@@ -16,4 +16,13 @@ interface IExchange {
   createdAt: string;
 }
 
-export default IExchange;
+export default ExchangeInterface;
+
+export interface ExchangeDocumentInterface
+  extends ExchangeInterface,
+    Document<unknown, unknown, ExchangeInterface>,
+    Required<{
+      _id: ObjectId;
+    }> {
+  _id: ObjectId;
+}

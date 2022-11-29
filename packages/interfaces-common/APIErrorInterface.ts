@@ -1,6 +1,6 @@
-interface IAPIError {
+interface APIErrorInterface {
   status: { code: number; ok: boolean };
   error: { message: string };
 }
 
-export default IAPIError;
+export default APIErrorInterface;

@@ -1,9 +1,9 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, Document } from "mongoose";
 
-interface IUser {
+interface UserInterface {
   _id: ObjectId;
   username: string;
-  password: string | undefined;
+  password: string;
   wallet: {
     USD: number;
     GBP: number;
@@ -11,4 +11,13 @@ interface IUser {
   createdAt: string;
 }
 
-export default IUser;
+export default UserInterface;
+
+export interface UserDocumentInterface
+  extends UserInterface,
+    Document<unknown, unknown, UserInterface>,
+    Required<{
+      _id: ObjectId;
+    }> {
+  _id: ObjectId;
+}
