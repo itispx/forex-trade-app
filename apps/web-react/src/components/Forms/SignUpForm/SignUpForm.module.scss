@@ -1,0 +1,19 @@
+@import "../../../styles/colors";
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.submit {
+  align-self: flex-end;
+  padding: 10px 25px;
+  width: fit-content;
+  border: solid;
+  border-width: 3px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 300;
+  color: #fff;
+  cursor: pointer;
+}

@@ -6,7 +6,7 @@ const UserSchema = new Schema<IUser>(
   {
     _id: { type: Schema.Types.ObjectId, required: true },
     username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true, minlength: 6 },
     wallet: {
       USD: { type: Number, default: 1000 },
       GBP: { type: Number, default: 0 },

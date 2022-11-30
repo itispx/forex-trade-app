@@ -12,11 +12,17 @@ const SignUpButton: React.FC = () => {
     setShowModal(true);
   }
 
+  function closeModal() {
+    setShowModal(false);
+  }
+
   return (
-    <div className={styles["container"]} onClick={openModal}>
-      <span className={styles["text"]}>Sign Up</span>
-      <SignUpModal show={showModal} setShow={setShowModal} />
-    </div>
+    <>
+      <div className={styles["container"]} onClick={openModal}>
+        <span className={styles["text"]}>Sign Up</span>
+      </div>
+      <SignUpModal show={showModal} close={closeModal} />
+    </>
   );
 };
 
