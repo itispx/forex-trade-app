@@ -32,6 +32,7 @@ describe("users", () => {
       expect(response.body.success.doc.username).toBe(userPayload.username);
       expect(response.body.success.doc.wallet.USD).toBe(1000);
       expect(response.body.success.doc.wallet.GBP).toBe(0);
+      expect(typeof response.body.success.token).toBe("string");
     });
 
     it("should failed to sign up the same user twice", async () => {

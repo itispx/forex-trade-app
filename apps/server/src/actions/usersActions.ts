@@ -10,7 +10,7 @@ import { IQuery, IUserDocument } from "interfaces-common";
 export const signUpAction = async (
   username: string,
   password: string,
-): Promise<IQuery & { success: { doc: IUserDocument } }> => {
+): Promise<IQuery & { success: { doc: IUserDocument; token: string } }> => {
   const { status } = await getUserByUsernameQuery(username);
 
   if (status.code === 404) {
@@ -18,7 +18,15 @@ export const signUpAction = async (
 
     const { status: signupStatus, data } = await signUpQuery(username, hashed);
 
-    return { status: signupStatus, success: { doc: data } };
+    if (signupStatus.code === 201) {
+      const token = jwt.sign(
+        { userID: data._id, username: data.username },
+        process.env.JWT_KEY as string,
+        { expiresIn: "1h" },
+      );
+
+      return { status: signupStatus, success: { doc: data, token } };
+    }
   }
 
   throw APIError.conflict();
@@ -40,9 +48,7 @@ export const signInAction = async (
     const token = jwt.sign(
       { userID: data._id, username: data.username },
       process.env.JWT_KEY as string,
-      {
-        expiresIn: "1h",
-      },
+      { expiresIn: "1h" },
     );
 
     return { status: { code: 200, ok: true }, success: { doc: data, token } };
