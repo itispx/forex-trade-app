@@ -37,7 +37,7 @@ const TextFormField: React.FC<Props> = ({
         onBlur={onBlur}
       />
 
-      <span className={styles["error-message"]}>{touched && errors}</span>
+      <span className={styles["error-message"]}>&#8205;{touched && errors}</span>
     </div>
   );
 };
