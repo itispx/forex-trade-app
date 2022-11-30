@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import styles from "./SignUpButton.module.scss";
 
-import SignUpModal from "../SignUpModal";
+import SignUpModal from "../../Modals/SignUpModal";
 
 const SignUpButton: React.FC = () => {
   const [showModal, setShowModal] = useState(false);

@@ -3,7 +3,7 @@ import styles from "./SignUpModal.module.scss";
 
 import Modal from "react-modal";
 
-import SignUpForm from "../Forms/SignUpForm";
+import SignUpForm from "../../Forms/SignUpForm";
 
 Modal.setAppElement("#root");
 

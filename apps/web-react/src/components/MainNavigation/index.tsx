@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./MainNavigation.module.scss";
 
-import SignInButton from "../SignInButton";
-import SignUpButton from "../SignUpButton";
+import SignInButton from "../Buttons/SignInButton";
+import SignUpButton from "../Buttons/SignUpButton";
 
 const MainNavigation: React.FC = () => {
   return (
