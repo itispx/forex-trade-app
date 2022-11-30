@@ -21,3 +21,8 @@ export interface UserDocumentInterface
     }> {
   _id: ObjectId;
 }
+
+export interface UserServerResponseInterface {
+  doc: UserInterface;
+  token: string;
+}

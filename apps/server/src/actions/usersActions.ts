@@ -5,12 +5,12 @@ import jwt from "jsonwebtoken";
 
 import { signUpQuery, getUserByUsernameQuery } from "../queries/usersQueries";
 
-import { IQuery, IUserDocument } from "interfaces-common";
+import { IQuery, IUserServerResponse } from "interfaces-common";
 
 export const signUpAction = async (
   username: string,
   password: string,
-): Promise<IQuery & { success: { doc: IUserDocument; token: string } }> => {
+): Promise<IQuery & { success: IUserServerResponse }> => {
   const { status } = await getUserByUsernameQuery(username);
 
   if (status.code === 404) {
@@ -35,7 +35,7 @@ export const signUpAction = async (
 export const signInAction = async (
   username: string,
   password: string,
-): Promise<IQuery & { success: { doc: IUserDocument; token: string } }> => {
+): Promise<IQuery & { success: IUserServerResponse }> => {
   const { data } = await getUserByUsernameQuery(username);
 
   if (!data) {
