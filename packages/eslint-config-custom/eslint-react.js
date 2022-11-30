@@ -23,6 +23,13 @@ module.exports = {
       files: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
       extends: ["plugin:testing-library/react", "plugin:jest/recommended"],
     },
+
+    {
+      files: ["*.test.tsx"],
+      rules: {
+        "react/react-in-jsx-scope": 0,
+      },
+    },
   ],
   ignorePatterns: [
     "**/*.js",

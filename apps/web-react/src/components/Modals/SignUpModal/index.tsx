@@ -5,7 +5,7 @@ import Modal from "react-modal";
 
 import SignUpForm from "../../Forms/SignUpForm";
 
-Modal.setAppElement("#root");
+Modal.setAppElement("body");
 
 interface Props {
   show: boolean;
