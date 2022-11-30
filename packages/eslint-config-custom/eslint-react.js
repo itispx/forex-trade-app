@@ -1,49 +1,32 @@
 module.exports = {
   env: {
+    es6: true,
     browser: true,
+    jest: true,
+    node: true,
   },
-  extends: ["plugin:import/recommended", "plugin:import/typescript", "prettier"],
-  plugins: ["@typescript-eslint", "import"],
-  settings: {
-    "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"],
-    },
-    "import/resolver": {
-      typescript: {
-        alwaysTryTypes: true,
-        project: ["apps/*/tsconfig.json"],
-      },
-    },
+  extends: ["plugin:react/recommended", "prettier"],
+  plugins: ["@typescript-eslint", "react"],
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaFeatures: { jsx: true },
+    ecmaVersion: "latest",
+    sourceType: "module",
   },
   rules: {
-    // // react
-    "react/function-component-definition": [
-      2,
-      {
-        namedComponents: "arrow-function",
-      },
-    ],
+    "react/function-component-definition": [2, { namedComponents: "arrow-function" }],
     "react/jsx-props-no-spreading": 0,
   },
   overrides: [
     {
-      // 3) Now we enable eslint-plugin-testing-library rules or preset only for matching files!
-      env: {
-        jest: true,
-      },
+      env: { jest: true },
       files: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
       extends: ["plugin:testing-library/react", "plugin:jest/recommended"],
-      rules: {
-        "import/no-extraneous-dependencies": [
-          "off",
-          { devDependencies: ["**/?(*.)+(spec|test).[jt]s?(x)"] },
-        ],
-      },
     },
   ],
   ignorePatterns: [
     "**/*.js",
-    "**/*.json",
+    "**/*.jsx",
     "node_modules",
     "public",
     "styles",
