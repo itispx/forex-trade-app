@@ -24,7 +24,7 @@ const SignInModal: React.FC<Props> = ({ show, close }) => {
       <div className={styles["container"]}>
         <h1 className={styles["title"]}>Sign In</h1>
 
-        <SignInForm />
+        <SignInForm closeModal={close} />
       </div>
     </Modal>
   );

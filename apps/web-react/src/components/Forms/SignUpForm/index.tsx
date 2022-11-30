@@ -13,12 +13,16 @@ import { toast } from "react-toastify";
 import TextFormField from "../../TextFormField";
 import Loading from "../../Loading";
 
-const SignUpForm: React.FC = () => {
+interface Props {
+  closeModal: () => void;
+}
+
+const SignUpForm: React.FC<Props> = ({ closeModal }) => {
   const { mutate: signUpUser, isLoading } = useMutation(signUpUserQuery, {
     onSuccess: (data) => {
       if (data.status.code === 201) {
-        console.log("sign up, token:", data.success.token);
         queryClient.setQueryData("user", data.success);
+        closeModal();
       }
     },
     onError: () => {

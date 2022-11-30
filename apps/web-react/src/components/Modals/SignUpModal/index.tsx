@@ -24,7 +24,7 @@ const SignUpModal: React.FC<Props> = ({ show, close }) => {
       <div className={styles["container"]}>
         <h1 className={styles["title"]}>Sign Up</h1>
 
-        <SignUpForm />
+        <SignUpForm closeModal={close} />
       </div>
     </Modal>
   );
