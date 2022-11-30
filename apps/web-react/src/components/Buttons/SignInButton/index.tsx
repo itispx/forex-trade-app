@@ -1,13 +1,27 @@
-"use client";
-
-import React from "react";
+import React, { useState } from "react";
 import styles from "./SignInButton.module.scss";
 
+import SignInModal from "../../Modals/SignInModal";
+
 const SignInButton: React.FC = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  function openModal() {
+    setShowModal(true);
+  }
+
+  function closeModal() {
+    setShowModal(false);
+  }
+
   return (
-    <div className={styles["container"]} onClick={() => console.log("sign in press")}>
-      <span className={styles["text"]}>Sign In</span>
-    </div>
+    <>
+      <div className={styles["container"]} onClick={openModal}>
+        <span className={styles["text"]}>Sign In</span>
+      </div>
+
+      <SignInModal show={showModal} close={closeModal} />
+    </>
   );
 };
 

@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import styles from "./SignUpButton.module.scss";
 
@@ -21,6 +19,7 @@ const SignUpButton: React.FC = () => {
       <div className={styles["container"]} onClick={openModal}>
         <span className={styles["text"]}>Sign Up</span>
       </div>
+
       <SignUpModal show={showModal} close={closeModal} />
     </>
   );
