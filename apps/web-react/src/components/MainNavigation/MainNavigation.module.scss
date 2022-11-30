@@ -10,8 +10,25 @@
 
 .inner-container {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
   align-items: center;
   min-width: 750px;
+}
+
+.signed {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+
+  .username {
+    font-weight: 600;
+    font-size: 24px;
+    color: #fff;
+  }
+}
+
+.not-signed {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
 }
