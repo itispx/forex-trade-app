@@ -1,12 +1,15 @@
 import { ObjectId, Document } from "mongoose";
 
+import TCurrencies from "./CurrenciesTypes";
+
 interface UserInterface {
   _id: ObjectId;
   username: string;
   password: string;
   wallet: {
-    USD: number;
-    GBP: number;
+    [x in TCurrencies]: number;
+    // USD: number;
+    // GBP: number;
   };
   createdAt: string;
 }

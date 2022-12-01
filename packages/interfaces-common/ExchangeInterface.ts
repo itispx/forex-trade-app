@@ -26,3 +26,9 @@ export interface ExchangeDocumentInterface
     }> {
   _id: ObjectId;
 }
+
+export interface ExchangeConversionInterface {
+  base: TCurrencies;
+  converted: TCurrencies;
+  exchangeRate: number;
+}
