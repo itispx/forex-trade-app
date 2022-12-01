@@ -1,0 +1,35 @@
+@import "../../../styles/colors";
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.submit {
+  align-self: flex-end;
+  padding: 10px 25px;
+  width: fit-content;
+  border: solid;
+  border-width: 3px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 300;
+  color: #fff;
+  cursor: pointer;
+}
+
+.loading-container {
+  align-self: center;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  appearance: textfield;
+}

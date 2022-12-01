@@ -26,16 +26,7 @@ const SignInForm: React.FC<Props> = ({ closeModal }) => {
       }
     },
     onError: () => {
-      toast.error("Something went wrong", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      toast.error("Something went wrong");
     },
     onSettled: () => queryClient.invalidateQueries("user"),
   });

@@ -13,7 +13,18 @@ const App: React.FC = () => {
     <div>
       <QueryClientProvider client={queryClient}>
         <Layout />
-        <ToastContainer />
+        <ToastContainer
+          position="top-center"
+          autoClose={2500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </QueryClientProvider>
     </div>
   );

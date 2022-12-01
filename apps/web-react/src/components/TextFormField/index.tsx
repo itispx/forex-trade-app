@@ -1,16 +1,17 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, HTMLInputTypeAttribute, InputHTMLAttributes } from "react";
 import styles from "./TextFormField.module.scss";
 
 interface Props {
   id: string;
   name: string;
-  type: "text" | "password";
+  type: HTMLInputTypeAttribute;
   placeholder: string;
-  value: string;
+  value: string | number;
   onChange: (e: string | ChangeEvent<HTMLInputElement>) => void;
   onBlur: (e: any) => void;
   touched?: boolean;
   errors?: string;
+  inputProps?: InputHTMLAttributes<HTMLInputElement>;
 }
 
 const TextFormField: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const TextFormField: React.FC<Props> = ({
   onBlur,
   touched,
   errors,
+  inputProps,
 }) => {
   return (
     <div className={styles["container"]}>
@@ -35,6 +37,7 @@ const TextFormField: React.FC<Props> = ({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        {...inputProps}
       />
 
       <span className={styles["error-message"]}>&#8205;{touched && errors}</span>
