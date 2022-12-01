@@ -40,3 +40,9 @@
 </table>
 
 # [Trello board](https://trello.com/invite/b/54JLFXOF/ATTIa3ac526461f8ffbb14ac36b419553df8E489C502/forex-trading-application)
+
+# TODO
+
+- Websocket refactoring
+- Finish testing
+- Website responsiveness

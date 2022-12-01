@@ -1,0 +1,61 @@
+@import "../../styles/colors";
+
+$text-color: #fff;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 30px;
+  height: 200px;
+  width: 350px;
+  border: solid;
+  border-width: 5px;
+  border-radius: 25px;
+  border-color: $text-color;
+  color: $text-color;
+  background-color: $accent;
+}
+
+.data-container {
+  display: flex;
+  flex: 0.6;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.currency-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.currency-type {
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.currency-value {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.equal-sign {
+  font-size: 60px;
+  font-weight: bold;
+  color: $text-color;
+}
+
+.buy-button-container {
+  display: flex;
+  flex: 0.3;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.buy-button {
+  padding: 5px 15px;
+  border: solid;
+  border-width: 5px;
+  border-radius: 15px;
+}
