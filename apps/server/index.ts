@@ -13,10 +13,10 @@ const io = new Server(server, { cors: { origin: "*" } });
 
 import { getRealTimeExchangeValuesAction } from "./src/actions/exchangesActions";
 
-io.on("connection", (socket) => {
-  console.log("new connection:", socket.id);
+const exchangeIo = io.of("/v1/exchanges");
 
-  getRealTimeExchangeValuesAction(io);
+exchangeIo.on("connection", () => {
+  getRealTimeExchangeValuesAction(exchangeIo);
 });
 
 server.listen(port, async () => {
