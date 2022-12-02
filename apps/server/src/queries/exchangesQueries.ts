@@ -68,3 +68,16 @@ export const makeExchangeQuery = async (
     throw catchErrorHandler(error as Error);
   }
 };
+
+export const getExchangesQuery = async (
+  userID: string,
+): Promise<IQuery & { data: IExchangeDocument[] }> => {
+  try {
+    const data = await Exchange.find({ userID });
+
+    return { status: { code: 201, ok: true }, data };
+  } catch (error) {
+    console.log("error:", error);
+    throw catchErrorHandler(error as Error);
+  }
+};

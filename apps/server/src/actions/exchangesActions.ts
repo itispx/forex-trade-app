@@ -1,6 +1,10 @@
 import { Namespace } from "socket.io";
 
-import { getCurrentExchangeValues, makeExchangeQuery } from "../queries/exchangesQueries";
+import {
+  getCurrentExchangeValues,
+  makeExchangeQuery,
+  getExchangesQuery,
+} from "../queries/exchangesQueries";
 import { addBalanceAction, removeBalanceAction } from "../actions/usersActions";
 
 import {
@@ -52,4 +56,12 @@ export const makeExchangeAction = async (
   }
 
   throw APIError.internal();
+};
+
+export const getExchangesAction = async (
+  userID: string,
+): Promise<IQuery & { success: { docs: IExchangeDocument[] } }> => {
+  const { status, data } = await getExchangesQuery(userID);
+
+  return { status, success: { docs: data } };
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import styles from "./BuyModal.module.scss";
 
 import queryClient from "../../../utilities/queryClient";
@@ -26,17 +26,17 @@ interface Props {
 const BuyModal: React.FC<Props> = ({ show, close, exchangeInfo }) => {
   const { mutate: performExchange, isLoading } = useMutation(performExchangeQuery, {
     onSuccess: (data) => {
-      console.log(data);
-      // if (data.status.code === 201) {
-      //   console.log(data.success);
-      // queryClient.setQueryData("exchanges", data.success);
-      //   close();
-      // }
+      if (data.status.code === 201) {
+        close();
+      }
     },
     onError: () => {
       toast.error("Something went wrong");
     },
-    onSettled: () => queryClient.invalidateQueries("user"),
+    onSettled: () => {
+      queryClient.invalidateQueries("user");
+      queryClient.invalidateQueries("exchanges");
+    },
   });
 
   const [amount, setAmount] = useState(1);

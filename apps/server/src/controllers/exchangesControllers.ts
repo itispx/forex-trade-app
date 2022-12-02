@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 
 import APIError from "../util/errors/APIError";
 
-import { makeExchangeAction } from "../actions/exchangesActions";
+import { makeExchangeAction, getExchangesAction } from "../actions/exchangesActions";
 
 import { TCurrencies } from "interfaces-common";
 
@@ -24,6 +24,20 @@ export const makeExchangeController: RequestHandler<
         base,
         convert,
       );
+
+      res.status(status.code).json({ status, success });
+    }
+
+    throw APIError.unauthorizedRequest();
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getExchangesController: RequestHandler = async (req, res, next) => {
+  try {
+    if (req.accessTokenID) {
+      const { status, success } = await getExchangesAction(req.accessTokenID);
 
       res.status(status.code).json({ status, success });
     }
