@@ -19,7 +19,7 @@ export const signUpController: RequestHandler<
 
     const { status, success } = await signUpAction(username, password);
 
-    res.status(status.code).json({ status, success });
+    return res.status(status.code).json({ status, success });
   } catch (error) {
     return next(error);
   }
@@ -40,7 +40,7 @@ export const signInController: RequestHandler<
 
     const { status, success } = await signInAction(username, password);
 
-    res.status(status.code).json({ status, success });
+    return res.status(status.code).json({ status, success });
   } catch (error) {
     return next(error);
   }

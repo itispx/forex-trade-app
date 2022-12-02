@@ -25,7 +25,7 @@ export const makeExchangeController: RequestHandler<
         convert,
       );
 
-      res.status(status.code).json({ status, success });
+      return res.status(status.code).json({ status, success });
     }
 
     throw APIError.unauthorizedRequest();
@@ -39,7 +39,7 @@ export const getExchangesController: RequestHandler = async (req, res, next) => 
     if (req.accessTokenID) {
       const { status, success } = await getExchangesAction(req.accessTokenID);
 
-      res.status(status.code).json({ status, success });
+      return res.status(status.code).json({ status, success });
     }
 
     throw APIError.unauthorizedRequest();
