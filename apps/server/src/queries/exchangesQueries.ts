@@ -64,7 +64,6 @@ export const makeExchangeQuery = async (
 
     return { status: { code: 201, ok: true }, data };
   } catch (error) {
-    console.log("error:", error);
     throw catchErrorHandler(error as Error);
   }
 };
@@ -77,7 +76,6 @@ export const getExchangesQuery = async (
 
     return { status: { code: 201, ok: true }, data };
   } catch (error) {
-    console.log("error:", error);
     throw catchErrorHandler(error as Error);
   }
 };

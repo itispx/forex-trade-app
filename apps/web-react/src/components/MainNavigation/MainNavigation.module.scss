@@ -3,7 +3,7 @@
 .container {
   display: flex;
   justify-content: center;
-  height: 75px;
+  height: 80px;
   width: auto;
   background-color: $accent;
 }
@@ -20,10 +20,20 @@
   justify-content: space-between;
   align-items: center;
 
-  .username {
-    font-weight: 600;
-    font-size: 24px;
-    color: #fff;
+  .route-link {
+    padding: 10px;
+    border: solid;
+    border-width: 3px;
+    border-radius: 10px;
+    border-color: #fff;
+
+    .link {
+      font-weight: 600;
+      font-size: 24px;
+      color: #fff;
+      cursor: pointer;
+      text-decoration: none;
+    }
   }
 }
 

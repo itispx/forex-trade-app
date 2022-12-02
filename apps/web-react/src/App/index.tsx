@@ -6,12 +6,14 @@ import queryClient from "../utilities/queryClient";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { BrowserRouter } from "react-router-dom";
+
 import Layout from "../Layout";
 
 const App: React.FC = () => {
   return (
-    <div>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
         <Layout />
         <ToastContainer
           position="top-center"
@@ -25,8 +27,8 @@ const App: React.FC = () => {
           pauseOnHover
           theme="dark"
         />
-      </QueryClientProvider>
-    </div>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 

@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
+
+import { Routes, Route } from "react-router-dom";
 
 import MainNavigation from "../components/MainNavigation";
 import DashboardPage from "../pages/DashboardPage";
+import ExchangesPage from "../pages/ExchangesPage";
 
 const Layout: React.FC = () => {
   return (
     <>
       <MainNavigation />
-      <DashboardPage />
+      <Routes>
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/exchanges" element={<ExchangesPage />} />
+      </Routes>
     </>
   );
 };
