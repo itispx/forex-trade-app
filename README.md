@@ -43,6 +43,7 @@
 
 # TODO
 
+- Refactor modals
 - Websocket refactoring
 - Finish testing
 - Website responsiveness
