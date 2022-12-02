@@ -1,40 +1,24 @@
 import React from "react";
 import styles from "./SignUpForm.module.scss";
 
-import { Formik } from "formik";
+import { Formik, FormikProps } from "formik";
 import * as yup from "yup";
-
-import queryClient from "../../../utilities/queryClient";
-import { useMutation } from "react-query";
-import { signUpUserQuery } from "../../../queries/usersQueries";
-
-import { toast } from "react-toastify";
 
 import TextFormField from "../../TextFormField";
 import Loading from "../../Loading";
 
 interface Props {
-  closeModal: () => void;
+  submitHandler: (username: string, password: string) => void;
+  isLoading: boolean;
+  inputRef?: React.RefObject<
+    FormikProps<{
+      username: string;
+      password: string;
+    }>
+  >;
 }
 
-const SignUpForm: React.FC<Props> = ({ closeModal }) => {
-  const { mutate: signUpUser, isLoading } = useMutation(signUpUserQuery, {
-    onSuccess: (data) => {
-      if (data.status.code === 201) {
-        queryClient.setQueryData("user", data.success);
-        closeModal();
-      }
-    },
-    onError: () => {
-      toast.error("Something went wrong");
-    },
-    onSettled: () => queryClient.invalidateQueries("user"),
-  });
-
-  async function submitHandler(username: string, password: string) {
-    signUpUser({ username, password });
-  }
-
+const SignUpForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => {
   const signUpSchema = yup.object({
     username: yup.string().typeError("Invalid username").required("Username is required"),
     password: yup

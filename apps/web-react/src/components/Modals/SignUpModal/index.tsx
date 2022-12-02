@@ -3,6 +3,12 @@ import styles from "./SignUpModal.module.scss";
 
 import Modal from "react-modal";
 
+import queryClient from "../../../utilities/queryClient";
+import { useMutation } from "react-query";
+import { signUpUserQuery } from "../../../queries/usersQueries";
+
+import { toast } from "react-toastify";
+
 import SignUpForm from "../../Forms/SignUpForm";
 
 Modal.setAppElement("body");
@@ -13,6 +19,23 @@ interface Props {
 }
 
 const SignUpModal: React.FC<Props> = ({ show, close }) => {
+  const { mutate: signUpUser, isLoading } = useMutation(signUpUserQuery, {
+    onSuccess: (data) => {
+      if (data.status.code === 201) {
+        queryClient.setQueryData("user", data.success);
+        close();
+      }
+    },
+    onError: () => {
+      toast.error("Something went wrong");
+    },
+    onSettled: () => queryClient.invalidateQueries("user"),
+  });
+
+  async function submitHandler(username: string, password: string) {
+    signUpUser({ username, password });
+  }
+
   return (
     <Modal
       isOpen={show}
@@ -24,7 +47,7 @@ const SignUpModal: React.FC<Props> = ({ show, close }) => {
       <div className={styles["container"]}>
         <h1 className={styles["title"]}>Sign Up</h1>
 
-        <SignUpForm closeModal={close} />
+        <SignUpForm submitHandler={submitHandler} isLoading={isLoading} />
       </div>
     </Modal>
   );

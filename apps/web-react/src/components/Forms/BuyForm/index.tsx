@@ -28,7 +28,7 @@ const BuyForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => {
         innerRef={inputRef}
         validationSchema={buySchema}
         initialValues={{ amount: 1 }}
-        onSubmit={() => submitHandler()}
+        onSubmit={submitHandler}
       >
         {(fprops) => (
           <div className={styles["container"]}>
