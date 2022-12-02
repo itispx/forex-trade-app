@@ -24,8 +24,10 @@ app.use("/v1/ping", (req, res) => res.status(200).send("pong"));
 
 // Routes
 import usersRoutes from "./routes/usersRoutes";
+import exchangesRoutes from "./routes/exchangesRoutes";
 
 app.use("/v1/users", usersRoutes);
+app.use("/v1/exchanges", exchangesRoutes);
 
 // Catch errors
 app.use(APIErrorHandler);

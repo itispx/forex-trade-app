@@ -3,11 +3,11 @@ import styles from "./BuyModal.module.scss";
 
 import queryClient from "../../../utilities/queryClient";
 import { useMutation } from "react-query";
-// import { performExchangeQuery } from "../../../queries/exchangesQueries";
+import { performExchangeQuery } from "../../../queries/exchangesQueries";
 
 import { toast } from "react-toastify";
 
-import { FormikProps, useFormikContext } from "formik";
+import { FormikProps } from "formik";
 
 import Modal from "react-modal";
 
@@ -24,19 +24,38 @@ interface Props {
 }
 
 const BuyModal: React.FC<Props> = ({ show, close, exchangeInfo }) => {
-  const [isLoading] = useState(false);
+  const { mutate: performExchange, isLoading } = useMutation(performExchangeQuery, {
+    onSuccess: (data) => {
+      console.log(data);
+      // if (data.status.code === 201) {
+      //   console.log(data.success);
+      // queryClient.setQueryData("exchanges", data.success);
+      //   close();
+      // }
+    },
+    onError: () => {
+      toast.error("Something went wrong");
+    },
+    onSettled: () => queryClient.invalidateQueries("user"),
+  });
 
-  const [totalValue, setTotalValue] = useState(exchangeInfo.exchangeRate);
+  const [amount, setAmount] = useState(1);
 
   // Since useRef doesn't not update the UI this is necessary to update the total value when the amount changes
   const onAmountChange = useCallback((node: FormikProps<{ amount: number }>) => {
     if (node) {
-      setTotalValue(node.values.amount * exchangeInfo.exchangeRate);
+      setAmount(node.values.amount);
     }
   }, []);
 
   const submitHandler = () => {
-    console.log("total value:", totalValue);
+    performExchange({
+      base: { currency: exchangeInfo.base, amount: amount },
+      convert: {
+        currency: exchangeInfo.converted,
+        amount: amount * exchangeInfo.exchangeRate,
+      },
+    });
   };
 
   return (
@@ -54,7 +73,9 @@ const BuyModal: React.FC<Props> = ({ show, close, exchangeInfo }) => {
           <span className={styles["currencies"]}>
             {exchangeInfo.base} &gt; {exchangeInfo.converted} =
           </span>
-          <span className={styles["total-value"]}>{totalValue}</span>{" "}
+          <span className={styles["total-value"]}>
+            {amount * exchangeInfo.exchangeRate}
+          </span>
         </div>
 
         <BuyForm

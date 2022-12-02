@@ -1,8 +1,8 @@
 import { Namespace } from "socket.io";
 
-import { getCurrentExchangeValues } from "../queries/exchangesQueries";
+import { getCurrentExchangeValues, makeExchangeQuery } from "../queries/exchangesQueries";
 
-import { IExchangeConversion } from "interfaces-common";
+import { IExchangeConversion, TCurrencies } from "interfaces-common";
 
 export const getExchangeValuesAction = async (): Promise<IExchangeConversion[]> => {
   const rates: IExchangeConversion[] = [];
@@ -26,4 +26,16 @@ export const getRealTimeExchangeValuesAction = async (io: Namespace) => {
   }, 30000);
 };
 
-// export const makeExchangeAction = async () => {};
+export const makeExchangeAction = async (
+  userID: string,
+  base: { currency: TCurrencies; amount: number },
+  convert: { currency: TCurrencies; amount: number },
+) => {
+  // Create exchange document
+  const { status, data } = await makeExchangeQuery(userID, base, convert);
+
+  if (status.code === 201) {
+    // Remove balance from user document
+    // Add balance from user document
+  }
+};

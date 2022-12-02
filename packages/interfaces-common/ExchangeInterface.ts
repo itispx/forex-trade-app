@@ -5,11 +5,11 @@ import TCurrencies from "./CurrenciesTypes";
 interface ExchangeInterface {
   _id: ObjectId;
   userID: ObjectId;
-  in: {
+  base: {
     currency: TCurrencies;
     amount: number;
   };
-  out: {
+  converted: {
     currency: TCurrencies;
     amount: number;
   };

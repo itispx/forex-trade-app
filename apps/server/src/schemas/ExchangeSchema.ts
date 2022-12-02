@@ -8,11 +8,11 @@ const ExchangeSchema = new Schema<IExchange>(
   {
     _id: { type: Schema.Types.ObjectId, required: true },
     userID: { type: Schema.Types.ObjectId, required: true },
-    in: {
+    base: {
       currency: { type: CurrencyOptions, required: true },
       amount: { type: Number, required: true },
     },
-    out: {
+    converted: {
       currency: { type: CurrencyOptions, required: true },
       amount: { type: Number, required: true },
     },

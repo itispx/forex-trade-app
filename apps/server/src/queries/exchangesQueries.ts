@@ -1,9 +1,18 @@
 import axios from "axios";
 
+import { Types } from "mongoose";
+
 import APIError from "../util/errors/APIError";
 import catchErrorHandler from "../util/errors/catchErrorHandler";
 
-import { IQuery, TCurrencies, IExchangeConversion } from "interfaces-common";
+import Exchange from "../schemas/ExchangeSchema";
+
+import {
+  IQuery,
+  TCurrencies,
+  IExchangeConversion,
+  IExchangeDocument,
+} from "interfaces-common";
 
 interface IAPIResponse {
   base: TCurrencies;
@@ -36,6 +45,26 @@ export const getCurrentExchangeValues = async (
 
     throw APIError.notFound();
   } catch (error) {
+    throw catchErrorHandler(error as Error);
+  }
+};
+
+export const makeExchangeQuery = async (
+  userID: string,
+  base: { currency: TCurrencies; amount: number },
+  convert: { currency: TCurrencies; amount: number },
+): Promise<IQuery & { data: IExchangeDocument }> => {
+  try {
+    const data = await Exchange.create({
+      _id: new Types.ObjectId(),
+      userID,
+      base,
+      converted: convert,
+    });
+
+    return { status: { code: 201, ok: true }, data };
+  } catch (error) {
+    console.log("error:", error);
     throw catchErrorHandler(error as Error);
   }
 };
