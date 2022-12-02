@@ -1,5 +1,7 @@
 import { RequestHandler } from "express";
 
+import APIError from "../util/errors/APIError";
+
 import { makeExchangeAction } from "../actions/exchangesActions";
 
 import { TCurrencies } from "interfaces-common";
@@ -17,10 +19,16 @@ export const makeExchangeController: RequestHandler<
     const { base, convert } = req.body;
 
     if (req.accessTokenID) {
-      await makeExchangeAction(req.accessTokenID, base, convert);
+      const { status, success } = await makeExchangeAction(
+        req.accessTokenID,
+        base,
+        convert,
+      );
+
+      res.status(status.code).json({ status, success });
     }
 
-    res.status(200).json({ message: "i got here" });
+    throw APIError.unauthorizedRequest();
   } catch (error) {
     return next(error);
   }

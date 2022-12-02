@@ -3,9 +3,19 @@ import APIError from "../util/errors/APIError";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import { signUpQuery, getUserByUsernameQuery } from "../queries/usersQueries";
+import {
+  signUpQuery,
+  getUserByUsernameQuery,
+  addBalanceQuery,
+  removeBalanceQuery,
+} from "../queries/usersQueries";
 
-import { IQuery, IUserServerResponse } from "interfaces-common";
+import {
+  IQuery,
+  TCurrencies,
+  IUserServerResponse,
+  IUserDocument,
+} from "interfaces-common";
 
 export const signUpAction = async (
   username: string,
@@ -55,4 +65,24 @@ export const signInAction = async (
   }
 
   throw APIError.unauthorizedRequest();
+};
+
+export const addBalanceAction = async (
+  userID: string,
+  currency: TCurrencies,
+  amount: number,
+): Promise<IQuery & { success: { doc: IUserDocument } }> => {
+  const { status, data } = await addBalanceQuery(userID, currency, amount);
+
+  return { status, success: { doc: data } };
+};
+
+export const removeBalanceAction = async (
+  userID: string,
+  currency: TCurrencies,
+  amount: number,
+): Promise<IQuery & { success: { doc: IUserDocument } }> => {
+  const { status, data } = await removeBalanceQuery(userID, currency, amount);
+
+  return { status, success: { doc: data } };
 };

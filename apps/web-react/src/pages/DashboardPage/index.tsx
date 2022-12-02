@@ -11,7 +11,7 @@ import Loading from "../../components/Loading";
 import { IExchangeConversion } from "interfaces-common";
 
 const DashboardPage: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [rates, setRates] = useState<IExchangeConversion[]>([
     { base: "USD", converted: "GBP", exchangeRate: 0.81586 },
