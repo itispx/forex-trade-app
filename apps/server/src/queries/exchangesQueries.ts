@@ -74,7 +74,7 @@ export const getExchangesQuery = async (
   try {
     const data = await Exchange.find({ userID });
 
-    return { status: { code: 201, ok: true }, data };
+    return { status: { code: 200, ok: true }, data };
   } catch (error) {
     throw catchErrorHandler(error as Error);
   }
