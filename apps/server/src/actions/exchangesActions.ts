@@ -60,8 +60,9 @@ export const makeExchangeAction = async (
 
 export const getExchangesAction = async (
   userID: string,
+  page: number,
 ): Promise<IQuery & { success: { docs: IExchangeDocument[] } }> => {
-  const { status, data } = await getExchangesQuery(userID);
+  const { status, data } = await getExchangesQuery(userID, page);
 
   return { status, success: { docs: data } };
 };

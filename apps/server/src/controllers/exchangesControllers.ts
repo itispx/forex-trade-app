@@ -34,10 +34,17 @@ export const makeExchangeController: RequestHandler<
   }
 };
 
-export const getExchangesController: RequestHandler = async (req, res, next) => {
+export const getExchangesController: RequestHandler<
+  Record<string, unknown>,
+  Record<string, unknown>,
+  Record<string, unknown>,
+  { page: number }
+> = async (req, res, next) => {
   try {
+    const { page } = req.query;
+
     if (req.accessTokenID) {
-      const { status, success } = await getExchangesAction(req.accessTokenID);
+      const { status, success } = await getExchangesAction(req.accessTokenID, page);
 
       return res.status(status.code).json({ status, success });
     }

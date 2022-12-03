@@ -70,9 +70,14 @@ export const makeExchangeQuery = async (
 
 export const getExchangesQuery = async (
   userID: string,
+  page: number,
 ): Promise<IQuery & { data: IExchangeDocument[] }> => {
   try {
-    const data = await Exchange.find({ userID });
+    const limit = 5;
+
+    const data = await Exchange.find({ userID })
+      .skip(page * limit)
+      .limit(limit);
 
     return { status: { code: 200, ok: true }, data };
   } catch (error) {

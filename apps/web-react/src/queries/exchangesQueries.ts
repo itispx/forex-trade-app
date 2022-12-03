@@ -16,12 +16,16 @@ export const performExchangeQuery = async ({
   return data;
 };
 
-export const getExchangesQuery = async (): Promise<
-  IQuery & { success: { docs: IExchange[] } }
-> => {
+export const getExchangesQuery = async ({
+  pageParam = 0,
+}: {
+  pageParam?: number;
+}): Promise<IExchange[]> => {
+  console.log("fetch next:", pageParam);
+
   const request = await http();
 
-  const { data } = await request.get("/exchanges");
+  const { data } = await request.get("/exchanges", { params: { page: pageParam } });
 
-  return data;
+  return data.success.docs;
 };
