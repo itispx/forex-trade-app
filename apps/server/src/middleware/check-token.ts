@@ -4,7 +4,11 @@ import APIError from "../util/errors/APIError";
 
 import jwt from "jsonwebtoken";
 
-const checkToken: RequestHandler = (req, res, next) => {
+const checkToken: RequestHandler<unknown, unknown, unknown, unknown> = (
+  req,
+  res,
+  next,
+) => {
   try {
     if (!req.headers.authorization) {
       throw APIError.unauthorizedRequest();
