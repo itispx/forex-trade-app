@@ -43,5 +43,6 @@
 
 # TODO
 
+- Routes validation
 - Finish testing
 - Website responsiveness
