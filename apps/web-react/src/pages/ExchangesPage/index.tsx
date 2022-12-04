@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./Exchanges.module.scss";
 
 import { useQuery } from "react-query";
@@ -9,23 +9,19 @@ import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
 import Exchange from "../../components/Exchange";
 
-import { IExchange } from "interfaces-common";
-
 const ExchangesPage: React.FC = () => {
-  const [exchanges, setExchange] = useState<IExchange[]>([]);
+  const page = useRef(0);
 
-  const { isLoading } = useQuery("exchanges", getExchangesQuery, {
-    onSuccess: (data) => {
-      if (data.status.code === 200) {
-        for (let i = 0; i < data.success.docs.length; i++) {
-          setExchange((prev) => [...prev, data.success.docs[i]]);
-        }
-      }
+  const { data, isLoading, refetch } = useQuery(
+    ["exchanges", page.current],
+    getExchangesQuery,
+    {
+      onError: () => {
+        toast.error("Something went wrong");
+      },
+      keepPreviousData: true,
     },
-    onError: () => {
-      toast.error("Something went wrong");
-    },
-  });
+  );
 
   return (
     <div className={styles["page-container"]}>
@@ -34,7 +30,7 @@ const ExchangesPage: React.FC = () => {
           <Loading />
         </div>
       ) : (
-        exchanges.map((exchange) => {
+        data?.success.docs.map((exchange) => {
           return (
             <Exchange
               key={exchange._id.toString()}
