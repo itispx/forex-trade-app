@@ -5,7 +5,7 @@ import app from "../app";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
-import jwt from "jsonwebtoken";
+import signJwt from "../util/signJwt";
 
 describe("users", () => {
   const userPayload = {
@@ -73,11 +73,7 @@ describe("users", () => {
 
   describe("get user", () => {
     it("should get the user", async () => {
-      const token = jwt.sign(
-        { userID: userPayload._id, username: userPayload.username },
-        process.env.JWT_KEY as string,
-        { expiresIn: "1h" },
-      );
+      const token = signJwt(userPayload._id, userPayload.username);
 
       const response = await request(app)
         .get("/v1/users")

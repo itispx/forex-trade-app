@@ -1,7 +1,6 @@
 import APIError from "../util/errors/APIError";
 
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 
 import {
   signUpQuery,
@@ -10,6 +9,8 @@ import {
   addBalanceQuery,
   removeBalanceQuery,
 } from "../queries/usersQueries";
+
+import signJwt from "../util/signJwt";
 
 import {
   IQuery,
@@ -30,11 +31,7 @@ export const signUpAction = async (
     const { status: signupStatus, data } = await signUpQuery(username, hashed);
 
     if (signupStatus.code === 201) {
-      const token = jwt.sign(
-        { userID: data._id, username: data.username },
-        process.env.JWT_KEY as string,
-        { expiresIn: "1h" },
-      );
+      const token = signJwt(data._id, data.username);
 
       return { status: signupStatus, success: { doc: data, token } };
     }
@@ -56,11 +53,7 @@ export const signInAction = async (
   const correctPassword = await bcrypt.compare(password, data.password);
 
   if (correctPassword) {
-    const token = jwt.sign(
-      { userID: data._id, username: data.username },
-      process.env.JWT_KEY as string,
-      { expiresIn: "1h" },
-    );
+    const token = signJwt(data._id, data.username);
 
     return { status: { code: 200, ok: true }, success: { doc: data, token } };
   }
@@ -77,11 +70,7 @@ export const getUserAction = async (
     throw APIError.notFound();
   }
 
-  const token = jwt.sign(
-    { userID: data._id, username: data.username },
-    process.env.JWT_KEY as string,
-    { expiresIn: "1h" },
-  );
+  const token = signJwt(data._id, data.username);
 
   return { status, success: { doc: data, token } };
 };
