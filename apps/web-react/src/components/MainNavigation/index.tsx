@@ -4,22 +4,26 @@ import styles from "./MainNavigation.module.scss";
 import { Link, useLocation } from "react-router-dom";
 
 import { useQuery } from "react-query";
+import { getUserQuery } from "../../queries/usersQueries";
+
+import { toast } from "react-toastify";
 
 import SignInButton from "../Buttons/SignInButton";
 import SignUpButton from "../Buttons/SignUpButton";
 import Currency from "../Currency";
 
-import { IUserServerResponse } from "interfaces-common";
-
 const MainNavigation: React.FC = () => {
   const { pathname } = useLocation();
 
-  function emptyQuery(): IUserServerResponse | undefined {
-    return;
-  }
+  const { data } = useQuery("user", getUserQuery, {
+    select: (data) => {
+      if (data && data.status.ok) {
+        return data;
+      }
 
-  const { data } = useQuery("user", emptyQuery, {
-    enabled: false,
+      toast.error("Something went wrong");
+    },
+    refetchOnWindowFocus: false,
   });
 
   return (

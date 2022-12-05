@@ -41,6 +41,22 @@ export const getUserByUsernameQuery = async (
   }
 };
 
+export const getUserQuery = async (
+  userID: string,
+): Promise<IQuery & { data: IUserDocument | undefined }> => {
+  try {
+    const data = await User.findById(userID);
+
+    if (!data) {
+      return { status: { code: 404, ok: false }, data: undefined };
+    }
+
+    return { status: { code: 200, ok: true }, data };
+  } catch (error) {
+    throw catchErrorHandler(error as Error);
+  }
+};
+
 export const addBalanceQuery = async (
   userID: string,
   currency: TCurrencies,

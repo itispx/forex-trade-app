@@ -20,6 +20,7 @@ const ExchangesPage: React.FC = () => {
         toast.error("Something went wrong");
       },
       keepPreviousData: true,
+      refetchOnWindowFocus: false,
     },
   );
 

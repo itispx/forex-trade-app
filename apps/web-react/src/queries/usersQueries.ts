@@ -1,6 +1,7 @@
 import http from "./http-common";
 
-import { IQuery, IUserServerResponse } from "interfaces-common";
+import { IQuery, IUserServerResponse, IUser } from "interfaces-common";
+import getUserToken from "../utilities/getUserToken";
 
 export const signUpUserQuery = async ({
   username,
@@ -8,12 +9,12 @@ export const signUpUserQuery = async ({
 }: {
   username: string;
   password: String;
-}): Promise<IQuery & { success: IUserServerResponse }> => {
+}): Promise<IQuery & IUserServerResponse> => {
   const request = await http();
 
   const { data } = await request.post("/users/signup", { username, password });
 
-  return data;
+  return { status: data.status, ...data.success };
 };
 
 export const signInUserQuery = async ({
@@ -22,10 +23,26 @@ export const signInUserQuery = async ({
 }: {
   username: string;
   password: String;
-}): Promise<IQuery & { success: IUserServerResponse }> => {
+}): Promise<IQuery & IUserServerResponse> => {
   const request = await http();
 
   const { data } = await request.post("/users/signin", { username, password });
 
-  return data;
+  return { status: data.status, ...data.success };
+};
+
+export const getUserQuery = async (): Promise<
+  (IQuery & IUserServerResponse) | undefined
+> => {
+  const token = await getUserToken();
+
+  if (token) {
+    const request = await http();
+
+    const { data } = await request.get("/users");
+
+    return { status: data.status, ...data.success };
+  }
+
+  return undefined;
 };

@@ -22,14 +22,13 @@ const SignInModal: React.FC<Props> = ({ show, close }) => {
   const { mutate: signInUser, isLoading } = useMutation(signInUserQuery, {
     onSuccess: (data) => {
       if (data.status.code === 200) {
-        queryClient.setQueryData("user", data.success);
+        queryClient.setQueryData("user", data);
         close();
       }
     },
     onError: () => {
       toast.error("Something went wrong");
     },
-    onSettled: () => queryClient.invalidateQueries("user"),
   });
 
   async function submitHandler(username: string, password: string) {

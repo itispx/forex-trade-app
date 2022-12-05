@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import {
   signUpQuery,
   getUserByUsernameQuery,
+  getUserQuery,
   addBalanceQuery,
   removeBalanceQuery,
 } from "../queries/usersQueries";
@@ -65,6 +66,24 @@ export const signInAction = async (
   }
 
   throw APIError.unauthorizedRequest();
+};
+
+export const getUserAction = async (
+  userID: string,
+): Promise<IQuery & { success: IUserServerResponse }> => {
+  const { status, data } = await getUserQuery(userID);
+
+  if (status.code === 404 || !data) {
+    throw APIError.notFound();
+  }
+
+  const token = jwt.sign(
+    { userID: data._id, username: data.username },
+    process.env.JWT_KEY as string,
+    { expiresIn: "1h" },
+  );
+
+  return { status, success: { doc: data, token } };
 };
 
 export const addBalanceAction = async (

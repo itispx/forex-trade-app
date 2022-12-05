@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 
-import { signUpAction, signInAction } from "../actions/usersActions";
+import { signUpAction, signInAction, getUserAction } from "../actions/usersActions";
 
 import APIError from "../util/errors/APIError";
 
@@ -39,6 +39,20 @@ export const signInController: RequestHandler<
     }
 
     const { status, success } = await signInAction(username, password);
+
+    return res.status(status.code).json({ status, success });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getUserController: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.accessTokenID) {
+      throw APIError.unauthorizedRequest();
+    }
+
+    const { status, success } = await getUserAction(req.accessTokenID);
 
     return res.status(status.code).json({ status, success });
   } catch (error) {

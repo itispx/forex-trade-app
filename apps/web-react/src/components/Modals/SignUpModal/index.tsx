@@ -22,14 +22,13 @@ const SignUpModal: React.FC<Props> = ({ show, close }) => {
   const { mutate: signUpUser, isLoading } = useMutation(signUpUserQuery, {
     onSuccess: (data) => {
       if (data.status.code === 201) {
-        queryClient.setQueryData("user", data.success);
+        queryClient.setQueryData("user", data);
         close();
       }
     },
     onError: () => {
       toast.error("Something went wrong");
     },
-    onSettled: () => queryClient.invalidateQueries("user"),
   });
 
   async function submitHandler(username: string, password: string) {
