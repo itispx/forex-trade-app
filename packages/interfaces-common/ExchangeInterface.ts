@@ -5,14 +5,8 @@ import TCurrencies from "./CurrenciesTypes";
 interface ExchangeInterface {
   _id: ObjectId;
   userID: ObjectId;
-  base: {
-    currency: TCurrencies;
-    amount: number;
-  };
-  converted: {
-    currency: TCurrencies;
-    amount: number;
-  };
+  base: CurrencyInfoInterface;
+  converted: CurrencyInfoInterface;
   createdAt: string;
 }
 
@@ -31,4 +25,14 @@ export interface ExchangeConversionInterface {
   base: TCurrencies;
   converted: TCurrencies;
   exchangeRate: number;
+}
+
+export interface ExchangeInfoInterface {
+  base: CurrencyInfoInterface;
+  convert: CurrencyInfoInterface;
+}
+
+export interface CurrencyInfoInterface {
+  currency: TCurrencies;
+  amount: number;
 }
