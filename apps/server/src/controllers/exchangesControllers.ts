@@ -30,7 +30,7 @@ export const makeExchangeController: RequestHandler<
 
     throw APIError.unauthorizedRequest();
   } catch (error) {
-    return next(error);
+    next(error);
   }
 };
 
@@ -51,6 +51,6 @@ export const getExchangesController: RequestHandler<
 
     throw APIError.unauthorizedRequest();
   } catch (error) {
-    return next(error);
+    next(error);
   }
 };

@@ -42,7 +42,7 @@ export const signInController: RequestHandler<
 
     return res.status(status.code).json({ status, success });
   } catch (error) {
-    return next(error);
+    next(error);
   }
 };
 
@@ -56,6 +56,6 @@ export const getUserController: RequestHandler = async (req, res, next) => {
 
     return res.status(status.code).json({ status, success });
   } catch (error) {
-    return next(error);
+    next(error);
   }
 };

@@ -9,7 +9,6 @@ const corsSetup: RequestHandler = (req, res, next) => {
 
   if (req.method === "OPTIONS") {
     res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
-    res.status(200).json({});
   }
 
   next();
