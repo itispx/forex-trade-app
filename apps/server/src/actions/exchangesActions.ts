@@ -5,7 +5,11 @@ import {
   makeExchangeQuery,
   getExchangesQuery,
 } from "../queries/exchangesQueries";
-import { addBalanceAction, removeBalanceAction } from "../actions/usersActions";
+import {
+  getUserAction,
+  addBalanceAction,
+  removeBalanceAction,
+} from "../actions/usersActions";
 
 import {
   IQuery,
@@ -42,6 +46,17 @@ export const makeExchangeAction = async (
   base: { currency: TCurrencies; amount: number },
   convert: { currency: TCurrencies; amount: number },
 ): Promise<IQuery & { success: { doc: IExchangeDocument } }> => {
+  // Check if user has enough credit to perform exchange
+  const { success } = await getUserAction(userID);
+
+  if (success.doc) {
+    if (success.doc.wallet[base.currency] < base.amount) {
+      throw new APIError(403, "Insufficient money");
+    }
+  } else {
+    throw APIError.notFound();
+  }
+
   // Create exchange document
   const { status, data } = await makeExchangeQuery(userID, base, convert);
 
