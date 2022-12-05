@@ -34,7 +34,7 @@ describe("users", () => {
       expect(response.body.status.ok).toBe(true);
       expect(response.body.success.doc.username).toBe(userPayload.username);
       expect(response.body.success.doc.wallet.USD).toBe(1000);
-      expect(response.body.success.doc.wallet.GBP).toBe(0);
+      expect(response.body.success.doc.wallet.GBP).toBe(1000);
       expect(typeof response.body.success.token).toBe("string");
 
       userPayload._id = response.body.success.doc._id;
