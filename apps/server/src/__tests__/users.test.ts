@@ -2,10 +2,9 @@ import request from "supertest";
 
 import app from "../app";
 
-import mongoose from "mongoose";
-import { MongoMemoryServer } from "mongodb-memory-server";
-
 import signJwt from "../util/signJwt";
+
+import { connectDB, disconnectDB } from "../util/testing";
 
 describe("users", () => {
   const userPayload = {
@@ -15,14 +14,11 @@ describe("users", () => {
   };
 
   beforeAll(async () => {
-    const mongoServer = await MongoMemoryServer.create();
-
-    await mongoose.connect(mongoServer.getUri());
+    await connectDB();
   });
 
   afterAll(async () => {
-    await mongoose.disconnect();
-    await mongoose.connection.close();
+    await disconnectDB();
   });
 
   describe("sign up", () => {
