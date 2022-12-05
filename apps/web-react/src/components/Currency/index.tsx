@@ -11,7 +11,7 @@ interface Props {
 const Currency: React.FC<Props> = ({ name, amount }) => {
   return (
     <span className={styles["container"]}>
-      {name}: {amount}
+      {name}: {amount.toFixed(3)}
     </span>
   );
 };

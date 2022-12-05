@@ -45,7 +45,7 @@ const MainNavigation: React.FC = () => {
               )}
             </div>
             <div>
-              {Object.keys(data.doc.wallet).map((currency, index) => {
+              {Object.keys(data.doc.wallet).map((currency) => {
                 return (
                   <Currency
                     key={currency}
