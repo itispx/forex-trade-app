@@ -77,7 +77,8 @@ export const getExchangesQuery = async (
 
     const data = await Exchange.find({ userID })
       .skip(page * limit)
-      .limit(limit);
+      .limit(limit)
+      .sort("-createdAt");
 
     return { status: { code: 200, ok: true }, data };
   } catch (error) {
