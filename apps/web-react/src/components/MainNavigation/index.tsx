@@ -12,6 +12,8 @@ import SignInButton from "../Buttons/SignInButton";
 import SignUpButton from "../Buttons/SignUpButton";
 import Currency from "../Currency";
 
+import { TCurrencies } from "interfaces-common";
+
 const MainNavigation: React.FC = () => {
   const { pathname } = useLocation();
 
@@ -43,8 +45,15 @@ const MainNavigation: React.FC = () => {
               )}
             </div>
             <div>
-              <Currency symbol="$" name="USD" amount={data.doc.wallet.USD} />
-              <Currency symbol="€" name="GBP" amount={data.doc.wallet.GBP} />
+              {Object.keys(data.doc.wallet).map((currency, index) => {
+                return (
+                  <Currency
+                    key={currency}
+                    name={currency as TCurrencies}
+                    amount={data.doc.wallet[currency as TCurrencies]}
+                  />
+                );
+              })}
             </div>
           </div>
         ) : (
