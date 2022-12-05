@@ -1,19 +1,17 @@
 import { Schema, model } from "mongoose";
 
-import { IExchange, TCurrencies } from "interfaces-common";
-
-const CurrencyOptions: TCurrencies[] = ["USD", "GBP"];
+import { IExchange, OCurrency } from "interfaces-common";
 
 const ExchangeSchema = new Schema<IExchange>(
   {
     _id: { type: Schema.Types.ObjectId, required: true },
     userID: { type: Schema.Types.ObjectId, required: true },
     base: {
-      currency: { type: CurrencyOptions, required: true },
+      currency: { type: String, enum: OCurrency, required: true },
       amount: { type: Number, required: true },
     },
     converted: {
-      currency: { type: CurrencyOptions, required: true },
+      currency: { type: String, enum: OCurrency, required: true },
       amount: { type: Number, required: true },
     },
   },
