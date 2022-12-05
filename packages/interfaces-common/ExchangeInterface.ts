@@ -36,3 +36,5 @@ export interface CurrencyInfoInterface {
   currency: TCurrencies;
   amount: number;
 }
+
+export const CurrencyOptions: TCurrencies[] = ["USD", "GBP"];
