@@ -3,7 +3,7 @@ import styles from "./Currency.module.scss";
 
 import { TCurrencies } from "interfaces-common";
 
-interface Props {
+export interface Props {
   name: TCurrencies;
   amount: number;
 }
