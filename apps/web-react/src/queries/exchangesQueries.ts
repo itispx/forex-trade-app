@@ -17,13 +17,9 @@ export const performExchangeQuery = async ({
   return data;
 };
 
-export const getExchangesQuery = async ({
-  queryKey,
-}: QueryFunctionContext<[string, number]>): Promise<
-  IQuery & { success: { docs: IExchange[] } }
-> => {
-  const [_, page] = queryKey;
-
+export const getExchangesQuery = async (
+  page: number,
+): Promise<IQuery & { success: { docs: IExchange[] } }> => {
   const request = await http();
 
   const { data } = await request.get("/exchanges", { params: { page } });
