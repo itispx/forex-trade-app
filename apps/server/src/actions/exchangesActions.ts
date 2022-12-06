@@ -1,10 +1,13 @@
 import { Namespace } from "socket.io";
 
+import APIError from "../util/errors/APIError";
+
 import {
   getCurrentExchangeValues,
   makeExchangeQuery,
   getExchangesQuery,
 } from "../queries/exchangesQueries";
+
 import {
   getUserAction,
   addBalanceAction,
@@ -17,7 +20,6 @@ import {
   IExchangeConversion,
   IExchangeDocument,
 } from "interfaces-common";
-import APIError from "../util/errors/APIError";
 
 export const getExchangeValuesAction = async (): Promise<IExchangeConversion[]> => {
   const rates: IExchangeConversion[] = [];

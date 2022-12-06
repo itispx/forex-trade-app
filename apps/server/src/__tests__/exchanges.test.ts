@@ -2,6 +2,10 @@ import request from "supertest";
 
 import app from "../app";
 
+// import { createServer } from "http";
+// import { Server } from "socket.io";
+// import Client, { Socket } from "socket.io-client";
+
 import {
   connectMongoMemoryServer,
   disconnectDB,
@@ -30,6 +34,38 @@ describe("exchanges", () => {
   afterAll(async () => {
     await disconnectDB();
   });
+
+  // describe("exchange websocket", () => {
+  //   let io: Server | undefined = undefined;
+  //   let serverSocket: Socket | undefined = undefined;
+  //   let clientSocket: Socket | undefined = undefined;
+
+  //   beforeAll((done) => {
+  //     const port = 3001;
+
+  //     const httpServer = createServer(app);
+
+  //     httpServer.listen(port, () => {
+  //       io = new Server(httpServer, { cors: { origin: "*" } });
+
+  //       const exchangeIo = io.of("/v1/exchanges");
+
+  //       clientSocket = new Client(`http://localhost:${port}/v1/exchanges`);
+
+  //       exchangeIo.on("connection", () => {
+  //         console.log("hit");
+  //         //   getRealTimeExchangeValuesAction(exchangeIo);
+  //       });
+
+  //       clientSocket?.on("connect", done);
+  //     });
+  //   });
+
+  //   afterAll(() => {
+  //     io.close();
+  //     clientSocket.close();
+  //   });
+  // });
 
   describe("make exchange", () => {
     it("should make successful exchange", async () => {
