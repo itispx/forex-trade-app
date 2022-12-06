@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import styles from "./ExchangeRateInfo.module.scss";
 
-import queryClient from "../../utilities/queryClient";
+import useUserQueryData from "../../queries/useUserQueryData";
 
 import { toast } from "react-toastify";
 
 import BuyModal from "../Modals/BuyModal";
 
-import { IUserServerResponse, IExchangeConversion } from "interfaces-common";
+import { IExchangeConversion } from "interfaces-common";
 
-const ExchangeRateInfo: React.FC<{ exchangeInfo: IExchangeConversion }> = ({
-  exchangeInfo,
-}) => {
+export interface Props {
+  exchangeInfo: IExchangeConversion;
+}
+
+const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
   const [showModal, setShowModal] = useState(false);
 
   function openModal() {
@@ -23,11 +25,11 @@ const ExchangeRateInfo: React.FC<{ exchangeInfo: IExchangeConversion }> = ({
   }
 
   const buyHandler = async () => {
-    const data = (await queryClient.getQueryData("user")) as
-      | IUserServerResponse
-      | undefined;
+    const data = await useUserQueryData();
 
-    if (!data || !data.token || !data.doc || !data.token) {
+    console.log("DATA:", data);
+
+    if (!data || !data.token || !data.doc) {
       toast.error("User not signed in");
     } else if (data.doc.wallet[exchangeInfo.base] <= 0) {
       toast.error("You don't have enough money");
@@ -41,17 +43,29 @@ const ExchangeRateInfo: React.FC<{ exchangeInfo: IExchangeConversion }> = ({
       <div className={styles["container"]}>
         <div className={styles["data-container"]}>
           <div className={styles["currency-container"]}>
-            <span className={styles["currency-type"]}>{exchangeInfo.base}</span>
-            <span className={styles["currency-value"]}>1</span>
+            <span data-testid="base-currency" className={styles["currency-type"]}>
+              {exchangeInfo.base}
+            </span>
+            <span data-testid="base-amount" className={styles["currency-value"]}>
+              1
+            </span>
           </div>
           <span className={styles["equal-sign"]}>=</span>
           <div className={styles["currency-container"]}>
-            <span className={styles["currency-type"]}>{exchangeInfo.converted}</span>
-            <span className={styles["currency-value"]}>{exchangeInfo.exchangeRate}</span>
+            <span data-testid="converted-currency" className={styles["currency-type"]}>
+              {exchangeInfo.converted}
+            </span>
+            <span data-testid="converted-amount" className={styles["currency-value"]}>
+              {exchangeInfo.exchangeRate}
+            </span>
           </div>
         </div>
 
-        <div className={styles["buy-button-container"]} onClick={() => buyHandler()}>
+        <div
+          data-testid="buy-button-container"
+          className={styles["buy-button-container"]}
+          onClick={buyHandler}
+        >
           <div className={styles["buy-button"]}>
             <h1>BUY</h1>
           </div>
