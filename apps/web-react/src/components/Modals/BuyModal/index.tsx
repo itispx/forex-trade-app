@@ -55,10 +55,10 @@ const BuyModal: React.FC<Props> = ({ show, close, exchangeInfo }) => {
         <h1 className={styles["title"]}>Buy</h1>
 
         <div className={styles["display-converted-container"]}>
-          <span className={styles["currencies"]}>
+          <span data-testid="currencies-display" className={styles["currencies"]}>
             {exchangeInfo.base} &gt; {exchangeInfo.converted} =
           </span>
-          <span className={styles["total-value"]}>
+          <span data-testid="total-amount" className={styles["total-value"]}>
             {amount * exchangeInfo.exchangeRate}
           </span>
         </div>
