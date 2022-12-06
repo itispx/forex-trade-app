@@ -1,0 +1,22 @@
+import { useQuery } from "react-query";
+
+import { getUserQuery } from "./usersQueries";
+
+import { toast } from "react-toastify";
+
+const useFetchUser = () => {
+  const { data } = useQuery("user", getUserQuery, {
+    select: (data) => {
+      if (data && data.status.ok) {
+        return data;
+      }
+
+      toast.error("Something went wrong");
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  return { data };
+};
+
+export default useFetchUser;

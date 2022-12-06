@@ -1,11 +1,7 @@
 import React, { useState, useCallback } from "react";
 import styles from "./BuyModal.module.scss";
 
-import queryClient from "../../../utilities/queryClient";
-import { useMutation } from "react-query";
-import { performExchangeQuery } from "../../../queries/exchangesQueries";
-
-import { toast } from "react-toastify";
+import usePostExchange from "../../../queries/usePostExchange";
 
 import { FormikProps } from "formik";
 
@@ -24,20 +20,7 @@ interface Props {
 }
 
 const BuyModal: React.FC<Props> = ({ show, close, exchangeInfo }) => {
-  const { mutate: performExchange, isLoading } = useMutation(performExchangeQuery, {
-    onSuccess: (data) => {
-      if (data.status.code === 201) {
-        close();
-      }
-    },
-    onError: () => {
-      toast.error("Something went wrong");
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries("user");
-      queryClient.invalidateQueries("exchanges");
-    },
-  });
+  const { mutate: performExchange, isLoading } = usePostExchange();
 
   const [amount, setAmount] = useState(1);
 

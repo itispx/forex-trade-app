@@ -3,11 +3,7 @@ import styles from "./SignInModal.module.scss";
 
 import Modal from "react-modal";
 
-import queryClient from "../../../utilities/queryClient";
-import { useMutation } from "react-query";
-import { signInUserQuery } from "../../../queries/usersQueries";
-
-import { toast } from "react-toastify";
+import useSignInUser from "../../../queries/useSignInUser";
 
 import SignInForm from "../../Forms/SignInForm";
 
@@ -19,17 +15,7 @@ interface Props {
 }
 
 const SignInModal: React.FC<Props> = ({ show, close }) => {
-  const { mutate: signInUser, isLoading } = useMutation(signInUserQuery, {
-    onSuccess: (data) => {
-      if (data.status.code === 200) {
-        queryClient.setQueryData("user", data);
-        close();
-      }
-    },
-    onError: () => {
-      toast.error("Something went wrong");
-    },
-  });
+  const { mutate: signInUser, isLoading } = useSignInUser(close);
 
   async function submitHandler(username: string, password: string) {
     signInUser({ username, password });
