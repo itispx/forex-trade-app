@@ -51,25 +51,83 @@ describe("exchanges", () => {
       );
       expect(typeof response.body.success.doc.createdAt).toBe("string");
     });
+
+    it("should fail with code 401", async () => {
+      const response = await request(app).post("/v1/exchanges").send(exchangeInfo);
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body.status.code).toBe(401);
+      expect(response.body.status.ok).toBe(false);
+    });
   });
 
-  it("should fail with code 401", async () => {
-    const response = await request(app).post("/v1/exchanges").send(exchangeInfo);
+  describe("get user past exchanges", () => {
+    beforeAll(async () => {
+      for (let i = 0; i < 11; i++) {
+        await request(app)
+          .post("/v1/exchanges")
+          .set({ Authorization: "Bearer " + token })
+          .send(exchangeInfo);
+      }
+    });
 
-    expect(response.statusCode).toBe(401);
-    expect(response.body.status.code).toBe(401);
-    expect(response.body.status.ok).toBe(false);
+    it("should get exchanges on page 0", async () => {
+      const response = await request(app)
+        .get("/v1/exchanges")
+        .set({ Authorization: "Bearer " + token })
+        .query({ page: 0 });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body.success.docs.length).toBe(5);
+    });
+
+    it("should get exchanges on page 1", async () => {
+      const response = await request(app)
+        .get("/v1/exchanges")
+        .set({ Authorization: "Bearer " + token })
+        .query({ page: 1 });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body.success.docs.length).toBe(5);
+    });
+
+    it("should get exchanges on page 2", async () => {
+      const response = await request(app)
+        .get("/v1/exchanges")
+        .set({ Authorization: "Bearer " + token })
+        .query({ page: 2 });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body.success.docs.length).toBe(2);
+    });
+
+    it("should get exchanges on page 0 without passing query params", async () => {
+      const response = await request(app)
+        .get("/v1/exchanges")
+        .set({ Authorization: "Bearer " + token });
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body.success.docs.length).toBe(5);
+    });
+
+    it("should fail get exchanges with code 401", async () => {
+      const response = await request(app).get("/v1/exchanges");
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body.status.code).toBe(401);
+      expect(response.body.status.ok).toBe(false);
+    });
   });
 });
 
 const makeExchangeInfoObj = (): IExchangeInfo => {
   const baseCurrency = OCurrency[randomNumber(OCurrency.length - 1)];
-  const baseAmount = randomNumber(100, 1);
+  const baseAmount = randomNumber(80, 1);
 
   const convertCurrency = OCurrency.filter((cur) => baseCurrency !== cur)[
     randomNumber(OCurrency.length - 2)
   ];
-  const convertAmount = randomNumber(100, 1);
+  const convertAmount = randomNumber(80, 1);
 
   return {
     base: { currency: baseCurrency, amount: baseAmount },

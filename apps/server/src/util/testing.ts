@@ -15,10 +15,12 @@ export const userPayload = {
   password: "test_password",
 };
 
-export const connectMongoMemoryServer = async (): Promise<void> => {
+export const connectMongoMemoryServer = async (): Promise<MongoMemoryServer> => {
   const mongoServer = await MongoMemoryServer.create();
 
   await connectDB(mongoServer.getUri());
+
+  return mongoServer;
 };
 
 export const disconnectDB = async (): Promise<void> => {
