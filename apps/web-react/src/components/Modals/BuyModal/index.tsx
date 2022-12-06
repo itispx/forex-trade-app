@@ -43,6 +43,8 @@ const BuyModal: React.FC<Props> = ({ show, close, exchangeInfo }) => {
 
   return (
     <Modal
+      id="buy-modal"
+      testId="buy-modal"
       isOpen={show}
       onRequestClose={close}
       contentLabel="BuyModal"

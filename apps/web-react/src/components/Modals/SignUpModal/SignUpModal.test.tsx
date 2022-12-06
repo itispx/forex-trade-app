@@ -3,9 +3,17 @@ import { render } from "../../../utilities/testing";
 
 import SignUpModal from ".";
 
-describe("sign in modal component", () => {
+describe("sign up modal component", () => {
   describe("modal visibility", () => {
     const handleClose = jest.fn();
+
+    it("should have title", () => {
+      render(<SignUpModal show={true} close={handleClose} />);
+
+      const title = screen.getByText("Sign Up");
+
+      expect(title).toBeVisible();
+    });
 
     it("should be visible", () => {
       render(<SignUpModal show={true} close={handleClose} />);

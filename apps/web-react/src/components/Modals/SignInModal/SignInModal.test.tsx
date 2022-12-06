@@ -7,6 +7,14 @@ describe("sign in modal component", () => {
   describe("modal visibility", () => {
     const handleClose = jest.fn();
 
+    it("should have title", () => {
+      render(<SignInModal show={true} close={handleClose} />);
+
+      const title = screen.getByText("Sign In");
+
+      expect(title).toBeVisible();
+    });
+
     it("should be visible", () => {
       render(<SignInModal show={true} close={handleClose} />);
 
