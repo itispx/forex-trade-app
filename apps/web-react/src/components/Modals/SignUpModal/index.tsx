@@ -37,6 +37,7 @@ const SignUpModal: React.FC<Props> = ({ show, close }) => {
 
   return (
     <Modal
+      testId="sign-up-modal"
       isOpen={show}
       onRequestClose={close}
       contentLabel="SignUpModal"
