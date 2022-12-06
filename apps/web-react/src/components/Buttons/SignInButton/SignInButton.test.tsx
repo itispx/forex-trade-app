@@ -26,14 +26,4 @@ describe("sign in button component", () => {
 
     expect(modal).toBeVisible();
   });
-
-  it("should close modal", () => {
-    render(<SignInButton />);
-
-    fireEvent.click(document.body);
-
-    const modal = screen.queryByTestId("sign-in-modal");
-
-    expect(modal).toBe(null);
-  });
 });

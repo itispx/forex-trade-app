@@ -26,14 +26,4 @@ describe("sign up button component", () => {
 
     expect(modal).toBeVisible();
   });
-
-  it("should close modal", () => {
-    render(<SignUpButton />);
-
-    fireEvent.click(document.body);
-
-    const modal = screen.queryByTestId("sign-up-modal");
-
-    expect(modal).toBe(null);
-  });
 });
