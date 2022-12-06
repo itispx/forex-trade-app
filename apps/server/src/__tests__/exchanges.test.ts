@@ -2,11 +2,14 @@ import request from "supertest";
 
 import app from "../app";
 
-import { connectMongoMemoryServer, disconnectDB, createUserDB } from "../util/testing";
+import {
+  connectMongoMemoryServer,
+  disconnectDB,
+  createUserDB,
+  makeExchangeInfoObj,
+} from "../util/testing";
 
-import randomNumber from "../util/randomNumber";
-
-import { IExchangeInfo, OCurrency, IUser } from "interfaces-common";
+import { IExchangeInfo, IUser } from "interfaces-common";
 
 describe("exchanges", () => {
   let exchangeInfo: IExchangeInfo | undefined = undefined;
@@ -119,18 +122,3 @@ describe("exchanges", () => {
     });
   });
 });
-
-const makeExchangeInfoObj = (): IExchangeInfo => {
-  const baseCurrency = OCurrency[randomNumber(OCurrency.length - 1)];
-  const baseAmount = randomNumber(80, 1);
-
-  const convertCurrency = OCurrency.filter((cur) => baseCurrency !== cur)[
-    randomNumber(OCurrency.length - 2)
-  ];
-  const convertAmount = randomNumber(80, 1);
-
-  return {
-    base: { currency: baseCurrency, amount: baseAmount },
-    convert: { currency: convertCurrency, amount: convertAmount },
-  };
-};
