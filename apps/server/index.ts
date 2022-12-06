@@ -1,7 +1,7 @@
 import * as http from "http";
 import app from "./src/app";
 
-import connectDB from "./src/middleware/connect-db";
+import { connectDB } from "./src/util/db";
 
 const port = process.env.PORT || 3001;
 
@@ -22,5 +22,5 @@ exchangeIo.on("connection", () => {
 server.listen(port, async () => {
   console.log(`Server running at http://localhost:${port}`);
 
-  await connectDB();
+  await connectDB(process.env.MONGO_DB_URI as string);
 });

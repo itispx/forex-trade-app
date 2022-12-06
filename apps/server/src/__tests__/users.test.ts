@@ -4,7 +4,7 @@ import app from "../app";
 
 import signJwt from "../util/signJwt";
 
-import { connectDB, disconnectDB } from "../util/testing";
+import { connectMongoMemoryServer, disconnectDB } from "../util/testing";
 
 describe("users", () => {
   const userPayload = {
@@ -14,7 +14,7 @@ describe("users", () => {
   };
 
   beforeAll(async () => {
-    await connectDB();
+    await connectMongoMemoryServer();
   });
 
   afterAll(async () => {

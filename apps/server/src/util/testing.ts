@@ -5,6 +5,8 @@ import { Express } from "express";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
+import { connectDB } from "./db";
+
 import { IUserServerResponse } from "interfaces-common";
 
 export const userPayload = {
@@ -13,10 +15,10 @@ export const userPayload = {
   password: "test_password",
 };
 
-export const connectDB = async (): Promise<void> => {
+export const connectMongoMemoryServer = async (): Promise<void> => {
   const mongoServer = await MongoMemoryServer.create();
 
-  await mongoose.connect(mongoServer.getUri());
+  await connectDB(mongoServer.getUri());
 };
 
 export const disconnectDB = async (): Promise<void> => {
