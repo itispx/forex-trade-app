@@ -4,15 +4,9 @@ import app from "../app";
 
 import signJwt from "../util/signJwt";
 
-import { connectMongoMemoryServer, disconnectDB } from "../util/testing";
+import { connectMongoMemoryServer, disconnectDB, userPayload } from "../util/testing";
 
 describe("users", () => {
-  const userPayload = {
-    _id: "",
-    username: "test_username",
-    password: "test_password",
-  };
-
   beforeAll(async () => {
     await connectMongoMemoryServer();
   });

@@ -1,6 +1,6 @@
 import { ObjectId, Document } from "mongoose";
 
-import TCurrencies from "./CurrenciesTypes";
+import TCurrencies, { CurrencyInfoInterface } from "./CurrenciesTypes";
 
 interface ExchangeInterface {
   _id: ObjectId;
@@ -31,10 +31,3 @@ export interface ExchangeInfoInterface {
   base: CurrencyInfoInterface;
   convert: CurrencyInfoInterface;
 }
-
-export interface CurrencyInfoInterface {
-  currency: TCurrencies;
-  amount: number;
-}
-
-export const CurrencyOptions: TCurrencies[] = ["USD", "GBP"];
