@@ -52,6 +52,14 @@ describe("exchanges", () => {
       expect(typeof response.body.success.doc.createdAt).toBe("string");
     });
   });
+
+  it("should fail with code 401", async () => {
+    const response = await request(app).post("/v1/exchanges").send(exchangeInfo);
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.status.code).toBe(401);
+    expect(response.body.status.ok).toBe(false);
+  });
 });
 
 const makeExchangeInfoObj = (): IExchangeInfo => {
