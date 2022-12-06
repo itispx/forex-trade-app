@@ -1,4 +1,5 @@
-import { render, screen, cleanup } from "@testing-library/react";
+import { screen, cleanup } from "@testing-library/react";
+import { render } from "../../../utilities/testing";
 
 import SignInButton from ".";
 

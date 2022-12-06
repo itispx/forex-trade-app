@@ -1,20 +1,20 @@
 import React from "react";
+import { render, RenderOptions } from "@testing-library/react";
 
+// Providers
 import { QueryClientProvider } from "react-query";
-import queryClient from "../utilities/queryClient";
+import queryClient from "./queryClient";
 
 import { BrowserRouter } from "react-router-dom";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import Layout from "../Layout";
-
-const App: React.FC = () => {
+const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Layout />
+        {children}
         <ToastContainer
           position="top-center"
           autoClose={2500}
@@ -32,4 +32,8 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+const customRender = (ui: React.ReactElement, options?: RenderOptions) => {
+  render(ui, { wrapper, ...options });
+};
+
+export { customRender as render };
