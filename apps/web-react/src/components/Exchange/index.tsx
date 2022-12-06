@@ -13,14 +13,15 @@ interface Props {
     amount: number;
   };
   createdAt: string;
+  innerRef?: React.Ref<HTMLDivElement>;
 }
 
-const Exchange: React.FC<Props> = ({ base, converted, createdAt }) => {
+const Exchange: React.FC<Props> = ({ base, converted, createdAt, innerRef }) => {
   const date = new Date(createdAt).toLocaleDateString();
   const time = new Date(createdAt).toLocaleTimeString();
 
   return (
-    <div className={styles["container"]}>
+    <div className={styles["container"]} ref={innerRef}>
       <div className={styles["data-container"]}>
         <div className={styles["currency-container"]}>
           <span className={styles["currency-type"]}>{base.currency}</span>
