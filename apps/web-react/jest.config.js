@@ -1,3 +1,4 @@
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   preset: "ts-jest",
   transform: {
@@ -9,4 +10,6 @@ module.exports = {
   },
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["./src/setupTests.ts"],
+  collectCoverage: true,
+  coverageReporters: ["text"],
 };

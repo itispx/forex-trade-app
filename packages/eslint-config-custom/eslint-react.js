@@ -28,6 +28,8 @@ module.exports = {
       files: ["*.test.tsx"],
       rules: {
         "react/react-in-jsx-scope": 0,
+        "testing-library/no-container": 0,
+        "testing-library/no-node-access": 0,
       },
     },
   ],

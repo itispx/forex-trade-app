@@ -33,7 +33,7 @@ const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 const customRender = (ui: React.ReactElement, options?: RenderOptions) => {
-  render(ui, { wrapper, ...options });
+  return render(ui, { wrapper, ...options });
 };
 
 export { customRender as render };

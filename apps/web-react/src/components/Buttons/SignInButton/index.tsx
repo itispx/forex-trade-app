@@ -16,7 +16,11 @@ const SignInButton: React.FC = () => {
 
   return (
     <>
-      <div className={styles["container"]} onClick={openModal}>
+      <div
+        id="sign-in-button-container"
+        className={styles["container"]}
+        onClick={openModal}
+      >
         <span className={styles["text"]}>Sign In</span>
       </div>
 

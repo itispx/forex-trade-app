@@ -43,6 +43,7 @@
 
 # TODO
 
+- Show error in buy modal if user does not have enough money to perform exchange
 - Routes validation
 - Finish testing
 - Website responsiveness
