@@ -1,16 +1,32 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./Exchanges.module.scss";
 
-import { getExchangesQuery } from "../../queries/exchangesQueries";
+import queryClient from "../../utilities/queryClient";
+
+import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
+
+import { getExchangesQuery } from "../../queries/exchangesQueries";
 
 import Loading from "../../components/Loading";
 import Exchange from "../../components/Exchange";
 
-import { IExchange } from "interfaces-common";
+import { IExchange, IUserServerResponse } from "interfaces-common";
 
 const ExchangesPage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const userQueryData = queryClient.getQueryData("user") as
+    | IUserServerResponse
+    | undefined;
+
+  useEffect(() => {
+    if (!userQueryData) {
+      navigate("/");
+    }
+  }, []);
+
   const page = useRef(0);
   const hasMore = useRef(true);
 
