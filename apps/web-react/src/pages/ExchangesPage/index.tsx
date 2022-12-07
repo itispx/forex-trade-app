@@ -1,25 +1,23 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./Exchanges.module.scss";
 
-import queryClient from "../../utilities/queryClient";
-
 import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
 import { getExchangesQuery } from "../../queries/exchangesQueries";
 
+import useUserQueryData from "../../queries/hooks/useUserQueryData";
+
 import Loading from "../../components/Loading";
 import Exchange from "../../components/Exchange";
 
-import { IExchange, IUserServerResponse } from "interfaces-common";
+import { IExchange } from "interfaces-common";
 
 const ExchangesPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const userQueryData = queryClient.getQueryData("user") as
-    | IUserServerResponse
-    | undefined;
+  const userQueryData = useUserQueryData();
 
   useEffect(() => {
     if (!userQueryData) {
@@ -84,23 +82,22 @@ const ExchangesPage: React.FC = () => {
   );
 
   return (
-    <div className={styles["page-container"]}>
-      {isLoading ? (
+    <div data-testid="exchanges-page" className={styles["page-container"]}>
+      {data.map((exchange, index) => {
+        return (
+          <Exchange
+            innerRef={data.length === index + 1 ? lastItemRef : null}
+            key={exchange._id.toString()}
+            base={exchange.base}
+            converted={exchange.converted}
+            createdAt={exchange.createdAt}
+          />
+        );
+      })}
+      {isLoading && (
         <div className={styles["loading-container"]}>
           <Loading />
         </div>
-      ) : (
-        data.map((exchange, index) => {
-          return (
-            <Exchange
-              innerRef={data.length === index + 1 ? lastItemRef : null}
-              key={exchange._id.toString()}
-              base={exchange.base}
-              converted={exchange.converted}
-              createdAt={exchange.createdAt}
-            />
-          );
-        })
       )}
     </div>
   );

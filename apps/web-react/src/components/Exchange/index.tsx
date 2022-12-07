@@ -15,7 +15,7 @@ const Exchange: React.FC<Props> = ({ base, converted, createdAt, innerRef }) => 
   const time = new Date(createdAt).toLocaleTimeString();
 
   return (
-    <div className={styles["container"]} ref={innerRef}>
+    <div data-testid="exchange" className={styles["container"]} ref={innerRef}>
       <div className={styles["data-container"]}>
         <div className={styles["currency-container"]}>
           <span data-testid="base-currency" className={styles["currency-type"]}>
