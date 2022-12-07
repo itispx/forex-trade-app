@@ -29,7 +29,7 @@ const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
   }
 
   const buyHandler = async () => {
-    const data = await useUserQueryData();
+    const data = useUserQueryData();
 
     if (!data || !data.token || !data.doc) {
       toast.error("User not signed in");

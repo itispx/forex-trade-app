@@ -57,7 +57,7 @@ describe("exchange rate info component", () => {
   });
 
   it("should not open modal because user is not logged in", async () => {
-    useUserQueryDataMocked.mockImplementation(async () => undefined);
+    useUserQueryDataMocked.mockImplementation(() => undefined);
 
     render(<ExchangeRateInfo {...exchangeRateInfo} />);
 
@@ -71,7 +71,7 @@ describe("exchange rate info component", () => {
   });
 
   it("should open modal", async () => {
-    useUserQueryDataMocked.mockImplementation(async () => ({
+    useUserQueryDataMocked.mockImplementation(() => ({
       doc: {
         _id: "01234567890" as unknown as ObjectId,
         username: "test_username",

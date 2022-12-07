@@ -10,17 +10,17 @@ const useUserQueryDataMocked = jest.mocked(useUserQueryData, true);
 
 describe("get user token function", () => {
   it("should return undefined", async () => {
-    useUserQueryDataMocked.mockImplementation(async () => undefined);
+    useUserQueryDataMocked.mockImplementation(() => undefined);
 
-    const token = await getUserToken();
+    const token = getUserToken();
 
     expect(token).toBe(undefined);
   });
 
   it("should return token", async () => {
-    useUserQueryDataMocked.mockImplementation(async () => userMock);
+    useUserQueryDataMocked.mockImplementation(() => userMock);
 
-    const token = await getUserToken();
+    const token = getUserToken();
 
     expect(token).toBe(userMock.token);
   });
