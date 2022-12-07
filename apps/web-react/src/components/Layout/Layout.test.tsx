@@ -1,5 +1,5 @@
 import { screen } from "@testing-library/react";
-import { render } from "../utilities/testing";
+import { render } from "../../utilities/testing";
 
 import Layout from ".";
 

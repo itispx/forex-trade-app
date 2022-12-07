@@ -1,7 +1,7 @@
 import React from "react";
 
 import { QueryClientProvider } from "react-query";
-import queryClient from "../utilities/queryClient";
+import queryClient from "../../utilities/queryClient";
 
 import { BrowserRouter } from "react-router-dom";
 
