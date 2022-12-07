@@ -8,8 +8,8 @@ import TextFormField from "../../TextFormField";
 import Loading from "../../Loading";
 
 interface Props {
-  submitHandler: (username: string, password: string) => void;
   isLoading: boolean;
+  submitHandler: (username: string, password: string) => void;
   inputRef?: React.RefObject<
     FormikProps<{
       username: string;
@@ -18,7 +18,7 @@ interface Props {
   >;
 }
 
-const SignInForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => {
+const SignInForm: React.FC<Props> = ({ isLoading, submitHandler, inputRef }) => {
   const signInSchema = yup.object({
     username: yup.string().typeError("Invalid username").required("Username is required"),
     password: yup.string().required("Password is required"),
@@ -62,7 +62,11 @@ const SignInForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => 
                 <Loading />
               </div>
             ) : (
-              <div className={styles["submit"]} onClick={() => fprops.submitForm()}>
+              <div
+                data-testid="submit-button"
+                className={styles["submit"]}
+                onClick={() => fprops.submitForm()}
+              >
                 <h2>Submit</h2>
               </div>
             )}
