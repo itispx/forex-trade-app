@@ -9,13 +9,13 @@ describe("sign in form", () => {
     it("should render username input", () => {
       const { container } = renderComp();
 
-      expect(getUsernameInput(container)).toBeInTheDocument();
+      expect(getUsernameInput(container)).toBeVisible();
     });
 
     it("should render password input", () => {
       const { container } = renderComp();
 
-      expect(getPasswordInput(container)).toBeInTheDocument();
+      expect(getPasswordInput(container)).toBeVisible();
     });
 
     it("should render submit button", () => {

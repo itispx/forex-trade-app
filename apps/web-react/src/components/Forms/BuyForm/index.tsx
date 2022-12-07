@@ -19,7 +19,11 @@ interface Props {
 
 const BuyForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => {
   const buySchema = yup.object({
-    amount: yup.number().typeError("Invalid amount"),
+    amount: yup
+      .number()
+      .typeError("Invalid amount")
+      .min(0.1, "Minimal amount of 0.1")
+      .required("Amount is required"),
   });
 
   return (
@@ -50,7 +54,11 @@ const BuyForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => {
                 <Loading />
               </div>
             ) : (
-              <div className={styles["submit"]} onClick={() => fprops.submitForm()}>
+              <div
+                data-testid="submit-button"
+                className={styles["submit"]}
+                onClick={() => fprops.submitForm()}
+              >
                 <h2>Submit</h2>
               </div>
             )}

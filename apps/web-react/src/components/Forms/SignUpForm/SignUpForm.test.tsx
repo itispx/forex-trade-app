@@ -9,19 +9,19 @@ describe("sign up form", () => {
     it("should render username input", () => {
       const { container } = renderComp();
 
-      expect(getUsernameInput(container)).toBeInTheDocument();
+      expect(getUsernameInput(container)).toBeVisible();
     });
 
     it("should render password input", () => {
       const { container } = renderComp();
 
-      expect(getPasswordInput(container)).toBeInTheDocument();
+      expect(getPasswordInput(container)).toBeVisible();
     });
 
     it("should render confirm password  input", () => {
       const { container } = renderComp();
 
-      expect(getConfirmPasswordInput(container)).toBeInTheDocument();
+      expect(getConfirmPasswordInput(container)).toBeVisible();
     });
 
     it("should render submit button", () => {
@@ -50,7 +50,7 @@ describe("sign up form", () => {
   });
 
   describe("form validation", () => {
-    describe("username", () => {
+    describe("username validation", () => {
       it("should type valid username", async () => {
         const { container } = renderComp();
 
@@ -76,7 +76,7 @@ describe("sign up form", () => {
       });
     });
 
-    describe("password", () => {
+    describe("password validation", () => {
       it("should type valid password", async () => {
         const { container } = renderComp();
 
@@ -118,7 +118,7 @@ describe("sign up form", () => {
       });
     });
 
-    describe("confirm password", () => {
+    describe("confirm password validation", () => {
       it("should type valid confirm password", async () => {
         const { container } = renderComp();
 
