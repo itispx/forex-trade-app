@@ -4,7 +4,7 @@ import { render } from "../../utilities/testing";
 import Currency, { Props } from ".";
 
 describe("currency component", () => {
-  it("should display 0 with 3 decimals", () => {
+  it("should display 0 as 0.000", () => {
     const currencyInfo: Props = {
       name: "USD",
       amount: 0,
@@ -14,10 +14,10 @@ describe("currency component", () => {
 
     const cd = screen.getByTestId("currency-display").textContent;
 
-    expect(cd).toBe(`${currencyInfo.name}: ${currencyInfo.amount.toFixed(3)}`);
+    expect(cd).toBe(`${currencyInfo.name}: 0.000`);
   });
 
-  it("should display 1.11 with 3 decimals", () => {
+  it("should display 1.11 as 1.110", () => {
     const currencyInfo: Props = {
       name: "GBP",
       amount: 1.11,
@@ -27,10 +27,10 @@ describe("currency component", () => {
 
     const cd = screen.getByTestId("currency-display").textContent;
 
-    expect(cd).toBe(`${currencyInfo.name}: ${currencyInfo.amount.toFixed(3)}`);
+    expect(cd).toBe(`${currencyInfo.name}: 1.110`);
   });
 
-  it("should display 2.2222222 with 3 decimals", () => {
+  it("should display 2.2222222 as 2.222", () => {
     const currencyInfo: Props = {
       name: "USD",
       amount: 2.2222222,
@@ -40,6 +40,6 @@ describe("currency component", () => {
 
     const cd = screen.getByTestId("currency-display").textContent;
 
-    expect(cd).toBe(`${currencyInfo.name}: ${currencyInfo.amount.toFixed(3)}`);
+    expect(cd).toBe(`${currencyInfo.name}: 2.222`);
   });
 });
