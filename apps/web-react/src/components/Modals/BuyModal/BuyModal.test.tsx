@@ -12,11 +12,13 @@ describe("buy modal component", () => {
     exchangeRate: 0.5,
   };
 
-  const handleClose = jest.fn();
+  const handleCloseMock = jest.fn();
 
   describe("modal visibility", () => {
     it("should have title", () => {
-      render(<BuyModal show={true} close={handleClose} exchangeInfo={exchangeInfo} />);
+      render(
+        <BuyModal show={true} close={handleCloseMock} exchangeInfo={exchangeInfo} />,
+      );
 
       const title = screen.getByText("Buy");
 
@@ -24,7 +26,9 @@ describe("buy modal component", () => {
     });
 
     it("should be visible", () => {
-      render(<BuyModal show={true} close={handleClose} exchangeInfo={exchangeInfo} />);
+      render(
+        <BuyModal show={true} close={handleCloseMock} exchangeInfo={exchangeInfo} />,
+      );
 
       const modal = screen.getByTestId("buy-modal");
 
@@ -32,7 +36,9 @@ describe("buy modal component", () => {
     });
 
     it("should not visible", () => {
-      render(<BuyModal show={false} close={handleClose} exchangeInfo={exchangeInfo} />);
+      render(
+        <BuyModal show={false} close={handleCloseMock} exchangeInfo={exchangeInfo} />,
+      );
 
       const modal = screen.queryByTestId("buy-modal");
 
@@ -40,7 +46,9 @@ describe("buy modal component", () => {
     });
 
     it("should close modal", () => {
-      render(<BuyModal show={true} close={handleClose} exchangeInfo={exchangeInfo} />);
+      render(
+        <BuyModal show={true} close={handleCloseMock} exchangeInfo={exchangeInfo} />,
+      );
 
       const modal = screen.queryByTestId("buy-modal");
 
@@ -53,13 +61,15 @@ describe("buy modal component", () => {
         });
       }
 
-      expect(handleClose).toHaveBeenCalledTimes(1);
+      expect(handleCloseMock).toHaveBeenCalledTimes(1);
     });
   });
 
   describe("display values", () => {
     it("should render the currencies display", () => {
-      render(<BuyModal show={true} close={handleClose} exchangeInfo={exchangeInfo} />);
+      render(
+        <BuyModal show={true} close={handleCloseMock} exchangeInfo={exchangeInfo} />,
+      );
 
       const cd = screen.getByTestId("currencies-display").textContent;
 
@@ -67,7 +77,9 @@ describe("buy modal component", () => {
     });
 
     it("should render the correct total amount", () => {
-      render(<BuyModal show={true} close={handleClose} exchangeInfo={exchangeInfo} />);
+      render(
+        <BuyModal show={true} close={handleCloseMock} exchangeInfo={exchangeInfo} />,
+      );
 
       const tm = screen.getByTestId("total-amount").textContent;
 
