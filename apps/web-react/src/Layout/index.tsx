@@ -8,13 +8,13 @@ import ExchangesPage from "../pages/ExchangesPage";
 
 const Layout: React.FC = () => {
   return (
-    <>
+    <div data-testid="layout">
       <MainNavigation />
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/exchanges" element={<ExchangesPage />} />
       </Routes>
-    </>
+    </div>
   );
 };
 

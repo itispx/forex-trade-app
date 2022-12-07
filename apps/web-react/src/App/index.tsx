@@ -16,6 +16,7 @@ const App: React.FC = () => {
       <BrowserRouter basename="/">
         <Layout />
         <ToastContainer
+          containerId="toast-container"
           position="top-center"
           autoClose={2500}
           hideProgressBar={false}
