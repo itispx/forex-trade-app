@@ -3,7 +3,7 @@ import { render } from "../../utilities/testing";
 
 import Layout from ".";
 
-describe("app component", () => {
+describe("layout component", () => {
   it("should render layout", () => {
     render(<Layout />);
 
