@@ -20,7 +20,11 @@ interface Props {
 
 const SignUpForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => {
   const signUpSchema = yup.object({
-    username: yup.string().typeError("Invalid username").required("Username is required"),
+    username: yup
+      .string()
+      .typeError("Invalid username")
+      .min(3, "Must have at least 3 characters")
+      .required("Username is required"),
     password: yup
       .string()
       .required("Password is required")
@@ -81,7 +85,11 @@ const SignUpForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => 
                 <Loading />
               </div>
             ) : (
-              <div className={styles["submit"]} onClick={() => fprops.submitForm()}>
+              <div
+                data-testid="submit-button"
+                className={styles["submit"]}
+                onClick={() => fprops.submitForm()}
+              >
                 <h2>Submit</h2>
               </div>
             )}

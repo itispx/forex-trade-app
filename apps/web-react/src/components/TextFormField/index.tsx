@@ -28,19 +28,23 @@ const TextFormField: React.FC<Props> = ({
 }) => {
   return (
     <div className={styles["container"]}>
-      <input
-        className={styles["field"]}
-        id={id}
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        {...inputProps}
-      />
+      <label htmlFor={name}>
+        <input
+          className={styles["field"]}
+          id={id}
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          {...inputProps}
+        />
+      </label>
 
-      <span className={styles["error-message"]}>&#8205;{touched && errors}</span>
+      <span data-testid={`${id}-error`} className={styles["error-message"]}>
+        {touched && errors}
+      </span>
     </div>
   );
 };
