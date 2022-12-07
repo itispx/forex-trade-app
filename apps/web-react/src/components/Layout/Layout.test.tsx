@@ -1,12 +1,14 @@
-import { screen } from "@testing-library/react";
+import { screen, act } from "@testing-library/react";
 import { render } from "../../utilities/testing";
 
 import Layout from ".";
 
 describe("layout component", () => {
-  it("should render layout", () => {
-    render(<Layout />);
-
+  it("should render layout", async () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act
+    await act(async () => {
+      render(<Layout />);
+    });
     const nav = screen.getByTestId("main-navigation-container");
 
     expect(nav).toBeVisible();
