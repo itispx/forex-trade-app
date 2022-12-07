@@ -1,4 +1,4 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, act, waitFor } from "@testing-library/react";
 import { render } from "../../utilities/testing";
 
 import useUserQueryData from "../../queries/useUserQueryData";
@@ -7,19 +7,9 @@ import { Types } from "mongoose";
 
 import ExchangeRateInfo, { Props } from ".";
 
-//     doc: {
-//       _id: "01234567890" as unknown as Types.ObjectId,
-//       username: "test_username",
-//       password: "hashed__password__hashed",
-//       wallet: {
-//         GBP: 1000,
-//         USD: 1000,
-//       },
-//       createdAt: "2022-11-30T15:50:08.043+00:00",
-//     },
-//     token: "123_token_123",
+jest.mock("../../queries/useUserQueryData");
 
-const useUserQueryDataMock = jest.fn(useUserQueryData);
+const useUserQueryDataMocked = jest.mocked(useUserQueryData, true);
 
 describe("exchange rate info component", () => {
   const exchangeRateInfo: Props = {
@@ -66,31 +56,45 @@ describe("exchange rate info component", () => {
     expect(ca).toBe(`${exchangeRateInfo.exchangeInfo.exchangeRate}`);
   });
 
-  it.todo("should open modal", async () => {
-    useUserQueryDataMock.mockImplementation(async () => {
-      return {
-        doc: {
-          _id: "01234567890" as unknown as Types.ObjectId,
-          username: "test_username",
-          password: "hashed__password__hashed",
-          wallet: {
-            GBP: 1000,
-            USD: 1000,
-          },
-          createdAt: "2022-11-30T15:50:08.043+00:00",
-        },
-        token: "123_token_123",
-      };
-    });
+  it("should not open modal because user is not logged in", async () => {
+    useUserQueryDataMocked.mockImplementation(async () => undefined);
 
     render(<ExchangeRateInfo {...exchangeRateInfo} />);
 
     const buyBtn = screen.getByTestId("buy-button-container");
 
-    fireEvent.click(buyBtn);
+    buyBtn.click();
 
     const modal = screen.queryByTestId("buy-modal");
 
-    expect(modal).toBeVisible();
+    expect(modal).toBe(null);
+  });
+
+  it("should open modal", async () => {
+    useUserQueryDataMocked.mockImplementation(async () => ({
+      doc: {
+        _id: "01234567890" as unknown as Types.ObjectId,
+        username: "test_username",
+        password: "hashed__password__hashed",
+        wallet: {
+          GBP: 1000,
+          USD: 1000,
+        },
+        createdAt: "2022-11-30T15:50:08.043+00:00",
+      },
+      token: "123_token_123",
+    }));
+
+    render(<ExchangeRateInfo {...exchangeRateInfo} />);
+
+    const buyBtn = screen.getByTestId("buy-button-container");
+
+    await waitFor(() => {
+      buyBtn.click();
+
+      const modal = screen.getByTestId("buy-modal");
+
+      expect(modal).toBeVisible();
+    });
   });
 });
