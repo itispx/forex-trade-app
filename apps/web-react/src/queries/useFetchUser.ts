@@ -4,7 +4,9 @@ import { getUserQuery } from "./usersQueries";
 
 import { toast } from "react-toastify";
 
-const useFetchUser = () => {
+import { IQuery, IUserServerResponse } from "interfaces-common";
+
+const useFetchUser = (): { data: (IQuery & IUserServerResponse) | undefined } => {
   const { data } = useQuery("user", getUserQuery, {
     select: (data) => {
       if (data && data.status.ok) {
