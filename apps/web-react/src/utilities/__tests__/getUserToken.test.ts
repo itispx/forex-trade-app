@@ -1,10 +1,10 @@
 import getUserToken from "../getUserToken";
 
-import useUserQueryData from "../../queries/useUserQueryData";
+import useUserQueryData from "../../queries/hooks/useUserQueryData";
 
 import { userMock } from "../testing";
 
-jest.mock("../../queries/useUserQueryData");
+jest.mock("../../queries/hooks/useUserQueryData");
 
 const useUserQueryDataMocked = jest.mocked(useUserQueryData, true);
 

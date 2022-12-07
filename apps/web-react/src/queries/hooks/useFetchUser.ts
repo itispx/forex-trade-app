@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 
-import { getUserQuery } from "./usersQueries";
+import { getUserQuery } from "../usersQueries";
 
 import { toast } from "react-toastify";
 

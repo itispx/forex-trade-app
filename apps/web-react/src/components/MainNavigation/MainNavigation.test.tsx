@@ -1,17 +1,17 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { render } from "../../utilities/testing";
 
 import MainNavigation from ".";
 
 import { ObjectId } from "mongoose";
 
-import useFetchUser from "../../queries/useFetchUser";
+import useFetchUser from "../../queries/hooks/useFetchUser";
 
 import { useLocation } from "react-router-dom";
 
 import { TCurrencies } from "interfaces-common";
 
-jest.mock("../../queries/useFetchUser");
+jest.mock("../../queries/hooks/useFetchUser");
 
 const useFetchUserMocked = jest.mocked(useFetchUser, true);
 

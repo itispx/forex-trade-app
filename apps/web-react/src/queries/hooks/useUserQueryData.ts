@@ -1,4 +1,4 @@
-import queryClient from "../utilities/queryClient";
+import queryClient from "../../utilities/queryClient";
 
 import { IUserServerResponse } from "interfaces-common";
 

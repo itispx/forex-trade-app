@@ -3,7 +3,7 @@ import styles from "./MainNavigation.module.scss";
 
 import { Link, useLocation } from "react-router-dom";
 
-import useFetchUser from "../../queries/useFetchUser";
+import useFetchUser from "../../queries/hooks/useFetchUser";
 
 import SignInButton from "../Buttons/SignInButton";
 import SignUpButton from "../Buttons/SignUpButton";

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./ExchangeRateInfo.module.scss";
 
-import useUserQueryData from "../../queries/useUserQueryData";
+import useUserQueryData from "../../queries/hooks/useUserQueryData";
 
 import { toast } from "react-toastify";
 

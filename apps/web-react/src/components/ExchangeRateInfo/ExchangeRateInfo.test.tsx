@@ -1,13 +1,13 @@
 import { screen, waitFor } from "@testing-library/react";
 import { render } from "../../utilities/testing";
 
-import useUserQueryData from "../../queries/useUserQueryData";
+import useUserQueryData from "../../queries/hooks/useUserQueryData";
 
 import { ObjectId } from "mongoose";
 
 import ExchangeRateInfo, { Props } from ".";
 
-jest.mock("../../queries/useUserQueryData");
+jest.mock("../../queries/hooks/useUserQueryData");
 
 const useUserQueryDataMocked = jest.mocked(useUserQueryData, true);
 

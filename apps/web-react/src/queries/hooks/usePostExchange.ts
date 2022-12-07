@@ -1,8 +1,8 @@
 import { useMutation } from "react-query";
 
-import queryClient from "../utilities/queryClient";
+import queryClient from "../../utilities/queryClient";
 
-import { performExchangeQuery } from "./exchangesQueries";
+import { performExchangeQuery } from "../exchangesQueries";
 
 import { toast } from "react-toastify";
 

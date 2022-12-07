@@ -3,7 +3,7 @@ import styles from "./SignUpModal.module.scss";
 
 import Modal from "react-modal";
 
-import useSignUpUser from "../../../queries/useSignUpUser";
+import useSignUpUser from "../../../queries/hooks/useSignUpUser";
 
 import SignUpForm from "../../Forms/SignUpForm";
 

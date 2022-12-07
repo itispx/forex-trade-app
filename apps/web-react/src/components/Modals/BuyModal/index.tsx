@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import styles from "./BuyModal.module.scss";
 
-import usePostExchange from "../../../queries/usePostExchange";
+import usePostExchange from "../../../queries/hooks/usePostExchange";
 
 import { FormikProps } from "formik";
 

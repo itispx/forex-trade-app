@@ -3,7 +3,7 @@ import styles from "./SignInModal.module.scss";
 
 import Modal from "react-modal";
 
-import useSignInUser from "../../../queries/useSignInUser";
+import useSignInUser from "../../../queries/hooks/useSignInUser";
 
 import SignInForm from "../../Forms/SignInForm";
 

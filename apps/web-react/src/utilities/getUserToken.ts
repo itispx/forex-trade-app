@@ -1,4 +1,4 @@
-import useUserQueryData from "../queries/useUserQueryData";
+import useUserQueryData from "../queries/hooks/useUserQueryData";
 
 const getUserToken = async (): Promise<string | undefined> => {
   const data = await useUserQueryData();
