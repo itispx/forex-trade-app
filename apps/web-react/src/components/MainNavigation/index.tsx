@@ -17,7 +17,7 @@ const MainNavigation: React.FC = () => {
   const { data } = useFetchUser();
 
   return (
-    <div className={styles["container"]}>
+    <div data-testid="main-navigation-container" className={styles["container"]}>
       <div className={styles["inner-container"]}>
         {data ? (
           <div className={styles["signed"]}>
