@@ -46,6 +46,7 @@
     "mongoose": "^6.8.0",
     "react-test-renderer": "^18.2.0",
     "sass": "^1.56.1",
+    "setimmediate": "^1.0.5",
     "ts-jest": "^29.0.3",
     "tsconfig": "*",
     "typescript": "^4.9.3"

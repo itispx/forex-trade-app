@@ -9,16 +9,14 @@ import Loading from "../../components/Loading";
 import { IExchangeConversion } from "interfaces-common";
 
 const DashboardPage: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [rates, setRates] = useState<IExchangeConversion[]>([
-    { base: "USD", converted: "GBP", exchangeRate: 0.81586 },
-    { base: "GBP", converted: "USD", exchangeRate: 1.2257 },
+    // { base: "USD", converted: "GBP", exchangeRate: 0.81586 },
+    // { base: "GBP", converted: "USD", exchangeRate: 1.2257 },
   ]);
 
   const exchangesListenerHandler = (data: IExchangeConversion[]) => {
-    console.log("data:", data);
-
     setRates(data);
 
     if (isLoading) {

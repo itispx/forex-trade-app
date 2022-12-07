@@ -3,6 +3,8 @@ import { render } from "../../utilities/testing";
 
 import Layout from ".";
 
+import "setimmediate";
+
 describe("layout component", () => {
   it("should render layout", async () => {
     // eslint-disable-next-line testing-library/no-unnecessary-act
