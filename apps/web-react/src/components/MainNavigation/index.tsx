@@ -21,17 +21,15 @@ const MainNavigation: React.FC = () => {
       <div className={styles["inner-container"]}>
         {data ? (
           <div className={styles["signed"]}>
-            <div className={styles["route-link"]}>
-              {pathname === "/exchanges" ? (
-                <Link to="/" className={styles["link"]}>
-                  Home
-                </Link>
-              ) : (
-                <Link to="/exchanges" className={styles["link"]}>
-                  {data.doc.username}
-                </Link>
-              )}
-            </div>
+            {pathname === "/exchanges" ? (
+              <Link to="/" className={styles["route-link"]}>
+                <span className={styles["link"]}>Home</span>
+              </Link>
+            ) : (
+              <Link to="/exchanges" className={styles["route-link"]}>
+                <span className={styles["link"]}>{data.doc.username}</span>
+              </Link>
+            )}
             <div>
               {Object.keys(data.doc.wallet).map((currency) => {
                 return (
