@@ -17,7 +17,6 @@ const SignInButton: React.FC = () => {
   return (
     <>
       <div
-        id="sign-in-button-container"
         data-testid="sign-in-button-container"
         className={styles["container"]}
         onClick={openModal}

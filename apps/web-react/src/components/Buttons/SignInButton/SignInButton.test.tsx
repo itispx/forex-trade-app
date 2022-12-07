@@ -1,4 +1,4 @@
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import { render } from "../../../utilities/testing";
 
 import SignInButton from ".";
@@ -12,18 +12,17 @@ describe("sign in button component", () => {
     expect(title).toBeVisible();
   });
 
-  it("should open modal", () => {
-    const { container } = render(<SignInButton />);
+  it("should open modal", async () => {
+    render(<SignInButton />);
 
-    // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
-    const containerDiv = container.querySelector("#sign-in-button-container");
+    const signInBtn = screen.getByTestId("sign-in-button-container");
 
-    if (containerDiv) {
-      fireEvent.click(containerDiv);
-    }
+    await waitFor(() => {
+      signInBtn.click();
 
-    const modal = screen.getByTestId("sign-in-modal");
+      const modal = screen.getByTestId("sign-in-modal");
 
-    expect(modal).toBeVisible();
+      expect(modal).toBeVisible();
+    });
   });
 });

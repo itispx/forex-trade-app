@@ -17,7 +17,6 @@ const SignUpButton: React.FC = () => {
   return (
     <>
       <div
-        id="sign-up-button-container"
         data-testid="sign-up-button-container"
         className={styles["container"]}
         onClick={openModal}

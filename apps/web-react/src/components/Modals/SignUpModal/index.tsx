@@ -23,7 +23,6 @@ const SignUpModal: React.FC<Props> = ({ show, close }) => {
 
   return (
     <Modal
-      id="sign-up-modal"
       testId="sign-up-modal"
       isOpen={show}
       onRequestClose={close}
