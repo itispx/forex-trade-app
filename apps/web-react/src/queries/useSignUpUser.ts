@@ -6,7 +6,7 @@ import { signUpUserQuery } from "./usersQueries";
 
 import { toast } from "react-toastify";
 
-const useSignUpUser = () => {
+const useSignUpUser = (close: () => void) => {
   const { mutate, isLoading } = useMutation(signUpUserQuery, {
     onSuccess: (data) => {
       if (data.status.code === 201) {

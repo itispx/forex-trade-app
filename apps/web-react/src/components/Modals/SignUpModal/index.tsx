@@ -15,7 +15,7 @@ interface Props {
 }
 
 const SignUpModal: React.FC<Props> = ({ show, close }) => {
-  const { mutate: signUpUser, isLoading } = useSignUpUser();
+  const { mutate: signUpUser, isLoading } = useSignUpUser(close);
 
   async function submitHandler(username: string, password: string) {
     signUpUser({ username, password });
