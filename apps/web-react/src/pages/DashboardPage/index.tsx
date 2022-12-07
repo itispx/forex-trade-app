@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./DashboardPage.module.scss";
 
-import { io } from "socket.io-client";
-
-// const socket = io("http://localhost:3001/v1/exchanges");
+import exchangesListener from "../../queries/websockets/exchangesListener";
 
 import ExchangeRateInfo from "../../components/ExchangeRateInfo";
 import Loading from "../../components/Loading";
@@ -18,15 +16,19 @@ const DashboardPage: React.FC = () => {
     { base: "GBP", converted: "USD", exchangeRate: 1.2257 },
   ]);
 
-  // useEffect(() => {
-  //   socket.on("get-forex-data", (data: IExchangeConversion[]) => {
-  //     setRates(data);
+  const exchangesListenerHandler = (data: IExchangeConversion[]) => {
+    console.log("data:", data);
 
-  //     if (isLoading) {
-  //       setIsLoading(false);
-  //     }
-  //   });
-  // }, []);
+    setRates(data);
+
+    if (isLoading) {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    exchangesListener(exchangesListenerHandler);
+  }, []);
 
   return (
     <div className={styles["page-container"]}>
