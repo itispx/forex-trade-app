@@ -1,13 +1,13 @@
-import queryClient from "./queryClient";
-
-import { IUserServerResponse } from "interfaces-common";
+import useUserQueryData from "../queries/useUserQueryData";
 
 const getUserToken = async (): Promise<string | undefined> => {
-  const data = (await queryClient.getQueryData("user")) as
-    | IUserServerResponse
-    | undefined;
+  const data = await useUserQueryData();
 
-  return data?.token;
+  if (data) {
+    return data.token;
+  }
+
+  return undefined;
 };
 
 export default getUserToken;
