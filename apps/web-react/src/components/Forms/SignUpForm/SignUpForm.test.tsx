@@ -1,5 +1,5 @@
 import { screen, act } from "@testing-library/react";
-import { render } from "../../../utilities/testing";
+import { render, typeNtab, clickNtab } from "../../../utilities/testing";
 import user from "@testing-library/user-event";
 
 import SignUpForm from ".";
@@ -200,22 +200,4 @@ const getPasswordError = () => {
 
 const getConfirmPasswordError = () => {
   return screen.getByTestId("confirmPassword-error").textContent;
-};
-
-const typeNtab = async (input: HTMLElement, text: string) => {
-  // eslint-disable-next-line testing-library/no-unnecessary-act
-  await act(() => {
-    user.type(input, text);
-
-    user.tab();
-  });
-};
-
-const clickNtab = async (element: HTMLElement) => {
-  // eslint-disable-next-line testing-library/no-unnecessary-act
-  await act(() => {
-    user.click(element);
-
-    user.tab();
-  });
 };

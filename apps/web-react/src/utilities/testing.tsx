@@ -1,5 +1,6 @@
 import React from "react";
-import { render, RenderOptions } from "@testing-library/react";
+import { render, RenderOptions, act } from "@testing-library/react";
+import user from "@testing-library/user-event";
 
 // Providers
 import { QueryClientProvider } from "react-query";
@@ -54,4 +55,22 @@ export const userMock: IUserServerResponse = {
     createdAt: "2022-11-30T15:50:08.043+00:00",
   },
   token: "123_token_123",
+};
+
+export const typeNtab = async (input: HTMLElement, text: string) => {
+  // eslint-disable-next-line testing-library/no-unnecessary-act
+  await act(() => {
+    user.type(input, text);
+
+    user.tab();
+  });
+};
+
+export const clickNtab = async (element: HTMLElement) => {
+  // eslint-disable-next-line testing-library/no-unnecessary-act
+  await act(() => {
+    user.click(element);
+
+    user.tab();
+  });
 };
