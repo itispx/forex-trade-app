@@ -10,6 +10,7 @@ module.exports = {
   },
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["./src/setupTests.ts"],
+  forceExit: true,
   collectCoverage: true,
   coverageReporters: ["text"],
 };

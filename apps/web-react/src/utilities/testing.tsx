@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename="/">
         {children}
         <ToastContainer
           position="top-center"

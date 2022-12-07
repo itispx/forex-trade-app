@@ -13,7 +13,7 @@ import Layout from "../Layout";
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename="/">
         <Layout />
         <ToastContainer
           position="top-center"
