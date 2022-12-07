@@ -37,3 +37,21 @@ const customRender = (ui: React.ReactElement, options?: RenderOptions) => {
 };
 
 export { customRender as render };
+
+import { ObjectId } from "mongoose";
+
+import { IUserServerResponse } from "interfaces-common";
+
+export const userMock: IUserServerResponse = {
+  doc: {
+    _id: "01234567890" as unknown as ObjectId,
+    username: "test_username",
+    password: "hashed__password__hashed",
+    wallet: {
+      GBP: 1000,
+      USD: 1000,
+    },
+    createdAt: "2022-11-30T15:50:08.043+00:00",
+  },
+  token: "123_token_123",
+};
