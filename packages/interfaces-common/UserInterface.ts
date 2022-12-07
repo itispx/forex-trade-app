@@ -1,9 +1,9 @@
-import { Document, Types } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 
 import TCurrencies from "./CurrenciesTypes";
 
 interface UserInterface {
-  _id: Types.ObjectId;
+  _id: ObjectId;
   username: string;
   password: string;
   wallet: {
@@ -20,9 +20,9 @@ export interface UserDocumentInterface
   extends UserInterface,
     Document<unknown, unknown, UserInterface>,
     Required<{
-      _id: Types.ObjectId;
+      _id: ObjectId;
     }> {
-  _id: Types.ObjectId;
+  _id: ObjectId;
 }
 
 export interface UserServerResponseInterface {

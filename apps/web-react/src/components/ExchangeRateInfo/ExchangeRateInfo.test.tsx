@@ -3,7 +3,7 @@ import { render } from "../../utilities/testing";
 
 import useUserQueryData from "../../queries/useUserQueryData";
 
-import { Types } from "mongoose";
+import { ObjectId } from "mongoose";
 
 import ExchangeRateInfo, { Props } from ".";
 
@@ -73,7 +73,7 @@ describe("exchange rate info component", () => {
   it("should open modal", async () => {
     useUserQueryDataMocked.mockImplementation(async () => ({
       doc: {
-        _id: "01234567890" as unknown as Types.ObjectId,
+        _id: "01234567890" as unknown as ObjectId,
         username: "test_username",
         password: "hashed__password__hashed",
         wallet: {
