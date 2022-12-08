@@ -125,7 +125,7 @@ describe("exchanges page", () => {
       const exchanges = screen.queryAllByTestId("exchange");
 
       expect(exchanges[0]).toBeInTheDocument();
-      expect(exchanges.length).toBe(5);
+      expect(exchanges.length).toBe(mockedExchanges.length);
     });
 
     it("should render loading", async () => {

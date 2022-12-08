@@ -24,10 +24,6 @@ const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
     setShowModal(false);
   }
 
-  async function getBitches() {
-    return;
-  }
-
   const buyHandler = async () => {
     const data = useUserQueryData();
 
@@ -42,7 +38,7 @@ const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
 
   return (
     <>
-      <div className={styles["container"]}>
+      <div data-testid="exchange-rate-info" className={styles["container"]}>
         <div className={styles["data-container"]}>
           <div className={styles["currency-container"]}>
             <span data-testid="base-currency" className={styles["currency-type"]}>

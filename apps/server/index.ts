@@ -22,6 +22,5 @@ import { getRealTimeExchangeValuesAction } from "./src/actions/exchangesActions"
 const exchangeIo = io.of("/v1/exchanges");
 
 exchangeIo.on("connection", () => {
-  console.log("hit");
   getRealTimeExchangeValuesAction(exchangeIo);
 });
