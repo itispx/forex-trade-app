@@ -1,5 +1,7 @@
 import APIError from "../util/errors/APIError";
 
+import { ObjectId } from "mongoose";
+
 import bcrypt from "bcryptjs";
 
 import {
@@ -62,7 +64,7 @@ export const signInAction = async (
 };
 
 export const getUserAction = async (
-  userID: string,
+  userID: ObjectId,
 ): Promise<IQuery & { success: IUserServerResponse }> => {
   const { status, data } = await getUserQuery(userID);
 
@@ -76,7 +78,7 @@ export const getUserAction = async (
 };
 
 export const addBalanceAction = async (
-  userID: string,
+  userID: ObjectId,
   currency: TCurrencies,
   amount: number,
 ): Promise<IQuery & { success: { doc: IUserDocument } }> => {
@@ -86,7 +88,7 @@ export const addBalanceAction = async (
 };
 
 export const removeBalanceAction = async (
-  userID: string,
+  userID: ObjectId,
   currency: TCurrencies,
   amount: number,
 ): Promise<IQuery & { success: { doc: IUserDocument } }> => {

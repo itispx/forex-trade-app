@@ -1,5 +1,7 @@
 import { Namespace } from "socket.io";
 
+import { ObjectId } from "mongoose";
+
 import APIError from "../util/errors/APIError";
 
 import {
@@ -44,7 +46,7 @@ export const getRealTimeExchangeValuesAction = async (io: Namespace) => {
 };
 
 export const makeExchangeAction = async (
-  userID: string,
+  userID: ObjectId,
   base: { currency: TCurrencies; amount: number },
   convert: { currency: TCurrencies; amount: number },
 ): Promise<IQuery & { success: { doc: IExchangeDocument } }> => {
@@ -76,7 +78,7 @@ export const makeExchangeAction = async (
 };
 
 export const getExchangesAction = async (
-  userID: string,
+  userID: ObjectId,
   page: number,
 ): Promise<IQuery & { success: { docs: IExchangeDocument[] } }> => {
   const { status, data } = await getExchangesQuery(userID, page);

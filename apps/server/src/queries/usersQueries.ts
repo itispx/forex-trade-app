@@ -1,11 +1,12 @@
-import { Types } from "mongoose";
+import APIError from "../util/errors/APIError";
+
+import { Types, ObjectId } from "mongoose";
 
 import catchErrorHandler from "../util/errors/catchErrorHandler";
 
 import User from "../schemas/UserSchema";
 
 import { IQuery, IUserDocument, TCurrencies } from "interfaces-common";
-import APIError from "../util/errors/APIError";
 
 export const signUpQuery = async (
   username: string,
@@ -42,7 +43,7 @@ export const getUserByUsernameQuery = async (
 };
 
 export const getUserQuery = async (
-  userID: string,
+  userID: ObjectId,
 ): Promise<IQuery & { data: IUserDocument | undefined }> => {
   try {
     const data = await User.findById(userID);
@@ -58,7 +59,7 @@ export const getUserQuery = async (
 };
 
 export const addBalanceQuery = async (
-  userID: string,
+  userID: ObjectId,
   currency: TCurrencies,
   amount: number,
 ): Promise<IQuery & { data: IUserDocument }> => {
@@ -80,7 +81,7 @@ export const addBalanceQuery = async (
 };
 
 export const removeBalanceQuery = async (
-  userID: string,
+  userID: ObjectId,
   currency: TCurrencies,
   amount: number,
 ): Promise<IQuery & { data: IUserDocument }> => {
