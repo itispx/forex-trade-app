@@ -46,9 +46,7 @@ describe("users actions", () => {
   });
 
   it("should get user", async () => {
-    if (!userID) {
-      throw new Error("userID is empty");
-    }
+    if (!userID) throw new Error("userID is empty");
 
     const response = await getUserAction(userID);
 
@@ -61,9 +59,7 @@ describe("users actions", () => {
   });
 
   it("should add balance", async () => {
-    if (!userID) {
-      throw new Error("userID is empty");
-    }
+    if (!userID) throw new Error("userID is empty");
 
     const response = await addBalanceAction(userID, "GBP", 500);
 
@@ -74,9 +70,7 @@ describe("users actions", () => {
   });
 
   it("should remove balance", async () => {
-    if (!userID) {
-      throw new Error("userID is empty");
-    }
+    if (!userID) throw new Error("userID is empty");
 
     const response = await removeBalanceAction(userID, "GBP", 500);
 

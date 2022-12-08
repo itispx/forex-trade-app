@@ -9,23 +9,7 @@ import {
   makeExchangeInfoObj,
 } from "../../util/testing";
 
-import randomNumber from "../../util/randomNumber";
-
-import { IExchangeInfo, IUser, TCurrencies } from "interfaces-common";
-
-import { getCurrentExchangeValues } from "../../queries/exchangesQueries";
-
-import { getExchangeValuesAction } from "../../actions/exchangesActions";
-
-jest.mock("../../queries/exchangesQueries", () => {
-  const original = jest.requireActual("../../queries/exchangesQueries");
-  return {
-    ...original,
-    getCurrentExchangeValues: jest.fn(),
-  };
-});
-
-const getCurrentExchangeValuesMocked = jest.mocked(getCurrentExchangeValues);
+import { IExchangeInfo, IUser } from "interfaces-common";
 
 describe("exchanges routes", () => {
   let exchangeInfo: IExchangeInfo | undefined = undefined;
@@ -45,35 +29,6 @@ describe("exchanges routes", () => {
 
   afterAll(async () => {
     await disconnectDB();
-  });
-
-  describe("get exchanges rate", () => {
-    it("should get the exchanges rate values", async () => {
-      getCurrentExchangeValuesMocked.mockImplementation(
-        async (base: TCurrencies, converted: TCurrencies) => {
-          return {
-            status: { code: 200, ok: true },
-            data: {
-              base,
-              converted,
-              exchangeRate: randomNumber(3, 1),
-            },
-          };
-        },
-      );
-
-      const data = await getExchangeValuesAction();
-
-      expect(data.length).toBe(2);
-
-      expect(data[0].base).toBe("USD");
-      expect(data[0].converted).toBe("GBP");
-      expect(typeof data[0].exchangeRate).toBe("number");
-
-      expect(data[1].base).toBe("GBP");
-      expect(data[1].converted).toBe("USD");
-      expect(typeof data[1].exchangeRate).toBe("number");
-    });
   });
 
   describe("make exchange", () => {

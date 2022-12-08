@@ -54,9 +54,7 @@ describe("users queries", () => {
   });
 
   it("should get user", async () => {
-    if (!userID) {
-      throw new Error("userID is empty");
-    }
+    if (!userID) throw new Error("userID is empty");
 
     const response = await getUserQuery(userID);
 
@@ -72,9 +70,7 @@ describe("users queries", () => {
   });
 
   it("should add balance", async () => {
-    if (!userID) {
-      throw new Error("userID is empty");
-    }
+    if (!userID) throw new Error("userID is empty");
 
     const response = await addBalanceQuery(userID, "USD", 500);
 
@@ -85,9 +81,7 @@ describe("users queries", () => {
   });
 
   it("should remove balance", async () => {
-    if (!userID) {
-      throw new Error("userID is empty");
-    }
+    if (!userID) throw new Error("userID is empty");
 
     const response = await removeBalanceQuery(userID, "USD", 500);
 
