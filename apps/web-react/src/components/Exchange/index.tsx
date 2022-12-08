@@ -22,7 +22,7 @@ const Exchange: React.FC<Props> = ({ base, converted, createdAt, innerRef }) => 
             {base.currency}
           </span>
           <span data-testid="base-amount" className={styles["currency-value"]}>
-            {base.amount}
+            {base.amount.toFixed(3)}
           </span>
         </div>
         <span className={styles["gt-sign"]}>&gt;</span>
@@ -31,7 +31,7 @@ const Exchange: React.FC<Props> = ({ base, converted, createdAt, innerRef }) => 
             {converted.currency}
           </span>
           <span data-testid="converted-amount" className={styles["currency-value"]}>
-            {converted.amount}
+            {converted.amount.toFixed(3)}
           </span>
         </div>
       </div>
