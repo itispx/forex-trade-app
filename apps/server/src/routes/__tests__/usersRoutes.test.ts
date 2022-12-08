@@ -15,7 +15,7 @@ describe("users", () => {
     await disconnectDB();
   });
 
-  describe("sign up", () => {
+  describe("sign up routes", () => {
     it("should sign up user", async () => {
       const response = await request(app).post("/v1/users/signup").send(userPayload);
 

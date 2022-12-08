@@ -27,7 +27,7 @@ jest.mock("../../queries/exchangesQueries", () => {
 
 const getCurrentExchangeValuesMocked = jest.mocked(getCurrentExchangeValues);
 
-describe("exchanges", () => {
+describe("exchanges routes", () => {
   let exchangeInfo: IExchangeInfo | undefined = undefined;
   let userPayload: IUser | undefined = undefined;
   let token = "";

@@ -50,3 +50,7 @@ export const makeExchangeInfoObj = (): IExchangeInfo => {
     convert: { currency: convertCurrency, amount: convertAmount },
   };
 };
+
+export const createID = () => {
+  return new mongoose.Types.ObjectId();
+};
