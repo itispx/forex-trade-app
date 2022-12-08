@@ -9,6 +9,12 @@ import { Schema } from "mongoose";
 
 import { ICurrencyInfo } from "interfaces-common";
 
+import axios from "axios";
+
+jest.mock("axios");
+
+const axiosMocked = jest.mocked(axios);
+
 describe("exchanges queries", () => {
   const userID = createID() as unknown as Schema.Types.ObjectId;
 
@@ -27,6 +33,54 @@ describe("exchanges queries", () => {
 
   afterAll(async () => {
     await disconnectDB();
+  });
+
+  describe("get exchanges rates", () => {
+    beforeAll(() => {
+      axiosMocked.get.mockImplementation(async (url) => {
+        if (
+          url === `https://api.fastforex.io/fetch-one?from=USD&to=GBP&api_key=undefined`
+        ) {
+          return {
+            data: {
+              base: "USD",
+              result: { GBP: 0.823 },
+              updated: "2022-12-08 12:04:43",
+              ms: 2,
+            },
+          };
+        } else {
+          return {
+            data: {
+              base: "GBP",
+              result: { USD: 1.32 },
+              updated: "2022-12-08 12:04:43",
+              ms: 2,
+            },
+          };
+        }
+      });
+    });
+
+    it("should get rates USD > GBP", async () => {
+      const response = await getCurrentExchangeValues("USD", "GBP");
+
+      expect(response.status.code).toBe(200);
+      expect(response.status.ok).toBe(true);
+      expect(response.data.base).toBe("USD");
+      expect(response.data.converted).toBe("GBP");
+      expect(response.data.exchangeRate).toBe(0.823);
+    });
+
+    it("should get rates GBP > USD", async () => {
+      const response = await getCurrentExchangeValues("GBP", "USD");
+
+      expect(response.status.code).toBe(200);
+      expect(response.status.ok).toBe(true);
+      expect(response.data.base).toBe("GBP");
+      expect(response.data.converted).toBe("USD");
+      expect(response.data.exchangeRate).toBe(1.32);
+    });
   });
 
   describe("make exchange", () => {
