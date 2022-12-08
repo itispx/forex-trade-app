@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import styles from "./Exchanges.module.scss";
+import styles from "./ExchangesPage.module.scss";
 
 import { useNavigate } from "react-router-dom";
 
