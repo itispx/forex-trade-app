@@ -1,5 +1,5 @@
 /* eslint-disable testing-library/no-unnecessary-act */
-import { screen, act, fireEvent, waitFor } from "@testing-library/react";
+import { screen, act } from "@testing-library/react";
 import { render } from "../../utilities/testing";
 
 import DashboardPage from ".";

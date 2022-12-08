@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./DashboardPage.module.scss";
 
-import exchangesListener from "../../queries/websockets/exchangesListener";
+import exchangesListener, { socket } from "../../queries/websockets/exchangesListener";
 
 import ExchangeRateInfo from "../../components/ExchangeRateInfo";
 import Loading from "../../components/Loading";
@@ -26,6 +26,10 @@ const DashboardPage: React.FC = () => {
 
   useEffect(() => {
     exchangesListener(exchangesListenerHandler);
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   return (

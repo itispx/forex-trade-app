@@ -1,12 +1,16 @@
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
 import { baseURL } from "../http-common";
 
 import { IExchangeConversion } from "interfaces-common";
 
-const socket = io(`${baseURL}/exchanges`);
+export const socket = io(`${baseURL}/exchanges`);
 
-const exchangesListener = (func: (params: IExchangeConversion[]) => void) => {
+const exchangesListener = (func: (params: IExchangeConversion[]) => void): void => {
+  if (!socket.connected) {
+    socket.connect();
+  }
+
   socket.on("get-forex-data", (data: IExchangeConversion[]) => {
     func(data);
   });
