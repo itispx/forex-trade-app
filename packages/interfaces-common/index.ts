@@ -1,18 +1,18 @@
 import UserInterface, {
   UserDocumentInterface,
   UserServerResponseInterface,
-} from "./UserInterface";
+} from "./interfaces/UserInterface";
 import ExchangeInterface, {
   ExchangeDocumentInterface,
   ExchangeConversionInterface,
   ExchangeInfoInterface,
-} from "./ExchangeInterface";
+} from "./interfaces/ExchangeInterface";
 import CurrenciesTypes, {
   CurrencyInfoInterface,
   CurrencyOptions,
-} from "./CurrenciesTypes";
-import QueryInterface from "./QueryInterface";
-import APIErrorInterface from "./APIErrorInterface";
+} from "./interfaces/CurrenciesTypes";
+import QueryInterface from "./interfaces/QueryInterface";
+import APIErrorInterface from "./interfaces/APIErrorInterface";
 
 export type IUserDocument = UserDocumentInterface;
 export type IUserServerResponse = UserServerResponseInterface;
