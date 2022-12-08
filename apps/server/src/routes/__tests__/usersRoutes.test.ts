@@ -1,10 +1,10 @@
 import request from "supertest";
 
-import app from "../app";
+import app from "../../app";
 
-import signJwt from "../util/signJwt";
+import signJwt from "../../util/signJwt";
 
-import { connectMongoMemoryServer, disconnectDB, userPayload } from "../util/testing";
+import { connectMongoMemoryServer, disconnectDB, userPayload } from "../../util/testing";
 
 describe("users", () => {
   beforeAll(async () => {

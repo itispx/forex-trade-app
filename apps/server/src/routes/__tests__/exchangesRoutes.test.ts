@@ -1,24 +1,24 @@
 import request from "supertest";
 
-import app from "../app";
+import app from "../../app";
 
 import {
   connectMongoMemoryServer,
   disconnectDB,
   createUserDB,
   makeExchangeInfoObj,
-} from "../util/testing";
+} from "../../util/testing";
 
-import randomNumber from "../util/randomNumber";
+import randomNumber from "../../util/randomNumber";
 
 import { IExchangeInfo, IUser, TCurrencies } from "interfaces-common";
 
-import { getCurrentExchangeValues } from "../queries/exchangesQueries";
+import { getCurrentExchangeValues } from "../../queries/exchangesQueries";
 
-import { getExchangeValuesAction } from "../actions/exchangesActions";
+import { getExchangeValuesAction } from "../../actions/exchangesActions";
 
-jest.mock("../queries/exchangesQueries", () => {
-  const original = jest.requireActual("../queries/exchangesQueries");
+jest.mock("../../queries/exchangesQueries", () => {
+  const original = jest.requireActual("../../queries/exchangesQueries");
   return {
     ...original,
     getCurrentExchangeValues: jest.fn(),
