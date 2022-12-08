@@ -20,7 +20,7 @@ interface Props {
 }
 
 const BuyModal: React.FC<Props> = ({ show, close, exchangeInfo }) => {
-  const { mutate: performExchange, isLoading } = usePostExchange();
+  const { mutate: performExchange, isLoading } = usePostExchange(close);
 
   const [amount, setAmount] = useState(1);
 
