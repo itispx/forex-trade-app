@@ -1,5 +1,9 @@
-declare namespace Express {
-  export interface Request {
-    accessTokenID: string | undefined;
+import { ObjectId } from "mongoose";
+
+declare global {
+  namespace Express {
+    export interface Request {
+      accessTokenID: ObjectId | undefined;
+    }
   }
 }
