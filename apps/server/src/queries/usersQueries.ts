@@ -69,7 +69,7 @@ export const addBalanceQuery = async (
     if (user) {
       user.wallet[currency] += amount;
 
-      user.save();
+      await user.save();
 
       return { status: { code: 201, ok: true }, data: user };
     }
@@ -91,7 +91,7 @@ export const removeBalanceQuery = async (
     if (user) {
       user.wallet[currency] -= amount;
 
-      user.save();
+      await user.save();
 
       return { status: { code: 201, ok: true }, data: user };
     }
