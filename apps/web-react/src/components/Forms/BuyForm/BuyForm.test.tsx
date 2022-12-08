@@ -75,6 +75,20 @@ describe("buy form", () => {
 
       expect(getAmountError()).toBe("Minimal amount of 0.1");
     });
+
+    it("should successfully call submit handler function", async () => {
+      const submitHandlerMock = jest.fn();
+
+      const { container } = renderComp(false, submitHandlerMock);
+
+      await act(async () => {
+        fireEvent.change(getAmountInput(container), { target: { value: 10 } });
+
+        user.click(getSubmitButton());
+      });
+
+      expect(submitHandlerMock).toHaveBeenCalledTimes(1);
+    });
   });
 });
 
