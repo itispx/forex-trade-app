@@ -40,10 +40,3 @@
 </table>
 
 # [Trello board](https://trello.com/invite/b/54JLFXOF/ATTIa3ac526461f8ffbb14ac36b419553df8E489C502/forex-trading-application)
-
-# TODO
-
-- Show error in buy modal if user does not have enough money to perform exchange
-- Routes validation
-- Finish testing
-- Website responsiveness
