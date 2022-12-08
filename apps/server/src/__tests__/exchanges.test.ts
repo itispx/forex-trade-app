@@ -2,10 +2,6 @@ import request from "supertest";
 
 import app from "../app";
 
-// import { createServer } from "http";
-// import { Server } from "socket.io";
-// import Client, { Socket } from "socket.io-client";
-
 import {
   connectMongoMemoryServer,
   disconnectDB,
@@ -13,7 +9,23 @@ import {
   makeExchangeInfoObj,
 } from "../util/testing";
 
-import { IExchangeInfo, IUser } from "interfaces-common";
+import randomNumber from "../util/randomNumber";
+
+import { IExchangeInfo, IUser, TCurrencies } from "interfaces-common";
+
+import { getCurrentExchangeValues } from "../queries/exchangesQueries";
+
+import { getExchangeValuesAction } from "../actions/exchangesActions";
+
+jest.mock("../queries/exchangesQueries", () => {
+  const original = jest.requireActual("../queries/exchangesQueries");
+  return {
+    ...original,
+    getCurrentExchangeValues: jest.fn(),
+  };
+});
+
+const getCurrentExchangeValuesMocked = jest.mocked(getCurrentExchangeValues);
 
 describe("exchanges", () => {
   let exchangeInfo: IExchangeInfo | undefined = undefined;
@@ -35,37 +47,34 @@ describe("exchanges", () => {
     await disconnectDB();
   });
 
-  // describe("exchange websocket", () => {
-  //   let io: Server | undefined = undefined;
-  //   let serverSocket: Socket | undefined = undefined;
-  //   let clientSocket: Socket | undefined = undefined;
+  describe("get exchanges rate", () => {
+    it("should get the exchanges rate values", async () => {
+      getCurrentExchangeValuesMocked.mockImplementation(
+        async (base: TCurrencies, converted: TCurrencies) => {
+          return {
+            status: { code: 200, ok: true },
+            data: {
+              base,
+              converted,
+              exchangeRate: randomNumber(3, 1),
+            },
+          };
+        },
+      );
 
-  //   beforeAll((done) => {
-  //     const port = 3001;
+      const data = await getExchangeValuesAction();
 
-  //     const httpServer = createServer(app);
+      expect(data.length).toBe(2);
 
-  //     httpServer.listen(port, () => {
-  //       io = new Server(httpServer, { cors: { origin: "*" } });
+      expect(data[0].base).toBe("USD");
+      expect(data[0].converted).toBe("GBP");
+      expect(typeof data[0].exchangeRate).toBe("number");
 
-  //       const exchangeIo = io.of("/v1/exchanges");
-
-  //       clientSocket = new Client(`http://localhost:${port}/v1/exchanges`);
-
-  //       exchangeIo.on("connection", () => {
-  //         console.log("hit");
-  //         //   getRealTimeExchangeValuesAction(exchangeIo);
-  //       });
-
-  //       clientSocket?.on("connect", done);
-  //     });
-  //   });
-
-  //   afterAll(() => {
-  //     io.close();
-  //     clientSocket.close();
-  //   });
-  // });
+      expect(data[1].base).toBe("GBP");
+      expect(data[1].converted).toBe("USD");
+      expect(typeof data[1].exchangeRate).toBe("number");
+    });
+  });
 
   describe("make exchange", () => {
     it("should make successful exchange", async () => {
