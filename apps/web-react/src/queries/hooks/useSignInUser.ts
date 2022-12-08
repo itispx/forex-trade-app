@@ -11,6 +11,7 @@ const useSignInUser = (close: () => void) => {
     onSuccess: (data) => {
       if (data.status.code === 200) {
         queryClient.setQueryData("user", data);
+        toast.success("Sign in successful!");
         close();
       }
     },

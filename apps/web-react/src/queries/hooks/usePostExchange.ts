@@ -10,6 +10,7 @@ const usePostExchange = (close: () => void) => {
   const { mutate, isLoading } = useMutation(performExchangeQuery, {
     onSuccess: (data) => {
       if (data.status.code === 201) {
+        toast.success("Exchange successful!");
         close();
       }
     },

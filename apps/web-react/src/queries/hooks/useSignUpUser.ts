@@ -11,6 +11,7 @@ const useSignUpUser = (close: () => void) => {
     onSuccess: (data) => {
       if (data.status.code === 201) {
         queryClient.setQueryData("user", data);
+        toast.success("Sign up successful!");
         close();
       }
     },
