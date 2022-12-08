@@ -7,4 +7,5 @@ module.exports = {
   forceExit: true,
   collectCoverage: true,
   coverageReporters: ["text"],
+  setupFiles: ["./setupTests.ts"],
 };
