@@ -65,7 +65,7 @@ const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
           onClick={buyHandler}
         >
           <div className={styles["buy-button"]}>
-            <h1>BUY</h1>
+            <h1 className={styles['buy-title']}>BUY</h1>
           </div>
         </div>
       </div>
