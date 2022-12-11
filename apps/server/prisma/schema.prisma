@@ -11,14 +11,32 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  username String  @unique
-  password String
-  wallet   Wallet?
+  id        String     @id @default(uuid())
+  username  String     @unique
+  password  String
+  wallet    Wallet?
+  exchanges Exchange[]
+  createdAt DateTime   @default(now())
 }
 
 model Wallet {
   id     String @id @default(uuid())
   owner  User   @relation(fields: [userID], references: [id])
   userID String @unique
+}
+
+model Exchange {
+  id                String         @id @default(uuid())
+  user              User           @relation(fields: [userID], references: [id])
+  userID            String         @unique
+  baseCurrency      Currency_Types
+  baseAmount        Float
+  convertedCurrency Currency_Types
+  convertedAmount   Float
+  createdAt         DateTime       @default(now())
+}
+
+enum Currency_Types {
+  USD
+  GBP
 }

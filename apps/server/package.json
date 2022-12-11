@@ -14,6 +14,7 @@
   "author": "Px",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^4.7.1",
     "@types/socket.io-client": "^3.0.0",
     "axios": "^1.2.0",
     "bcryptjs": "^2.4.3",
