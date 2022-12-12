@@ -5,7 +5,7 @@ interface ExchangeInterface {
   userID: string;
   base: CurrencyInfoInterface;
   converted: CurrencyInfoInterface;
-  createdAt: string;
+  createdAt: Date;
 }
 
 export default ExchangeInterface;

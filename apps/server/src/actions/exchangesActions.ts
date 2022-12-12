@@ -1,7 +1,5 @@
 import { Namespace } from "socket.io";
 
-import { ObjectId } from "mongoose";
-
 import APIError from "../util/errors/APIError";
 
 import {
@@ -16,12 +14,7 @@ import {
   removeBalanceAction,
 } from "../actions/usersActions";
 
-import {
-  IQuery,
-  TCurrencies,
-  IExchangeConversion,
-  IExchangeDocument,
-} from "interfaces-common";
+import { IQuery, TCurrencies, IExchangeConversion, IExchange } from "interfaces-common";
 
 export const getExchangeValuesAction = async (): Promise<IExchangeConversion[]> => {
   const rates: IExchangeConversion[] = [];
@@ -46,14 +39,14 @@ export const getRealTimeExchangeValuesAction = async (io: Namespace) => {
 };
 
 export const makeExchangeAction = async (
-  userID: ObjectId,
+  userID: string,
   base: { currency: TCurrencies; amount: number },
   convert: { currency: TCurrencies; amount: number },
-): Promise<IQuery & { success: { doc: IExchangeDocument } }> => {
+): Promise<IQuery & { success: { doc: IExchange } }> => {
   // Check if user has enough credit to perform exchange
   const { success } = await getUserAction(userID);
 
-  if (success.doc) {
+  if (success.doc && success.doc.wallet) {
     if (success.doc.wallet[base.currency] < base.amount) {
       throw new APIError(403, "Insufficient money");
     }
@@ -78,9 +71,9 @@ export const makeExchangeAction = async (
 };
 
 export const getExchangesAction = async (
-  userID: ObjectId,
+  userID: string,
   page: number,
-): Promise<IQuery & { success: { docs: IExchangeDocument[] } }> => {
+): Promise<IQuery & { success: { docs: IExchange[] } }> => {
   const { status, data } = await getExchangesQuery(userID, page);
 
   return { status, success: { docs: data } };
