@@ -6,12 +6,16 @@ import APIError from "../util/errors/APIError";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const APIErrorHandler: ErrorRequestHandler = (error, req, res, _next) => {
   if (error instanceof APIError) {
-    return res.status(error.status.code).json(error);
+    if (typeof error.status.code === "number") {
+      return res.status(error.status.code).json(error);
+    } else {
+      return res.status(500).json(error);
+    }
   }
 
   const internalError = APIError.internal();
 
-  return res.status(internalError.status.code).json(internalError);
+  return res.status(internalError.status.code as number).json(internalError);
 };
 
 export default APIErrorHandler;
