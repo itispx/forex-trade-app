@@ -71,16 +71,10 @@ describe("main navigation component", () => {
       render(<MainNavigation />);
 
       const currencies = screen.getAllByTestId("currency-display");
-      const firstKey = Object.keys(userData.data.doc.wallet)[0] as TCurrencies;
-      const secondKey = Object.keys(userData.data.doc.wallet)[1] as TCurrencies;
 
       expect(currencies.length).toBe(2);
-      expect(currencies[0].textContent).toBe(
-        `${firstKey}: ${userData.data.doc.wallet[firstKey].toFixed(3)}`,
-      );
-      expect(currencies[1].textContent).toBe(
-        `${secondKey}: ${userData.data.doc.wallet[secondKey].toFixed(3)}`,
-      );
+      expect(currencies[0].textContent).toBe("GBP: 1000.000");
+      expect(currencies[1].textContent).toBe("USD: 1000.000");
     });
 
     it("should display exchanges link", () => {
