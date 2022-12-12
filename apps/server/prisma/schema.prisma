@@ -21,10 +21,10 @@ model User {
 
 model Wallet {
   id     String @id @default(uuid())
-  user  User   @relation(fields: [userID], references: [id])
+  user   User   @relation(fields: [userID], references: [id])
   userID String @unique
-  USD Float @default(1000)
-  GBP Float @default(1000)
+  USD    Float  @default(1000)
+  GBP    Float  @default(1000)
 }
 
 model Exchange {
