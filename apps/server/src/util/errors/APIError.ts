@@ -1,10 +1,10 @@
 import { IAPIError } from "interfaces-common";
 
 class APIError extends Error implements IAPIError {
-  status: { code: number; ok: boolean };
+  status: { code: number | string; ok: boolean };
   error: { message: string };
 
-  constructor(public code: number, public message: string) {
+  constructor(public code: number | string, public message: string) {
     super();
 
     this.status = { code: checkCode(code), ok: isOk(code) };
@@ -34,7 +34,7 @@ class APIError extends Error implements IAPIError {
   }
 }
 
-function isOk(code: number) {
+function isOk(code: number | string) {
   switch (code) {
     case 200:
       return true;
@@ -49,10 +49,8 @@ function isOk(code: number) {
   }
 }
 
-function checkCode(code: number) {
+function checkCode(code: number | string) {
   switch (code) {
-    case 11000:
-      return 409;
     default:
       return code;
   }
