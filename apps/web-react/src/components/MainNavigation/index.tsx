@@ -36,13 +36,14 @@ const MainNavigation: React.FC = () => {
             )}
             <div>
               {data.doc.wallet &&
-                Object.keys(data.doc.wallet).map((currency) => {
+                Object.keys(data.doc.wallet).map((key) => {
                   return (
-                    data.doc.wallet && (
+                    data.doc.wallet &&
+                    typeof data.doc.wallet[key as TCurrencies] === "number" && (
                       <Currency
-                        key={currency}
-                        name={currency as TCurrencies}
-                        amount={data.doc.wallet[currency as TCurrencies]}
+                        key={key}
+                        name={key as TCurrencies}
+                        amount={data.doc.wallet[key as TCurrencies]}
                       />
                     )
                   );
