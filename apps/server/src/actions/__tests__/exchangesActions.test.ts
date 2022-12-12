@@ -4,46 +4,54 @@ import {
   getExchangeValuesAction,
 } from "../exchangesActions";
 
-import app from "../../app";
-
-import { connectMongoMemoryServer, disconnectDB, createUserDB } from "../../util/testing";
+import { userMock, userServerResponseMock } from "../../util/testing";
 
 import randomNumber from "../../util/randomNumber";
 
-import { IUser, ICurrencyInfo, TCurrencies } from "interfaces-common";
+import { ICurrencyInfo, IExchange, TCurrencies } from "interfaces-common";
 
-import { getCurrentExchangeValues } from "../../queries/exchangesQueries";
+import {
+  getCurrentExchangeValues,
+  makeExchangeQuery,
+  getExchangesQuery,
+} from "../../queries/exchangesQueries";
 
 jest.mock("../../queries/exchangesQueries", () => {
-  const original = jest.requireActual("../../queries/exchangesQueries");
   return {
-    ...original,
     getCurrentExchangeValues: jest.fn(),
+    makeExchangeQuery: jest.fn(),
+    getExchangesQuery: jest.fn(),
   };
 });
 
 const getCurrentExchangeValuesMocked = jest.mocked(getCurrentExchangeValues);
+const makeExchangeQueryMocked = jest.mocked(makeExchangeQuery);
+const getExchangesQueryMocked = jest.mocked(getExchangesQuery);
+
+import {
+  getUserAction,
+  addBalanceAction,
+  removeBalanceAction,
+} from "../../actions/usersActions";
+
+jest.mock("../../actions/usersActions", () => {
+  return {
+    getUserAction: jest.fn(),
+    addBalanceAction: jest.fn(),
+    removeBalanceAction: jest.fn(),
+  };
+});
+
+const getUserActionMocked = jest.mocked(getUserAction);
+const addBalanceActionMocked = jest.mocked(addBalanceAction);
+const removeBalanceActionMocked = jest.mocked(removeBalanceAction);
 
 describe("exchanges actions", () => {
-  let userPayload: IUser | undefined = undefined;
-
   const base: ICurrencyInfo = { currency: "USD", amount: 5 };
   const convert: ICurrencyInfo = { currency: "GBP", amount: 12 };
 
-  beforeAll(async () => {
-    await connectMongoMemoryServer();
-
-    const { doc } = await createUserDB(app);
-
-    userPayload = doc;
-  });
-
-  afterAll(async () => {
-    await disconnectDB();
-  });
-
   describe("get exchanges rate", () => {
-    it("should get the exchanges rate values", async () => {
+    beforeAll(() => {
       getCurrentExchangeValuesMocked.mockImplementation(
         async (base: TCurrencies, converted: TCurrencies) => {
           return {
@@ -56,7 +64,9 @@ describe("exchanges actions", () => {
           };
         },
       );
+    });
 
+    it("should get the exchanges rate values", async () => {
       const data = await getExchangeValuesAction();
 
       expect(data.length).toBe(2);
@@ -73,55 +83,63 @@ describe("exchanges actions", () => {
 
   describe("make exchanges", () => {
     it("should make exchange", async () => {
-      if (!userPayload) throw new Error("No user");
+      getUserActionMocked.mockImplementation(async () => {
+        return {
+          status: { code: 201, ok: true },
+          success: userServerResponseMock,
+        };
+      });
+      makeExchangeQueryMocked.mockImplementation(
+        async (userID: string, base: ICurrencyInfo, converted: ICurrencyInfo) => {
+          return {
+            status: { code: 201, ok: true },
+            data: {
+              id: "random_exchange_id_123",
+              userID,
+              base,
+              converted,
+              createdAt: new Date(),
+            },
+          };
+        },
+      );
+      addBalanceActionMocked.mockImplementation();
+      removeBalanceActionMocked.mockImplementation();
 
-      const response = await makeExchangeAction(userPayload._id, base, convert);
+      const response = await makeExchangeAction(userMock.id, base, convert);
 
       expect(response.status.code).toBe(201);
       expect(response.status.ok).toBe(true);
-      expect(`${response.success.doc.userID}`).toBe(`${userPayload._id}`);
+      expect(response.success.doc.userID).toBe(userMock.id);
       expect(response.success.doc.base).toMatchObject(base);
       expect(response.success.doc.converted).toMatchObject(convert);
     });
   });
 
   describe("get exchanges", () => {
-    beforeAll(async () => {
-      if (!userPayload) throw new Error("No user");
+    const exchangesArr: IExchange[] = [
+      { id: "1", userID: userMock.id, base, converted: convert, createdAt: new Date() },
+      { id: "2", userID: userMock.id, base, converted: convert, createdAt: new Date() },
+      { id: "3", userID: userMock.id, base, converted: convert, createdAt: new Date() },
+      { id: "4", userID: userMock.id, base, converted: convert, createdAt: new Date() },
+      { id: "5", userID: userMock.id, base, converted: convert, createdAt: new Date() },
+    ];
 
-      for (let i = 0; i < 11; i++) {
-        await makeExchangeAction(userPayload._id, base, convert);
-      }
+    beforeAll(() => {
+      getExchangesQueryMocked.mockImplementation(async () => {
+        return {
+          status: { code: 200, ok: true },
+          data: exchangesArr,
+        };
+      });
     });
 
-    it("should get exchanges on page 0", async () => {
-      if (!userPayload) throw new Error("No user");
-
-      const response = await getExchangesAction(userPayload._id, 0);
+    it("should get exchanges", async () => {
+      const response = await getExchangesAction(userMock.id, 0);
 
       expect(response.status.code).toBe(200);
       expect(response.status.ok).toBe(true);
       expect(response.success.docs.length).toBe(5);
-    });
-
-    it("should get exchanges on page 1", async () => {
-      if (!userPayload) throw new Error("No user");
-
-      const response = await getExchangesAction(userPayload._id, 1);
-
-      expect(response.status.code).toBe(200);
-      expect(response.status.ok).toBe(true);
-      expect(response.success.docs.length).toBe(5);
-    });
-
-    it("should get exchanges on page 2", async () => {
-      if (!userPayload) throw new Error("No user");
-
-      const response = await getExchangesAction(userPayload._id, 2);
-
-      expect(response.status.code).toBe(200);
-      expect(response.status.ok).toBe(true);
-      expect(response.success.docs.length).toBe(2);
     });
   });
 });
