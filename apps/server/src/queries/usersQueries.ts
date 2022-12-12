@@ -1,26 +1,35 @@
 import APIError from "../util/errors/APIError";
 
-import { Types, ObjectId } from "mongoose";
-
 import catchErrorHandler from "../util/errors/catchErrorHandler";
 
-import User from "../schemas/UserSchema";
+import { IQuery, IUser, TCurrencies } from "interfaces-common";
 
-import { IQuery, IUserDocument, TCurrencies } from "interfaces-common";
+import { PrismaClient } from "@prisma/client";
+
+const User = new PrismaClient().user;
+const Wallet = new PrismaClient().wallet;
 
 export const signUpQuery = async (
   username: string,
   hash: string,
-): Promise<IQuery & { data: IUserDocument }> => {
+): Promise<IQuery & { data: IUser }> => {
   try {
-    // TODO Remove password before returning to the user
-    const data = await User.create({
-      _id: new Types.ObjectId(),
-      username: username,
-      password: hash,
+    const user = await User.create({
+      data: {
+        username,
+        password: hash,
+        wallet: {
+          create: { GBP: 1000, USD: 1000 },
+        },
+      },
+      include: { wallet: true },
     });
 
-    return { status: { code: 201, ok: true }, data };
+    if (user.wallet) {
+      return { status: { code: 201, ok: true }, data: user };
+    }
+
+    throw APIError.internal();
   } catch (error) {
     throw catchErrorHandler(error as Error);
   }
@@ -28,75 +37,91 @@ export const signUpQuery = async (
 
 export const getUserByUsernameQuery = async (
   username: string,
-): Promise<IQuery & { data: IUserDocument | undefined }> => {
+): Promise<IQuery & { data: IUser | undefined }> => {
   try {
-    const data = await User.find({ username });
+    const user = await User.findUnique({
+      where: { username },
+      include: { wallet: true },
+    });
 
-    if (data.length <= 0) {
+    if (!user) {
       return { status: { code: 404, ok: false }, data: undefined };
     }
 
-    return { status: { code: 200, ok: true }, data: data[0] };
+    return { status: { code: 200, ok: true }, data: user };
   } catch (error) {
     throw catchErrorHandler(error as Error);
   }
 };
 
 export const getUserQuery = async (
-  userID: ObjectId,
-): Promise<IQuery & { data: IUserDocument | undefined }> => {
+  userID: string,
+): Promise<IQuery & { data: IUser | undefined }> => {
   try {
-    const data = await User.findById(userID);
+    const user = await User.findUnique({
+      where: { id: userID },
+      include: { wallet: true },
+    });
 
-    if (!data) {
+    if (!user) {
       return { status: { code: 404, ok: false }, data: undefined };
     }
 
-    return { status: { code: 200, ok: true }, data };
+    return { status: { code: 200, ok: true }, data: user };
   } catch (error) {
     throw catchErrorHandler(error as Error);
   }
 };
 
 export const addBalanceQuery = async (
-  userID: ObjectId,
+  userID: string,
   currency: TCurrencies,
   amount: number,
-): Promise<IQuery & { data: IUserDocument }> => {
+): Promise<IQuery & { data: IUser }> => {
   try {
-    const user = await User.findById(userID);
+    const wallet = await Wallet.update({
+      where: { userID },
+      data: {
+        [currency]: { increment: amount },
+      },
+      include: { user: true },
+    });
 
-    if (user) {
-      user.wallet[currency] += amount;
+    const { user, ...remWallet } = wallet;
 
-      await user.save();
+    const data: IUser = {
+      ...user,
+      wallet: remWallet,
+    };
 
-      return { status: { code: 201, ok: true }, data: user };
-    }
-
-    throw APIError.notFound();
+    return { status: { code: 201, ok: true }, data };
   } catch (error) {
     throw catchErrorHandler(error as Error);
   }
 };
 
 export const removeBalanceQuery = async (
-  userID: ObjectId,
+  userID: string,
   currency: TCurrencies,
   amount: number,
-): Promise<IQuery & { data: IUserDocument }> => {
+): Promise<IQuery & { data: IUser }> => {
   try {
-    const user = await User.findById(userID);
+    const wallet = await Wallet.update({
+      where: { userID },
+      data: {
+        [currency]: { decrement: amount },
+      },
+      include: { user: true },
+    });
 
-    if (user) {
-      user.wallet[currency] -= amount;
+    const { user, ...remWallet } = wallet;
 
-      await user.save();
+    const data: IUser = {
+      ...user,
+      wallet: remWallet,
+    };
 
-      return { status: { code: 201, ok: true }, data: user };
-    }
-
-    throw APIError.notFound();
+    return { status: { code: 201, ok: true }, data };
   } catch (error) {
     throw catchErrorHandler(error as Error);
   }
