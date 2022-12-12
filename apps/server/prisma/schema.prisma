@@ -23,6 +23,8 @@ model Wallet {
   id     String @id @default(uuid())
   owner  User   @relation(fields: [userID], references: [id])
   userID String @unique
+  USD Float @default(1000)
+  GBP Float @default(1000)
 }
 
 model Exchange {
