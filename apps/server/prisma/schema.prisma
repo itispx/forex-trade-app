@@ -30,7 +30,7 @@ model Wallet {
 model Exchange {
   id                String         @id @default(uuid())
   user              User           @relation(fields: [userID], references: [id])
-  userID            String         @unique
+  userID            String
   baseCurrency      Currency_Types
   baseAmount        Float
   convertedCurrency Currency_Types

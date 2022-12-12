@@ -40,9 +40,6 @@ CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 -- CreateIndex
 CREATE UNIQUE INDEX "Wallet_userID_key" ON "Wallet"("userID");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Exchange_userID_key" ON "Exchange"("userID");
-
 -- AddForeignKey
 ALTER TABLE "Wallet" ADD CONSTRAINT "Wallet_userID_fkey" FOREIGN KEY ("userID") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
