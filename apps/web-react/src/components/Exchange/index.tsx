@@ -6,7 +6,7 @@ import { ICurrencyInfo } from "interfaces-common";
 export interface Props {
   base: ICurrencyInfo;
   converted: ICurrencyInfo;
-  createdAt: string;
+  createdAt: Date | string;
   innerRef?: React.Ref<HTMLDivElement>;
 }
 

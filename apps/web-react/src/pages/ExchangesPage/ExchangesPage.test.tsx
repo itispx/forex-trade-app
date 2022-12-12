@@ -10,7 +10,6 @@ import useUserQueryData from "../../queries/hooks/useUserQueryData";
 
 import { userMock } from "../../utilities/testing";
 
-import { ObjectId } from "mongoose";
 import { IExchange } from "interfaces-common";
 
 jest.mock("../../queries/exchangesQueries");
@@ -19,39 +18,39 @@ const getExchangesQueryMocked = jest.mocked(getExchangesQuery, true);
 
 const mockedExchanges: IExchange[] = [
   {
-    _id: "1" as unknown as ObjectId,
-    userID: userMock.doc._id,
+    id: "1",
+    userID: userMock.doc.id,
     base: { currency: "GBP", amount: 10 },
     converted: { currency: "USD", amount: 15 },
-    createdAt: "2022-01-01T00:00:00.000Z",
+    createdAt: new Date(),
   },
   {
-    _id: "2" as unknown as ObjectId,
-    userID: userMock.doc._id,
+    id: "2",
+    userID: userMock.doc.id,
     base: { currency: "USD", amount: 20 },
     converted: { currency: "GBP", amount: 30 },
-    createdAt: "2022-01-02T00:00:00.000Z",
+    createdAt: new Date(),
   },
   {
-    _id: "3" as unknown as ObjectId,
-    userID: userMock.doc._id,
+    id: "3",
+    userID: userMock.doc.id,
     base: { currency: "GBP", amount: 30 },
     converted: { currency: "USD", amount: 45 },
-    createdAt: "2022-01-01T00:00:00.000Z",
+    createdAt: new Date(),
   },
   {
-    _id: "4" as unknown as ObjectId,
-    userID: userMock.doc._id,
+    id: "4",
+    userID: userMock.doc.id,
     base: { currency: "USD", amount: 40 },
     converted: { currency: "GBP", amount: 60 },
-    createdAt: "2022-01-02T00:00:00.000Z",
+    createdAt: new Date(),
   },
   {
-    _id: "5" as unknown as ObjectId,
-    userID: userMock.doc._id,
+    id: "5",
+    userID: userMock.doc.id,
     base: { currency: "GBP", amount: 50 },
     converted: { currency: "USD", amount: 75 },
-    createdAt: "2022-01-01T00:00:00.000Z",
+    createdAt: new Date(),
   },
 ];
 

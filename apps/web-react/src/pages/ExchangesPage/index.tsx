@@ -87,7 +87,7 @@ const ExchangesPage: React.FC = () => {
         return (
           <Exchange
             innerRef={data.length === index + 1 ? lastItemRef : null}
-            key={exchange._id.toString()}
+            key={exchange.id}
             base={exchange.base}
             converted={exchange.converted}
             createdAt={exchange.createdAt}
