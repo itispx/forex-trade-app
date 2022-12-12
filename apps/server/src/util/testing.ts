@@ -2,33 +2,9 @@ import request from "supertest";
 
 import { Express } from "express";
 
-import mongoose from "mongoose";
-import { MongoMemoryServer } from "mongodb-memory-server";
-
-import { connectDB } from "./db";
-
 import randomNumber from "./randomNumber";
 
-import { IUserServerResponse, IExchangeInfo, OCurrency } from "interfaces-common";
-
-export const userPayload = {
-  _id: "",
-  username: "test_username",
-  password: "test_password",
-};
-
-export const connectMongoMemoryServer = async (): Promise<MongoMemoryServer> => {
-  const mongoServer = await MongoMemoryServer.create();
-
-  await connectDB(mongoServer.getUri());
-
-  return mongoServer;
-};
-
-export const disconnectDB = async (): Promise<void> => {
-  await mongoose.disconnect();
-  await mongoose.connection.close();
-};
+import { IUserServerResponse, IExchangeInfo, OCurrency, IUser } from "interfaces-common";
 
 export const createUserDB = async (app: Express): Promise<IUserServerResponse> => {
   const response = await request(app).post("/v1/users/signup").send(userPayload);
@@ -51,6 +27,26 @@ export const makeExchangeInfoObj = (): IExchangeInfo => {
   };
 };
 
-export const createID = () => {
-  return new mongoose.Types.ObjectId();
+export const userPayload = {
+  _id: "",
+  username: "test_username",
+  password: "test_password",
+};
+
+export const userMock: IUser = {
+  id: "01234567890",
+  username: "test_username",
+  password: "test_password",
+  wallet: {
+    id: "abcdefg",
+    userID: "01234567890",
+    GBP: 1000,
+    USD: 1000,
+  },
+  createdAt: new Date(),
+};
+
+export const userServerResponseMock: IUserServerResponse = {
+  doc: userMock,
+  token: "123_token_123",
 };

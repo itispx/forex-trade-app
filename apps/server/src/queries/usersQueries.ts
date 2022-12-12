@@ -2,12 +2,12 @@ import APIError from "../util/errors/APIError";
 
 import catchErrorHandler from "../util/errors/catchErrorHandler";
 
+import client from "../util/prisma";
+
 import { IQuery, IUser, TCurrencies } from "interfaces-common";
 
-import { PrismaClient } from "@prisma/client";
-
-const User = new PrismaClient().user;
-const Wallet = new PrismaClient().wallet;
+const User = client.user;
+const Wallet = client.wallet;
 
 export const signUpQuery = async (
   username: string,

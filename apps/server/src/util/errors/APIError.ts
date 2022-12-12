@@ -1,12 +1,16 @@
 import { IAPIError } from "interfaces-common";
 
-class APIError implements IAPIError {
+class APIError extends Error implements IAPIError {
   status: { code: number; ok: boolean };
   error: { message: string };
 
   constructor(public code: number, public message: string) {
+    super();
+
     this.status = { code: checkCode(code), ok: isOk(code) };
     this.error = { message };
+
+    Object.setPrototypeOf(this, APIError.prototype);
   }
 
   static unauthorizedRequest() {
