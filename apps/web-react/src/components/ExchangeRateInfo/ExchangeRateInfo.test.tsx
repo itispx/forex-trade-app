@@ -3,8 +3,6 @@ import { render } from "../../utilities/testing";
 
 import useUserQueryData from "../../queries/hooks/useUserQueryData";
 
-import { ObjectId } from "mongoose";
-
 import ExchangeRateInfo, { Props } from ".";
 
 jest.mock("../../queries/hooks/useUserQueryData");
@@ -73,14 +71,16 @@ describe("exchange rate info component", () => {
   it("should open modal", async () => {
     useUserQueryDataMocked.mockImplementation(() => ({
       doc: {
-        _id: "01234567890" as unknown as ObjectId,
+        id: "01234567890",
         username: "test_username",
         password: "hashed__password__hashed",
         wallet: {
+          id: "abcdefg",
+          userID: "01234567890",
           GBP: 1000,
           USD: 1000,
         },
-        createdAt: "2022-11-30T15:50:08.043+00:00",
+        createdAt: new Date(),
       },
       token: "123_token_123",
     }));
