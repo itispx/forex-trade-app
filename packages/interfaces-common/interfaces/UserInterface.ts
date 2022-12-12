@@ -1,31 +1,21 @@
-import { Document, ObjectId } from "mongoose";
-
-import TCurrencies from "./CurrenciesTypes";
-
 interface UserInterface {
-  _id: ObjectId;
+  id: string;
   username: string;
   password: string;
-  wallet: {
-    [x in TCurrencies]: number;
-    // USD: number;
-    // GBP: number;
-  };
-  createdAt: string;
+  createdAt: Date;
+  wallet: WalletInterface | null | undefined;
 }
 
 export default UserInterface;
 
-export interface UserDocumentInterface
-  extends UserInterface,
-    Document<unknown, unknown, UserInterface>,
-    Required<{
-      _id: ObjectId;
-    }> {
-  _id: ObjectId;
-}
-
 export interface UserServerResponseInterface {
   doc: UserInterface;
   token: string;
+}
+
+export interface WalletInterface {
+  id: string;
+  userID: string;
+  USD: number;
+  GBP: number;
 }
