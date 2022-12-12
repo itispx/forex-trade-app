@@ -35,15 +35,18 @@ const MainNavigation: React.FC = () => {
               </Link>
             )}
             <div>
-              {Object.keys(data.doc.wallet).map((currency) => {
-                return (
-                  <Currency
-                    key={currency}
-                    name={currency as TCurrencies}
-                    amount={data.doc.wallet[currency as TCurrencies]}
-                  />
-                );
-              })}
+              {data.doc.wallet &&
+                Object.keys(data.doc.wallet).map((currency) => {
+                  return (
+                    data.doc.wallet && (
+                      <Currency
+                        key={currency}
+                        name={currency as TCurrencies}
+                        amount={data.doc.wallet[currency as TCurrencies]}
+                      />
+                    )
+                  );
+                })}
             </div>
           </div>
         ) : (
