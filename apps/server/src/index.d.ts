@@ -1,5 +1,3 @@
-import { ObjectId } from "mongoose";
-
 declare global {
   namespace Express {
     export interface Request {
@@ -7,3 +5,6 @@ declare global {
     }
   }
 }
+
+// Make the file a module and avoid the TypeScript error
+export {};
