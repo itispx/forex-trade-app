@@ -1,4 +1,3 @@
-import { Wallet, User } from "@prisma/client";
 /* eslint-disable jest/no-conditional-expect */
 import {
   signUpQuery,
@@ -107,9 +106,7 @@ describe("users queries", () => {
   });
 
   it("should add balance", async () => {
-    const resolvedValues: Wallet & {
-      user: User;
-    } = {
+    const resolvedValues = {
       id: userMock.wallet.id,
       userID: userMock.id,
       USD: userMock.wallet.USD + 500,
@@ -140,9 +137,7 @@ describe("users queries", () => {
   });
 
   it("should remove balance", async () => {
-    const resolvedValues: Wallet & {
-      user: User;
-    } = {
+    const resolvedValues = {
       id: userMock.wallet.id,
       userID: userMock.id,
       USD: userMock.wallet.USD - 500,

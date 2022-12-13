@@ -28,7 +28,6 @@ export const signUpQuery = async (
 
     throw APIError.internal();
   } catch (error) {
-    console.log("error:", error);
     throw catchErrorHandler(error as Error);
   }
 };

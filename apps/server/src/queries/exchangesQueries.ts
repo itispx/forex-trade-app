@@ -3,7 +3,7 @@ import axios from "axios";
 import APIError from "../util/errors/APIError";
 import catchErrorHandler from "../util/errors/catchErrorHandler";
 
-import client from "../util/prisma/client";
+import prisma from "../util/prisma/client";
 
 import {
   IQuery,
@@ -12,8 +12,6 @@ import {
   IExchange,
   ICurrencyInfo,
 } from "interfaces-common";
-
-const Exchange = client.exchange;
 
 interface IAPIResponse {
   base: TCurrencies;
@@ -56,7 +54,7 @@ export const makeExchangeQuery = async (
   convert: ICurrencyInfo,
 ): Promise<IQuery & { data: IExchange }> => {
   try {
-    const exchange = await Exchange.create({
+    const exchange = await prisma.exchange.create({
       data: {
         userID,
         baseCurrency: base.currency,
@@ -99,7 +97,7 @@ export const getExchangesQuery = async (
   try {
     const limit = 5;
 
-    const exchanges = await Exchange.findMany({
+    const exchanges = await prisma.exchange.findMany({
       where: { userID },
       skip: page * limit,
       take: limit,

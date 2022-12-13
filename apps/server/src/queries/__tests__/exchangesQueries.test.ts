@@ -4,8 +4,7 @@ import {
   makeExchangeQuery,
 } from "../exchangesQueries";
 
-import { connectMongoMemoryServer, disconnectDB, createID } from "../../util/testing";
-import { Schema } from "mongoose";
+import { userMock } from "../../util/testing";
 
 import { ICurrencyInfo } from "interfaces-common";
 
@@ -15,24 +14,25 @@ jest.mock("axios");
 
 const axiosMocked = jest.mocked(axios);
 
+import prisma from "../../util/prisma/client";
+
 describe("exchanges queries", () => {
-  const userID = createID() as unknown as Schema.Types.ObjectId;
+  const base: ICurrencyInfo = { currency: "USD", amount: 5 };
+  const convert: ICurrencyInfo = { currency: "GBP", amount: 15 };
 
-  const base: ICurrencyInfo = {
-    currency: "USD",
-    amount: 5,
+  const exchange = {
+    id: "123_exchange_id_123",
+    userID: userMock.id,
+    baseCurrency: base.currency,
+    baseAmount: base.amount,
+    convertedCurrency: convert.currency,
+    convertedAmount: convert.amount,
+    createdAt: new Date(),
   };
-  const convert: ICurrencyInfo = {
-    currency: "GBP",
-    amount: 15,
-  };
 
-  beforeAll(async () => {
-    await connectMongoMemoryServer();
-  });
-
-  afterAll(async () => {
-    await disconnectDB();
+  beforeEach(() => {
+    prisma.exchange.create = jest.fn();
+    prisma.exchange.findMany = jest.fn();
   });
 
   describe("get exchanges rates", () => {
@@ -85,12 +85,22 @@ describe("exchanges queries", () => {
 
   describe("make exchange", () => {
     it("should make exchange", async () => {
-      const response = await makeExchangeQuery(userID, base, convert);
+      jest.spyOn(prisma.exchange, "create").mockResolvedValue(exchange);
 
+      const response = await makeExchangeQuery(userMock.id, base, convert);
+
+      expect(prisma.exchange.create).toHaveBeenCalledWith({
+        data: {
+          userID: userMock.id,
+          baseCurrency: base.currency,
+          baseAmount: base.amount,
+          convertedCurrency: convert.currency,
+          convertedAmount: convert.amount,
+        },
+      });
       expect(response.status.code).toBe(201);
       expect(response.status.ok).toBe(true);
-
-      expect(response.data.userID).toBe(userID);
+      expect(response.data.userID).toBe(userMock.id);
       expect(response.data.base.currency).toBe(base.currency);
       expect(response.data.base.amount).toBe(base.amount);
       expect(response.data.converted.currency).toBe(convert.currency);
@@ -99,34 +109,24 @@ describe("exchanges queries", () => {
   });
 
   describe("get exchanges", () => {
-    beforeAll(async () => {
-      for (let i = 0; i < 11; i++) {
-        await makeExchangeQuery(userID, base, convert);
-      }
-    });
+    it("should get exchanges", async () => {
+      jest
+        .spyOn(prisma.exchange, "findMany")
+        .mockResolvedValue([exchange, exchange, exchange, exchange, exchange]);
 
-    it("should get exchanges on page 0", async () => {
-      const response = await getExchangesQuery(userID, 0);
+      const response = await getExchangesQuery(userMock.id, 0);
 
+      expect(prisma.exchange.findMany).toHaveBeenCalledWith({
+        where: { userID: userMock.id },
+        skip: 0 * 5,
+        take: 5,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
       expect(response.status.code).toBe(200);
       expect(response.status.ok).toBe(true);
       expect(response.data.length).toBe(5);
-    });
-
-    it("should get exchanges on page 1", async () => {
-      const response = await getExchangesQuery(userID, 1);
-
-      expect(response.status.code).toBe(200);
-      expect(response.status.ok).toBe(true);
-      expect(response.data.length).toBe(5);
-    });
-
-    it("should get exchanges on page 2", async () => {
-      const response = await getExchangesQuery(userID, 2);
-
-      expect(response.status.code).toBe(200);
-      expect(response.status.ok).toBe(true);
-      expect(response.data.length).toBe(2);
     });
   });
 });
