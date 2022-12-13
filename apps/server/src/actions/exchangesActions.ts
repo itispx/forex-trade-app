@@ -70,6 +70,18 @@ export const makeExchangeAction = async (
   throw APIError.internal();
 };
 
+export const queueExchangeAction = async (
+  userID: string,
+  base: { currency: TCurrencies; amount: number },
+  convert: { currency: TCurrencies; amount: number },
+) => {
+  // Add to queue
+  // Wait for turn
+  // Make exchange
+  // Update queue
+  // Return data
+};
+
 export const getExchangesAction = async (
   userID: string,
   page: number,
