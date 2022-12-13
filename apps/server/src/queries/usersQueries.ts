@@ -2,19 +2,16 @@ import APIError from "../util/errors/APIError";
 
 import catchErrorHandler from "../util/errors/catchErrorHandler";
 
-import client from "../util/prisma";
+import prisma from "../util/prisma/client";
 
 import { IQuery, IUser, TCurrencies } from "interfaces-common";
-
-const User = client.user;
-const Wallet = client.wallet;
 
 export const signUpQuery = async (
   username: string,
   hash: string,
 ): Promise<IQuery & { data: IUser }> => {
   try {
-    const user = await User.create({
+    const user = await prisma.user.create({
       data: {
         username,
         password: hash,
@@ -31,6 +28,7 @@ export const signUpQuery = async (
 
     throw APIError.internal();
   } catch (error) {
+    console.log("error:", error);
     throw catchErrorHandler(error as Error);
   }
 };
@@ -39,7 +37,7 @@ export const getUserByUsernameQuery = async (
   username: string,
 ): Promise<IQuery & { data: IUser | undefined }> => {
   try {
-    const user = await User.findUnique({
+    const user = await prisma.user.findUnique({
       where: { username },
       include: { wallet: true },
     });
@@ -58,7 +56,7 @@ export const getUserQuery = async (
   userID: string,
 ): Promise<IQuery & { data: IUser | undefined }> => {
   try {
-    const user = await User.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: userID },
       include: { wallet: true },
     });
@@ -79,7 +77,7 @@ export const addBalanceQuery = async (
   amount: number,
 ): Promise<IQuery & { data: IUser }> => {
   try {
-    const wallet = await Wallet.update({
+    const wallet = await prisma.wallet.update({
       where: { userID },
       data: {
         [currency]: { increment: amount },
@@ -106,7 +104,7 @@ export const removeBalanceQuery = async (
   amount: number,
 ): Promise<IQuery & { data: IUser }> => {
   try {
-    const wallet = await Wallet.update({
+    const wallet = await prisma.wallet.update({
       where: { userID },
       data: {
         [currency]: { decrement: amount },

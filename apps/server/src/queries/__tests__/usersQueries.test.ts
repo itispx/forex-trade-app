@@ -1,3 +1,4 @@
+import { Wallet, User } from "@prisma/client";
 /* eslint-disable jest/no-conditional-expect */
 import {
   signUpQuery,
@@ -7,87 +8,162 @@ import {
   removeBalanceQuery,
 } from "../usersQueries";
 
-import { connectMongoMemoryServer, disconnectDB } from "../../util/testing";
+import prisma from "../../util/prisma/client";
 
-import { ObjectId } from "mongoose";
-
-import bcrypt from "bcryptjs";
+import { userMock } from "../../util/testing";
 
 describe("users queries", () => {
-  let userID: ObjectId | undefined = undefined;
-  const username = "username-test";
-  const password = "password-test";
-
-  beforeAll(async () => {
-    await connectMongoMemoryServer();
-  });
-
-  afterAll(async () => {
-    await disconnectDB();
+  beforeEach(() => {
+    prisma.user.create = jest.fn();
+    prisma.user.findUnique = jest.fn();
+    prisma.wallet.update = jest.fn();
   });
 
   it("should sign user up", async () => {
-    const hashed = await bcrypt.hash(password, 10);
+    jest.spyOn(prisma.user, "create").mockResolvedValue(userMock);
 
-    const response = await signUpQuery(username, hashed);
+    const response = await signUpQuery(userMock.username, userMock.password);
 
-    userID = response.data._id;
-
+    expect(prisma.user.create).toHaveBeenCalledWith({
+      data: {
+        username: userMock.username,
+        password: userMock.password,
+        wallet: { create: { GBP: 1000, USD: 1000 } },
+      },
+      include: { wallet: true },
+    });
     expect(response.status.code).toBe(201);
     expect(response.status.ok).toBe(true);
-    expect(response.data.username).toBe(username);
-    expect(response.data.password).toBe(hashed);
+    expect(response.data.username).toBe(userMock.username);
+    expect(response.data.password).toBe(userMock.password);
   });
 
   it("should get user by username", async () => {
-    const response = await getUserByUsernameQuery(username);
+    jest.spyOn(prisma.user, "findUnique").mockResolvedValue(userMock);
+
+    const response = await getUserByUsernameQuery(userMock.username);
 
     if (response.data) {
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { username: userMock.username },
+        include: { wallet: true },
+      });
       expect(response.status.code).toBe(200);
       expect(response.status.ok).toBe(true);
       expect(response.data).toBeDefined();
-      expect(response.data._id).toStrictEqual(userID);
-      expect(response.data.username).toBe(username);
+      expect(response.data.id).toStrictEqual(userMock.id);
+      expect(response.data.username).toBe(userMock.username);
     } else {
       throw new Error("response.data is missing");
     }
   });
 
-  it("should get user", async () => {
-    if (!userID) throw new Error("userID is empty");
+  it("should fail to get user by username", async () => {
+    jest.spyOn(prisma.user, "findUnique").mockResolvedValue(null);
 
-    const response = await getUserQuery(userID);
+    const response = await getUserByUsernameQuery(userMock.username);
+
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({
+      where: { username: userMock.username },
+      include: { wallet: true },
+    });
+    expect(response.status.code).toBe(404);
+    expect(response.status.ok).toBe(false);
+    expect(response.data).toBe(undefined);
+  });
+
+  it("should get user by id", async () => {
+    jest.spyOn(prisma.user, "findUnique").mockResolvedValue(userMock);
+
+    const response = await getUserQuery(userMock.id);
 
     if (response.data) {
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({
+        where: { id: userMock.id },
+        include: { wallet: true },
+      });
       expect(response.status.code).toBe(200);
       expect(response.status.ok).toBe(true);
       expect(response.data).toBeDefined();
-      expect(response.data._id).toStrictEqual(userID);
-      expect(response.data.username).toBe(username);
+      expect(response.data.id).toStrictEqual(userMock.id);
+      expect(response.data.username).toBe(userMock.username);
     } else {
       throw new Error("response.data is missing");
     }
+  });
+
+  it("should fail to get user", async () => {
+    jest.spyOn(prisma.user, "findUnique").mockResolvedValue(null);
+
+    const response = await getUserQuery(userMock.id);
+
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({
+      where: { id: userMock.id },
+      include: { wallet: true },
+    });
+    expect(response.status.code).toBe(404);
+    expect(response.status.ok).toBe(false);
+    expect(response.data).toBe(undefined);
   });
 
   it("should add balance", async () => {
-    if (!userID) throw new Error("userID is empty");
+    const resolvedValues: Wallet & {
+      user: User;
+    } = {
+      id: userMock.wallet.id,
+      userID: userMock.id,
+      USD: userMock.wallet.USD + 500,
+      GBP: userMock.wallet.GBP,
+      user: {
+        id: userMock.id,
+        username: userMock.username,
+        password: userMock.password,
+        createdAt: userMock.createdAt,
+      },
+    };
 
-    const response = await addBalanceQuery(userID, "USD", 500);
+    jest.spyOn(prisma.wallet, "update").mockResolvedValue(resolvedValues);
 
+    const response = await addBalanceQuery(userMock.id, "USD", 500);
+
+    if (!response.data.wallet) throw new Error();
+
+    expect(prisma.wallet.update).toHaveBeenCalledWith({
+      where: { userID: userMock.id },
+      data: { USD: { increment: 500 } },
+      include: { user: true },
+    });
     expect(response.status.code).toBe(201);
     expect(response.status.ok).toBe(true);
-    expect(response.data._id).toStrictEqual(userID);
+    expect(response.data.id).toStrictEqual(userMock.id);
     expect(response.data.wallet.USD).toBe(1500);
   });
 
   it("should remove balance", async () => {
-    if (!userID) throw new Error("userID is empty");
+    const resolvedValues: Wallet & {
+      user: User;
+    } = {
+      id: userMock.wallet.id,
+      userID: userMock.id,
+      USD: userMock.wallet.USD - 500,
+      GBP: userMock.wallet.GBP,
+      user: {
+        id: userMock.id,
+        username: userMock.username,
+        password: userMock.password,
+        createdAt: userMock.createdAt,
+      },
+    };
 
-    const response = await removeBalanceQuery(userID, "USD", 500);
+    jest.spyOn(prisma.wallet, "update").mockResolvedValue(resolvedValues);
+
+    const response = await removeBalanceQuery(userMock.id, "USD", 500);
+
+    if (!response.data.wallet) throw new Error();
 
     expect(response.status.code).toBe(201);
     expect(response.status.ok).toBe(true);
-    expect(response.data._id).toStrictEqual(userID);
-    expect(response.data.wallet.USD).toBe(1000);
+    expect(response.data.id).toStrictEqual(userMock.id);
+    expect(response.data.wallet.USD).toBe(500);
   });
 });

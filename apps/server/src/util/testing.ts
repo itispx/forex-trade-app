@@ -1,6 +1,4 @@
-import { IUserServerResponse, IUser } from "interfaces-common";
-
-export const userMock: IUser = {
+export const userMock = {
   id: "01234567890",
   username: "test_username",
   password: "test_password",
@@ -13,7 +11,7 @@ export const userMock: IUser = {
   createdAt: new Date(),
 };
 
-export const userServerResponseMock: IUserServerResponse = {
+export const userServerResponseMock = {
   doc: userMock,
   token: "123_token_123",
 };

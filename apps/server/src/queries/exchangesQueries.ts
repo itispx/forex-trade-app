@@ -3,7 +3,7 @@ import axios from "axios";
 import APIError from "../util/errors/APIError";
 import catchErrorHandler from "../util/errors/catchErrorHandler";
 
-import client from "../util/prisma";
+import client from "../util/prisma/client";
 
 import {
   IQuery,
