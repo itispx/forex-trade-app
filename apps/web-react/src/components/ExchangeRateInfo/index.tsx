@@ -29,7 +29,7 @@ const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
 
     if (!data || !data.token || !data.doc) {
       toast.error("User not signed in");
-    } else if (data.doc.wallet[exchangeInfo.base] <= 0) {
+    } else if (!data.doc.wallet || data.doc.wallet[exchangeInfo.base] <= 0) {
       toast.error("You don't have enough money");
     } else {
       openModal();
@@ -65,7 +65,7 @@ const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
           onClick={buyHandler}
         >
           <div className={styles["buy-button"]}>
-            <h1 className={styles['buy-title']}>BUY</h1>
+            <h1 className={styles["buy-title"]}>BUY</h1>
           </div>
         </div>
       </div>

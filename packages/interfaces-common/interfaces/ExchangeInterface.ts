@@ -1,25 +1,14 @@
-import { ObjectId, Document } from "mongoose";
-
 import TCurrencies, { CurrencyInfoInterface } from "./CurrenciesTypes";
 
 interface ExchangeInterface {
-  _id: ObjectId;
-  userID: ObjectId;
+  id: string;
+  userID: string;
   base: CurrencyInfoInterface;
   converted: CurrencyInfoInterface;
-  createdAt: string;
+  createdAt: Date;
 }
 
 export default ExchangeInterface;
-
-export interface ExchangeDocumentInterface
-  extends ExchangeInterface,
-    Document<unknown, unknown, ExchangeInterface>,
-    Required<{
-      _id: ObjectId;
-    }> {
-  _id: ObjectId;
-}
 
 export interface ExchangeConversionInterface {
   base: TCurrencies;

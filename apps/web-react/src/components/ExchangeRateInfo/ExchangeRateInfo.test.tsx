@@ -1,9 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
-import { render } from "../../utilities/testing";
+import { render, userMock } from "../../utilities/testing";
 
 import useUserQueryData from "../../queries/hooks/useUserQueryData";
-
-import { ObjectId } from "mongoose";
 
 import ExchangeRateInfo, { Props } from ".";
 
@@ -71,19 +69,7 @@ describe("exchange rate info component", () => {
   });
 
   it("should open modal", async () => {
-    useUserQueryDataMocked.mockImplementation(() => ({
-      doc: {
-        _id: "01234567890" as unknown as ObjectId,
-        username: "test_username",
-        password: "hashed__password__hashed",
-        wallet: {
-          GBP: 1000,
-          USD: 1000,
-        },
-        createdAt: "2022-11-30T15:50:08.043+00:00",
-      },
-      token: "123_token_123",
-    }));
+    useUserQueryDataMocked.mockImplementation(() => userMock);
 
     render(<ExchangeRateInfo {...exchangeRateInfo} />);
 

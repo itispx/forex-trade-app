@@ -1,17 +1,15 @@
 import axios from "axios";
 
-import { ObjectId, Types } from "mongoose";
-
 import APIError from "../util/errors/APIError";
 import catchErrorHandler from "../util/errors/catchErrorHandler";
 
-import Exchange from "../schemas/ExchangeSchema";
+import prisma from "../util/prisma/client";
 
 import {
   IQuery,
   TCurrencies,
   IExchangeConversion,
-  IExchangeDocument,
+  IExchange,
   ICurrencyInfo,
 } from "interfaces-common";
 
@@ -51,17 +49,40 @@ export const getCurrentExchangeValues = async (
 };
 
 export const makeExchangeQuery = async (
-  userID: ObjectId,
+  userID: string,
   base: ICurrencyInfo,
   convert: ICurrencyInfo,
-): Promise<IQuery & { data: IExchangeDocument }> => {
+): Promise<IQuery & { data: IExchange }> => {
   try {
-    const data = await Exchange.create({
-      _id: new Types.ObjectId(),
-      userID,
-      base,
-      converted: convert,
+    const exchange = await prisma.exchange.create({
+      data: {
+        userID,
+        baseCurrency: base.currency,
+        baseAmount: base.amount,
+        convertedCurrency: convert.currency,
+        convertedAmount: convert.amount,
+      },
     });
+
+    const {
+      baseCurrency,
+      baseAmount,
+      convertedCurrency,
+      convertedAmount,
+      ...remExchange
+    } = exchange;
+
+    const data: IExchange = {
+      ...remExchange,
+      base: {
+        currency: baseCurrency,
+        amount: baseAmount,
+      },
+      converted: {
+        currency: convertedCurrency,
+        amount: convertedAmount,
+      },
+    };
 
     return { status: { code: 201, ok: true }, data };
   } catch (error) {
@@ -70,18 +91,46 @@ export const makeExchangeQuery = async (
 };
 
 export const getExchangesQuery = async (
-  userID: ObjectId,
+  userID: string,
   page: number,
-): Promise<IQuery & { data: IExchangeDocument[] }> => {
+): Promise<IQuery & { data: IExchange[] }> => {
   try {
     const limit = 5;
 
-    const data = await Exchange.find({ userID })
-      .skip(page * limit)
-      .limit(limit)
-      .sort("-createdAt");
+    const exchanges = await prisma.exchange.findMany({
+      where: { userID },
+      skip: page * limit,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-    return { status: { code: 200, ok: true }, data };
+    const exchangesArr: IExchange[] = [];
+
+    for (let i = 0; i < exchanges.length; i++) {
+      const {
+        baseCurrency,
+        baseAmount,
+        convertedCurrency,
+        convertedAmount,
+        ...remExchange
+      } = exchanges[0];
+
+      exchangesArr.push({
+        ...remExchange,
+        base: {
+          currency: baseCurrency,
+          amount: baseAmount,
+        },
+        converted: {
+          currency: convertedCurrency,
+          amount: convertedAmount,
+        },
+      });
+    }
+
+    return { status: { code: 200, ok: true }, data: exchangesArr };
   } catch (error) {
     throw catchErrorHandler(error as Error);
   }

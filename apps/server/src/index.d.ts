@@ -1,9 +1,10 @@
-import { ObjectId } from "mongoose";
-
 declare global {
   namespace Express {
     export interface Request {
-      accessTokenID: ObjectId | undefined;
+      accessTokenID: string | undefined;
     }
   }
 }
+
+// Make the file a module and avoid the TypeScript error
+export {};

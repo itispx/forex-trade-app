@@ -2,38 +2,59 @@ import request from "supertest";
 
 import app from "../../app";
 
-import {
-  connectMongoMemoryServer,
-  disconnectDB,
-  createUserDB,
-  makeExchangeInfoObj,
-} from "../../util/testing";
+import signJwt from "../../util/signJwt";
 
-import { IExchangeInfo, IUser } from "interfaces-common";
+import { userMock } from "../../util/testing";
+
+import { ICurrencyInfo, IExchange } from "interfaces-common";
+
+import { makeExchangeAction, getExchangesAction } from "../../actions/exchangesActions";
+
+jest.mock("../../actions/exchangesActions", () => {
+  const original = jest.requireActual("../../actions/exchangesActions");
+
+  return {
+    ...original,
+    makeExchangeAction: jest.fn(),
+    getExchangesAction: jest.fn(),
+  };
+});
+
+const makeExchangeActionMocked = jest.mocked(makeExchangeAction);
+const getExchangesActionMocked = jest.mocked(getExchangesAction);
 
 describe("exchanges routes", () => {
-  let exchangeInfo: IExchangeInfo | undefined = undefined;
-  let userPayload: IUser | undefined = undefined;
-  let token = "";
+  const token = signJwt(userMock.id, userMock.username);
 
-  beforeAll(async () => {
-    await connectMongoMemoryServer();
+  const base: ICurrencyInfo = { currency: "USD", amount: 5 };
+  const convert: ICurrencyInfo = { currency: "GBP", amount: 12 };
 
-    exchangeInfo = makeExchangeInfoObj();
+  const exchangeInfo = { base, convert };
 
-    const { doc, token: createdUserToken } = await createUserDB(app);
-
-    userPayload = doc;
-    token = createdUserToken;
-  });
-
-  afterAll(async () => {
-    await disconnectDB();
-  });
+  const exchangesArr: IExchange[] = [
+    { id: "1", userID: userMock.id, base, converted: convert, createdAt: new Date() },
+    { id: "2", userID: userMock.id, base, converted: convert, createdAt: new Date() },
+    { id: "3", userID: userMock.id, base, converted: convert, createdAt: new Date() },
+    { id: "4", userID: userMock.id, base, converted: convert, createdAt: new Date() },
+    { id: "5", userID: userMock.id, base, converted: convert, createdAt: new Date() },
+  ];
 
   describe("make exchange", () => {
     it("should make successful exchange", async () => {
-      if (!userPayload || !exchangeInfo) return;
+      makeExchangeActionMocked.mockImplementation(async () => {
+        return {
+          status: { code: 201, ok: true },
+          success: {
+            doc: {
+              id: "123_exchange_id_123",
+              userID: userMock.id,
+              base: exchangeInfo.base,
+              converted: exchangeInfo.convert,
+              createdAt: new Date(),
+            },
+          },
+        };
+      });
 
       const response = await request(app)
         .post("/v1/exchanges")
@@ -43,7 +64,7 @@ describe("exchanges routes", () => {
       expect(response.statusCode).toBe(201);
       expect(response.body.status.code).toBe(201);
       expect(response.body.status.ok).toBe(true);
-      expect(response.body.success.doc.userID).toBe(userPayload._id);
+      expect(response.body.success.doc.userID).toBe(userMock.id);
       expect(response.body.success.doc.base.currency).toBe(exchangeInfo.base.currency);
       expect(response.body.success.doc.base.amount).toBe(exchangeInfo.base.amount);
       expect(response.body.success.doc.converted.currency).toBe(
@@ -65,13 +86,13 @@ describe("exchanges routes", () => {
   });
 
   describe("get user past exchanges", () => {
-    beforeAll(async () => {
-      for (let i = 0; i < 11; i++) {
-        await request(app)
-          .post("/v1/exchanges")
-          .set({ Authorization: "Bearer " + token })
-          .send(exchangeInfo);
-      }
+    beforeAll(() => {
+      getExchangesActionMocked.mockImplementation(async () => {
+        return {
+          status: { code: 200, ok: true },
+          success: { docs: exchangesArr },
+        };
+      });
     });
 
     it("should get exchanges on page 0", async () => {
@@ -82,26 +103,6 @@ describe("exchanges routes", () => {
 
       expect(response.statusCode).toBe(200);
       expect(response.body.success.docs.length).toBe(5);
-    });
-
-    it("should get exchanges on page 1", async () => {
-      const response = await request(app)
-        .get("/v1/exchanges")
-        .set({ Authorization: "Bearer " + token })
-        .query({ page: 1 });
-
-      expect(response.statusCode).toBe(200);
-      expect(response.body.success.docs.length).toBe(5);
-    });
-
-    it("should get exchanges on page 2", async () => {
-      const response = await request(app)
-        .get("/v1/exchanges")
-        .set({ Authorization: "Bearer " + token })
-        .query({ page: 2 });
-
-      expect(response.statusCode).toBe(200);
-      expect(response.body.success.docs.length).toBe(2);
     });
 
     it("should get exchanges on page 0 without passing query params", async () => {

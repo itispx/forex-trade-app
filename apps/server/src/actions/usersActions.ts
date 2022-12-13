@@ -1,7 +1,5 @@
 import APIError from "../util/errors/APIError";
 
-import { ObjectId } from "mongoose";
-
 import bcrypt from "bcryptjs";
 
 import {
@@ -14,12 +12,7 @@ import {
 
 import signJwt from "../util/signJwt";
 
-import {
-  IQuery,
-  TCurrencies,
-  IUserServerResponse,
-  IUserDocument,
-} from "interfaces-common";
+import { IQuery, TCurrencies, IUserServerResponse, IUser } from "interfaces-common";
 
 export const signUpAction = async (
   username: string,
@@ -33,7 +26,7 @@ export const signUpAction = async (
     const { status: signupStatus, data } = await signUpQuery(username, hashed);
 
     if (signupStatus.code === 201) {
-      const token = signJwt(data._id, data.username);
+      const token = signJwt(data.id, data.username);
 
       return { status: signupStatus, success: { doc: data, token } };
     }
@@ -55,7 +48,7 @@ export const signInAction = async (
   const correctPassword = await bcrypt.compare(password, data.password);
 
   if (correctPassword) {
-    const token = signJwt(data._id, data.username);
+    const token = signJwt(data.id, data.username);
 
     return { status: { code: 200, ok: true }, success: { doc: data, token } };
   }
@@ -64,7 +57,7 @@ export const signInAction = async (
 };
 
 export const getUserAction = async (
-  userID: ObjectId,
+  userID: string,
 ): Promise<IQuery & { success: IUserServerResponse }> => {
   const { status, data } = await getUserQuery(userID);
 
@@ -72,26 +65,26 @@ export const getUserAction = async (
     throw APIError.notFound();
   }
 
-  const token = signJwt(data._id, data.username);
+  const token = signJwt(data.id, data.username);
 
   return { status, success: { doc: data, token } };
 };
 
 export const addBalanceAction = async (
-  userID: ObjectId,
+  userID: string,
   currency: TCurrencies,
   amount: number,
-): Promise<IQuery & { success: { doc: IUserDocument } }> => {
+): Promise<IQuery & { success: { doc: IUser } }> => {
   const { status, data } = await addBalanceQuery(userID, currency, amount);
 
   return { status, success: { doc: data } };
 };
 
 export const removeBalanceAction = async (
-  userID: ObjectId,
+  userID: string,
   currency: TCurrencies,
   amount: number,
-): Promise<IQuery & { success: { doc: IUserDocument } }> => {
+): Promise<IQuery & { success: { doc: IUser } }> => {
   const { status, data } = await removeBalanceQuery(userID, currency, amount);
 
   return { status, success: { doc: data } };

@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  username  String     @unique
+  password  String
+  wallet    Wallet?
+  exchanges Exchange[]
+  createdAt DateTime   @default(now())
+}
+
+model Wallet {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userID], references: [id])
+  userID String @unique
+  USD    Float  @default(1000)
+  GBP    Float  @default(1000)
+}
+
+model Exchange {
+  id                String         @id @default(uuid())
+  user              User           @relation(fields: [userID], references: [id])
+  userID            String
+  baseCurrency      Currency_Types
+  baseAmount        Float
+  convertedCurrency Currency_Types
+  convertedAmount   Float
+  createdAt         DateTime       @default(now())
+}
+
+enum Currency_Types {
+  USD
+  GBP
+}

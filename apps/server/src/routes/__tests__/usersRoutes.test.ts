@@ -1,69 +1,125 @@
+/* eslint-disable jest/no-conditional-expect */
 import request from "supertest";
 
 import app from "../../app";
 
+import APIError from "../../util/errors/APIError";
+
 import signJwt from "../../util/signJwt";
 
-import { connectMongoMemoryServer, disconnectDB, userPayload } from "../../util/testing";
+import { userMock, userServerResponseMock } from "../../util/testing";
+
+import { signUpAction, signInAction, getUserAction } from "../../actions/usersActions";
+
+jest.mock("../../actions/usersActions", () => {
+  const original = jest.requireActual("../../actions/usersActions");
+  return {
+    ...original,
+    signUpAction: jest.fn(),
+    signInAction: jest.fn(),
+    getUserAction: jest.fn(),
+  };
+});
+
+const signUpActionMocked = jest.mocked(signUpAction);
+const signInActionMocked = jest.mocked(signInAction);
+const getUserActionMocked = jest.mocked(getUserAction);
 
 describe("users", () => {
-  beforeAll(async () => {
-    await connectMongoMemoryServer();
-  });
-
-  afterAll(async () => {
-    await disconnectDB();
-  });
-
   describe("sign up routes", () => {
     it("should sign up user", async () => {
-      const response = await request(app).post("/v1/users/signup").send(userPayload);
+      signUpActionMocked.mockImplementation(async () => {
+        return {
+          status: { code: 201, ok: true },
+          success: userServerResponseMock,
+        };
+      });
+
+      const response = await request(app)
+        .post("/v1/users/signup")
+        .send({ username: userMock.username, password: userMock.password });
 
       expect(response.statusCode).toBe(201);
       expect(response.body.status.code).toBe(201);
       expect(response.body.status.ok).toBe(true);
-      expect(response.body.success.doc.username).toBe(userPayload.username);
+      expect(response.body.success.doc.username).toBe(userMock.username);
       expect(response.body.success.doc.wallet.USD).toBe(1000);
       expect(response.body.success.doc.wallet.GBP).toBe(1000);
       expect(typeof response.body.success.token).toBe("string");
-
-      userPayload._id = response.body.success.doc._id;
     });
 
-    it("should failed to sign up the same user twice", async () => {
-      const response = await request(app).post("/v1/users/signup").send(userPayload);
+    it("should fail sign up user with missing password", async () => {
+      signUpActionMocked.mockImplementation();
 
-      expect(response.statusCode).toBe(409);
-      expect(response.body.status.code).toBe(409);
-      expect(response.body.status.ok).toBe(false);
+      try {
+        await request(app).post("/v1/users/signup").send({ username: userMock.username });
+      } catch (error) {
+        expect(error).toStrictEqual(APIError.badRequest());
+      }
+    });
+
+    it("should fail sign up user with missing username", async () => {
+      signUpActionMocked.mockImplementation();
+
+      try {
+        await request(app).post("/v1/users/signup").send({ password: userMock.password });
+      } catch (error) {
+        expect(error).toStrictEqual(APIError.badRequest());
+      }
     });
   });
 
   describe("sign in", () => {
     it("should sign in the user", async () => {
-      const response = await request(app).post("/v1/users/signin").send(userPayload);
+      signInActionMocked.mockImplementation(async () => {
+        return {
+          status: { code: 200, ok: true },
+          success: userServerResponseMock,
+        };
+      });
+
+      const response = await request(app)
+        .post("/v1/users/signin")
+        .send({ username: userMock.username, password: userMock.password });
 
       expect(response.statusCode).toBe(200);
       expect(response.body.status.code).toBe(200);
       expect(response.body.status.ok).toBe(true);
-      expect(response.body.success.doc.username).toBe(userPayload.username);
+      expect(response.body.success.doc.username).toBe(userMock.username);
       expect(typeof response.body.success.token).toBe("string");
     });
 
-    it("should fail to sign in user with wrong password", async () => {
-      const response = await request(app)
-        .post("/v1/users/signin")
-        .send({ username: userPayload.username, password: "wrong password" });
+    it("should fail sign in user with missing password", async () => {
+      signInActionMocked.mockImplementation();
 
-      expect(response.statusCode).toBe(401);
-      expect(response.body.status.code).toBe(401);
-      expect(response.body.status.ok).toBe(false);
+      try {
+        await request(app).post("/v1/users/signin").send({ username: userMock.username });
+      } catch (error) {
+        expect(error).toStrictEqual(APIError.badRequest());
+      }
+    });
+
+    it("should fail sign in user with missing username", async () => {
+      signInActionMocked.mockImplementation();
+
+      try {
+        await request(app).post("/v1/users/signin").send({ password: userMock.password });
+      } catch (error) {
+        expect(error).toStrictEqual(APIError.badRequest());
+      }
     });
   });
 
   describe("get user", () => {
     it("should get the user", async () => {
-      const token = signJwt(userPayload._id, userPayload.username);
+      getUserActionMocked.mockImplementation(async () => {
+        return {
+          status: { code: 200, ok: true },
+          success: userServerResponseMock,
+        };
+      });
+
+      const token = signJwt(userMock.id, userMock.username);
 
       const response = await request(app)
         .get("/v1/users")
@@ -72,10 +128,12 @@ describe("users", () => {
       expect(response.statusCode).toBe(200);
       expect(response.body.status.code).toBe(200);
       expect(response.body.status.ok).toBe(true);
-      expect(response.body.success.doc.username).toBe(userPayload.username);
+      expect(response.body.success.doc.username).toBe(userMock.username);
     });
 
     it("should fail with code with 401", async () => {
+      getUserActionMocked.mockImplementation();
+
       const response = await request(app).get("/v1/users");
 
       expect(response.statusCode).toBe(401);

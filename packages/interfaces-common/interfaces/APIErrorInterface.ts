@@ -1,5 +1,5 @@
 interface APIErrorInterface {
-  status: { code: number; ok: boolean };
+  status: { code: number | string; ok: boolean };
   error: { message: string };
 }
 
