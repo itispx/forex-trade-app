@@ -11,13 +11,12 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  username      String         @unique
-  password      String
-  wallet        Wallet?
-  exchanges     Exchange[]
-  createdAt     DateTime       @default(now())
-  queueSessions QueueSession[]
+  id        String     @id @default(uuid())
+  username  String     @unique
+  password  String
+  wallet    Wallet?
+  exchanges Exchange[]
+  createdAt DateTime   @default(now())
 }
 
 model Wallet {
@@ -36,6 +35,7 @@ model Exchange {
   baseAmount        Float
   convertedCurrency Currency_Types
   convertedAmount   Float
+  status            Status_Types
   createdAt         DateTime       @default(now())
 }
 
@@ -44,16 +44,8 @@ enum Currency_Types {
   GBP
 }
 
-model QueueSession {
-  id     String @id @default(uuid())
-  user   User   @relation(fields: [userID], references: [id])
-  userID String @unique
-
-  createdAt DateTime @default(now())
-}
-
-enum Queue_Status {
+enum Status_Types {
+  FAILED
   PENDING
   SUCCESSFUL
-  FAILED
 }
