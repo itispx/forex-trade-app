@@ -5,12 +5,15 @@ import catchErrorHandler from "../util/errors/catchErrorHandler";
 
 import prisma from "../util/prisma/client";
 
+import { makeExchangeObj } from "../util/exchanges";
+
 import {
   IQuery,
   TCurrencies,
   IExchangeConversion,
   IExchange,
   ICurrencyInfo,
+  TStatus,
 } from "interfaces-common";
 
 interface IAPIResponse {
@@ -48,7 +51,7 @@ export const getCurrentExchangeValues = async (
   }
 };
 
-export const makeExchangeQuery = async (
+export const addExchangeQuery = async (
   userID: string,
   base: ICurrencyInfo,
   convert: ICurrencyInfo,
@@ -61,28 +64,29 @@ export const makeExchangeQuery = async (
         baseAmount: base.amount,
         convertedCurrency: convert.currency,
         convertedAmount: convert.amount,
+        status: "PENDING",
       },
     });
 
-    const {
-      baseCurrency,
-      baseAmount,
-      convertedCurrency,
-      convertedAmount,
-      ...remExchange
-    } = exchange;
+    const data = makeExchangeObj(exchange);
 
-    const data: IExchange = {
-      ...remExchange,
-      base: {
-        currency: baseCurrency,
-        amount: baseAmount,
-      },
-      converted: {
-        currency: convertedCurrency,
-        amount: convertedAmount,
-      },
-    };
+    return { status: { code: 201, ok: true }, data };
+  } catch (error) {
+    throw catchErrorHandler(error as Error);
+  }
+};
+
+export const updateExchangeStatusQuery = async (
+  id: string,
+  status: TStatus,
+): Promise<IQuery & { data: IExchange }> => {
+  try {
+    const updatedExchange = await prisma.exchange.update({
+      where: { id },
+      data: { status },
+    });
+
+    const data = makeExchangeObj(updatedExchange);
 
     return { status: { code: 201, ok: true }, data };
   } catch (error) {
