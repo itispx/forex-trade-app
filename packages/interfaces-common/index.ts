@@ -6,6 +6,7 @@ import UserInterface, {
 import ExchangeInterface, {
   ExchangeConversionInterface,
   ExchangeInfoInterface,
+  StatusTypes,
 } from "./interfaces/ExchangeInterface";
 
 import CurrenciesTypes, {
@@ -24,6 +25,7 @@ export type IWallet = WalletInterface;
 export type IExchange = ExchangeInterface;
 export type IExchangeConversion = ExchangeConversionInterface;
 export type IExchangeInfo = ExchangeInfoInterface;
+export type TStatus = StatusTypes;
 
 export type TCurrencies = CurrenciesTypes;
 export type ICurrencyInfo = CurrencyInfoInterface;

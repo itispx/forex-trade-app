@@ -5,6 +5,7 @@ interface ExchangeInterface {
   userID: string;
   base: CurrencyInfoInterface;
   converted: CurrencyInfoInterface;
+  status: StatusTypes;
   createdAt: Date;
 }
 
@@ -20,3 +21,5 @@ export interface ExchangeInfoInterface {
   base: CurrencyInfoInterface;
   convert: CurrencyInfoInterface;
 }
+
+export type StatusTypes = "FAILED" | "PENDING" | "SUCCESSFUL";
