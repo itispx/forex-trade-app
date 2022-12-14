@@ -22,16 +22,19 @@ export const createExchangesMessageChannel = async (): Promise<Channel> => {
 export const consumeExchangesMessageChannel = async () => {
   const connection = await createExchangesMessageChannel();
 
+  // Tells RabbitMQ to process one message at a time
+  connection.prefetch(1);
+
   connection.consume("exchanges", async (exchange) => {
     if (exchange) {
-      // Tell RabbitMQ message was received
+      // Process exchange
+      const exchangeObj = JSON.parse(exchange.content.toString());
+      console.log("Exchanged received:", exchangeObj.id);
+
+      await processExchangeAction(exchangeObj);
+
       setTimeout(async () => {
-        // Process exchange
-        const exchangeObj = JSON.parse(exchange.content.toString());
-        console.log("Exchanged received:", exchangeObj);
-
-        await processExchangeAction(exchangeObj);
-
+        // Tell RabbitMQ message was received
         connection.ack(exchange);
         console.log("Acked");
       }, 10000);

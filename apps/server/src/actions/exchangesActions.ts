@@ -96,14 +96,14 @@ export const processExchangeAction = async (exchange: IExchange) => {
       exchange.converted.amount,
     );
 
-    console.log("Exchange processed successfully");
-
     // Update exchange status to "SUCCESSFUL"
     const { status, data } = await updateExchangeStatusQuery(exchange.id, "SUCCESSFUL");
 
+    console.log("Exchange processed successfully");
+
     return { status, success: { doc: data } };
   } catch (error) {
-    // If error is thrown update exchange status to "FAILED"
+    //  If error is thrown update exchange status to "FAILED"
     await updateExchangeStatusQuery(exchange.id, "FAILED");
   }
 };
