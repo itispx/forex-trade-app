@@ -46,8 +46,6 @@ export const addExchangeQueueAction = async (
   base: { currency: TCurrencies; amount: number },
   convert: { currency: TCurrencies; amount: number },
 ): Promise<IQuery & { success: { doc: IExchange } }> => {
-  console.log("addExchangeQueue");
-
   const messageChannel = await createExchangesMessageChannel();
 
   if (messageChannel) {
