@@ -22,8 +22,6 @@ const ExchangesPage: NextPage = () => {
 
   useEffect(() => {
     if (!userQueryData) {
-      console.log("I GOT HERE");
-
       push("/");
     }
   }, [userQueryData, push]);
