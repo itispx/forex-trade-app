@@ -1,5 +1,7 @@
 import DashboardPage from "./Dashboard";
 
-export default () => {
+const IndexPage = () => {
   return <DashboardPage />;
 };
+
+export default IndexPage;
