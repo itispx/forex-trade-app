@@ -35,10 +35,17 @@ model Exchange {
   baseAmount        Float
   convertedCurrency Currency_Types
   convertedAmount   Float
+  status            Status_Types
   createdAt         DateTime       @default(now())
 }
 
 enum Currency_Types {
   USD
   GBP
+}
+
+enum Status_Types {
+  FAILED
+  PENDING
+  SUCCESSFUL
 }

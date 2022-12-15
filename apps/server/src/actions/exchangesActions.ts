@@ -4,7 +4,8 @@ import APIError from "../util/errors/APIError";
 
 import {
   getCurrentExchangeValues,
-  makeExchangeQuery,
+  addExchangeQuery,
+  updateExchangeStatusQuery,
   getExchangesQuery,
 } from "../queries/exchangesQueries";
 
@@ -13,6 +14,8 @@ import {
   addBalanceAction,
   removeBalanceAction,
 } from "../actions/usersActions";
+
+import { createExchangesMessageChannel } from "../messages/messageChannel";
 
 import { IQuery, TCurrencies, IExchangeConversion, IExchange } from "interfaces-common";
 
@@ -38,36 +41,73 @@ export const getRealTimeExchangeValuesAction = async (io: Namespace) => {
   }, 30000);
 };
 
-export const makeExchangeAction = async (
+export const addExchangeQueueAction = async (
   userID: string,
   base: { currency: TCurrencies; amount: number },
   convert: { currency: TCurrencies; amount: number },
 ): Promise<IQuery & { success: { doc: IExchange } }> => {
-  // Check if user has enough credit to perform exchange
-  const { success } = await getUserAction(userID);
+  const messageChannel = await createExchangesMessageChannel();
 
-  if (success.doc && success.doc.wallet) {
-    if (success.doc.wallet[base.currency] < base.amount) {
-      throw new APIError(403, "Insufficient money");
-    }
-  } else {
-    throw APIError.notFound();
-  }
+  if (messageChannel) {
+    // Add exchange to database with "PENDING" status
+    const { status, data } = await addExchangeQuery(userID, base, convert);
 
-  // Create exchange document
-  const { status, data } = await makeExchangeQuery(userID, base, convert);
+    // Add exchange to message channel
+    const dataJson = JSON.stringify(data);
+    messageChannel.sendToQueue("exchanges", Buffer.from(dataJson));
 
-  if (status.code === 201) {
-    // Remove balance from user document
-    await removeBalanceAction(userID, base.currency, base.amount);
-
-    // Add balance from user document
-    await addBalanceAction(userID, convert.currency, convert.amount);
+    console.log("Exchange added to queue");
 
     return { status, success: { doc: data } };
   }
 
   throw APIError.internal();
+};
+
+export const processExchangeAction = async (
+  exchange: IExchange,
+): Promise<IQuery & { success: { doc: IExchange } }> => {
+  try {
+    // Check if user has enough credit to perform exchange
+    const { success } = await getUserAction(exchange.userID);
+
+    if (success.doc && success.doc.wallet) {
+      // User credit is insufficient to perform exchange
+      if (success.doc.wallet[exchange.base.currency] < exchange.base.amount) {
+        throw new APIError(403, "Insufficient money");
+      }
+    }
+
+    // Remove balance from user wallet
+    await removeBalanceAction(
+      exchange.userID,
+      exchange.base.currency,
+      exchange.base.amount,
+    );
+
+    // Add balance from user wallet
+    await addBalanceAction(
+      exchange.userID,
+      exchange.converted.currency,
+      exchange.converted.amount,
+    );
+
+    // Update exchange status to "SUCCESSFUL"
+    const { status, data } = await updateExchangeStatusQuery(exchange.id, "SUCCESSFUL");
+
+    console.log("Exchange processed successfully");
+
+    return { status, success: { doc: data } };
+  } catch (error) {
+    //  If error is thrown update exchange status to "FAILED"
+    await updateExchangeStatusQuery(exchange.id, "FAILED");
+
+    if (error instanceof APIError) {
+      throw new APIError(error.code, error.message);
+    }
+
+    throw new Error("Something went wrong processing the exchange");
+  }
 };
 
 export const getExchangesAction = async (

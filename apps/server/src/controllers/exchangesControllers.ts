@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 
 import APIError from "../util/errors/APIError";
 
-import { makeExchangeAction, getExchangesAction } from "../actions/exchangesActions";
+import { addExchangeQueueAction, getExchangesAction } from "../actions/exchangesActions";
 
 import { TCurrencies } from "interfaces-common";
 
@@ -19,7 +19,7 @@ export const makeExchangeController: RequestHandler<
     const { base, convert } = req.body;
 
     if (req.accessTokenID) {
-      const { status, success } = await makeExchangeAction(
+      const { status, success } = await addExchangeQueueAction(
         req.accessTokenID,
         base,
         convert,

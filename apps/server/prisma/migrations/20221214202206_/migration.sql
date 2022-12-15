@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "Currency_Types" AS ENUM ('USD', 'GBP');
 
+-- CreateEnum
+CREATE TYPE "Status_Types" AS ENUM ('FAILED', 'PENDING', 'SUCCESSFUL');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -29,6 +32,7 @@ CREATE TABLE "Exchange" (
     "baseAmount" DOUBLE PRECISION NOT NULL,
     "convertedCurrency" "Currency_Types" NOT NULL,
     "convertedAmount" DOUBLE PRECISION NOT NULL,
+    "status" "Status_Types" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Exchange_pkey" PRIMARY KEY ("id")

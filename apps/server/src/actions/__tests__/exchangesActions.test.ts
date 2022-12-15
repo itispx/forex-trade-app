@@ -1,32 +1,50 @@
+/* eslint-disable jest/no-conditional-expect */
 import {
-  makeExchangeAction,
+  addExchangeQueueAction,
+  processExchangeAction,
   getExchangesAction,
   getExchangeValuesAction,
 } from "../exchangesActions";
 
-import { userMock, userServerResponseMock } from "../../util/testing";
+import APIError from "../../util/errors/APIError";
+
+import { userMock, userServerResponseMock, exchangeMock } from "../../util/testing";
 
 import randomNumber from "../../util/randomNumber";
 
-import { ICurrencyInfo, IExchange, TCurrencies } from "interfaces-common";
+import { IExchange, TCurrencies } from "interfaces-common";
 
 import {
+  addExchangeQuery,
+  updateExchangeStatusQuery,
   getCurrentExchangeValues,
-  makeExchangeQuery,
   getExchangesQuery,
 } from "../../queries/exchangesQueries";
 
 jest.mock("../../queries/exchangesQueries", () => {
   return {
+    addExchangeQuery: jest.fn(),
+    updateExchangeStatusQuery: jest.fn(),
     getCurrentExchangeValues: jest.fn(),
-    makeExchangeQuery: jest.fn(),
     getExchangesQuery: jest.fn(),
   };
 });
 
 const getCurrentExchangeValuesMocked = jest.mocked(getCurrentExchangeValues);
-const makeExchangeQueryMocked = jest.mocked(makeExchangeQuery);
+const updateExchangeStatusQueryMocked = jest.mocked(updateExchangeStatusQuery);
+const addExchangeQueryMocked = jest.mocked(addExchangeQuery);
 const getExchangesQueryMocked = jest.mocked(getExchangesQuery);
+
+import { createExchangesMessageChannel } from "../../messages/messageChannel";
+import { Channel } from "amqplib";
+
+jest.mock("../../messages/messageChannel", () => {
+  return {
+    createExchangesMessageChannel: jest.fn(),
+  };
+});
+
+const createExchangesMessageChannelMocked = jest.mocked(createExchangesMessageChannel);
 
 import {
   getUserAction,
@@ -47,9 +65,6 @@ const addBalanceActionMocked = jest.mocked(addBalanceAction);
 const removeBalanceActionMocked = jest.mocked(removeBalanceAction);
 
 describe("exchanges actions", () => {
-  const base: ICurrencyInfo = { currency: "USD", amount: 5 };
-  const convert: ICurrencyInfo = { currency: "GBP", amount: 12 };
-
   describe("get exchanges rate", () => {
     beforeAll(() => {
       getCurrentExchangeValuesMocked.mockImplementation(
@@ -82,48 +97,116 @@ describe("exchanges actions", () => {
   });
 
   describe("make exchanges", () => {
-    it("should make exchange", async () => {
+    const exchange = exchangeMock("PENDING");
+
+    it("should add exchange to queue", async () => {
+      createExchangesMessageChannelMocked.mockImplementation(async () => {
+        const mocked = {
+          sendToQueue: jest.fn(),
+        } as unknown as Channel;
+
+        return mocked;
+      });
+      addExchangeQueryMocked.mockImplementation(async () => {
+        return {
+          status: { code: 201, ok: true },
+          data: exchange,
+        };
+      });
+
+      const response = await addExchangeQueueAction(
+        userMock.id,
+        exchange.base,
+        exchange.converted,
+      );
+
+      expect(createExchangesMessageChannelMocked).toHaveBeenCalledTimes(1);
+      expect(response.status.code).toBe(201);
+      expect(response.status.ok).toBe(true);
+      expect(response.success.doc.userID).toBe(userMock.id);
+      expect(response.success.doc.base).toMatchObject(exchange.base);
+      expect(response.success.doc.converted).toMatchObject(exchange.converted);
+    });
+
+    it("should process exchange", async () => {
       getUserActionMocked.mockImplementation(async () => {
         return {
           status: { code: 201, ok: true },
           success: userServerResponseMock,
         };
       });
-      makeExchangeQueryMocked.mockImplementation(
-        async (userID: string, base: ICurrencyInfo, converted: ICurrencyInfo) => {
-          return {
-            status: { code: 201, ok: true },
-            data: {
-              id: "random_exchange_id_123",
-              userID,
-              base,
-              converted,
-              createdAt: new Date(),
-            },
-          };
-        },
-      );
       addBalanceActionMocked.mockImplementation();
       removeBalanceActionMocked.mockImplementation();
+      updateExchangeStatusQueryMocked.mockImplementation(async () => {
+        return {
+          status: { code: 201, ok: true },
+          data: exchangeMock("SUCCESSFUL"),
+        };
+      });
 
-      const response = await makeExchangeAction(userMock.id, base, convert);
+      const response = await processExchangeAction(exchange);
 
       expect(response.status.code).toBe(201);
       expect(response.status.ok).toBe(true);
-      expect(response.success.doc.userID).toBe(userMock.id);
-      expect(response.success.doc.base).toMatchObject(base);
-      expect(response.success.doc.converted).toMatchObject(convert);
+      expect(response.success.doc.id).toBe(exchange.id);
+      expect(response.success.doc.userID).toBe(exchange.userID);
+      expect(response.success.doc.status).toBe("SUCCESSFUL");
+      expect(updateExchangeStatusQueryMocked).toHaveBeenCalledTimes(1);
+    });
+
+    it("should fail because user was not found", async () => {
+      getUserActionMocked.mockImplementation(async () => {
+        throw APIError.notFound();
+      });
+      updateExchangeStatusQueryMocked.mockRestore();
+
+      try {
+        await processExchangeAction(exchange);
+      } catch (error) {
+        expect(error).toStrictEqual(APIError.notFound());
+        expect(updateExchangeStatusQueryMocked).toHaveBeenCalledTimes(1);
+        expect(updateExchangeStatusQueryMocked).toHaveBeenCalledWith(
+          exchange.id,
+          "FAILED",
+        );
+      }
+    });
+
+    it("should fail because user does not have enough money", async () => {
+      getUserActionMocked.mockImplementation(async () => {
+        return {
+          status: { code: 200, ok: true },
+          success: {
+            ...userServerResponseMock,
+            doc: {
+              ...userServerResponseMock.doc,
+              wallet: {
+                ...userServerResponseMock.doc.wallet,
+                [exchange.base.currency]: 0,
+              },
+            },
+          },
+        };
+      });
+      updateExchangeStatusQueryMocked.mockRestore();
+
+      try {
+        await processExchangeAction(exchange);
+      } catch (error) {
+        expect(error).toBeInstanceOf(APIError);
+        expect((error as APIError).status.code).toBe(403);
+        expect(updateExchangeStatusQueryMocked).toHaveBeenCalledTimes(1);
+        expect(updateExchangeStatusQueryMocked).toHaveBeenCalledWith(
+          exchange.id,
+          "FAILED",
+        );
+      }
     });
   });
 
   describe("get exchanges", () => {
-    const exchangesArr: IExchange[] = [
-      { id: "1", userID: userMock.id, base, converted: convert, createdAt: new Date() },
-      { id: "2", userID: userMock.id, base, converted: convert, createdAt: new Date() },
-      { id: "3", userID: userMock.id, base, converted: convert, createdAt: new Date() },
-      { id: "4", userID: userMock.id, base, converted: convert, createdAt: new Date() },
-      { id: "5", userID: userMock.id, base, converted: convert, createdAt: new Date() },
-    ];
+    const exchange = exchangeMock("SUCCESSFUL");
+    const exchangesArr: IExchange[] = [exchange, exchange, exchange, exchange, exchange];
 
     beforeAll(() => {
       getExchangesQueryMocked.mockImplementation(async () => {

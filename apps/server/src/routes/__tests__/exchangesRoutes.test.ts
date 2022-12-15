@@ -8,19 +8,22 @@ import { userMock } from "../../util/testing";
 
 import { ICurrencyInfo, IExchange } from "interfaces-common";
 
-import { makeExchangeAction, getExchangesAction } from "../../actions/exchangesActions";
+import {
+  addExchangeQueueAction,
+  getExchangesAction,
+} from "../../actions/exchangesActions";
 
 jest.mock("../../actions/exchangesActions", () => {
   const original = jest.requireActual("../../actions/exchangesActions");
 
   return {
     ...original,
-    makeExchangeAction: jest.fn(),
+    addExchangeQueueAction: jest.fn(),
     getExchangesAction: jest.fn(),
   };
 });
 
-const makeExchangeActionMocked = jest.mocked(makeExchangeAction);
+const addExchangeQueueActionMocked = jest.mocked(addExchangeQueueAction);
 const getExchangesActionMocked = jest.mocked(getExchangesAction);
 
 describe("exchanges routes", () => {
@@ -32,16 +35,51 @@ describe("exchanges routes", () => {
   const exchangeInfo = { base, convert };
 
   const exchangesArr: IExchange[] = [
-    { id: "1", userID: userMock.id, base, converted: convert, createdAt: new Date() },
-    { id: "2", userID: userMock.id, base, converted: convert, createdAt: new Date() },
-    { id: "3", userID: userMock.id, base, converted: convert, createdAt: new Date() },
-    { id: "4", userID: userMock.id, base, converted: convert, createdAt: new Date() },
-    { id: "5", userID: userMock.id, base, converted: convert, createdAt: new Date() },
+    {
+      id: "1",
+      userID: userMock.id,
+      base,
+      converted: convert,
+      status: "SUCCESSFUL",
+      createdAt: new Date(),
+    },
+    {
+      id: "2",
+      userID: userMock.id,
+      base,
+      converted: convert,
+      status: "SUCCESSFUL",
+      createdAt: new Date(),
+    },
+    {
+      id: "3",
+      userID: userMock.id,
+      base,
+      converted: convert,
+      status: "SUCCESSFUL",
+      createdAt: new Date(),
+    },
+    {
+      id: "4",
+      userID: userMock.id,
+      base,
+      converted: convert,
+      status: "SUCCESSFUL",
+      createdAt: new Date(),
+    },
+    {
+      id: "5",
+      userID: userMock.id,
+      base,
+      converted: convert,
+      status: "SUCCESSFUL",
+      createdAt: new Date(),
+    },
   ];
 
   describe("make exchange", () => {
     it("should make successful exchange", async () => {
-      makeExchangeActionMocked.mockImplementation(async () => {
+      addExchangeQueueActionMocked.mockImplementation(async () => {
         return {
           status: { code: 201, ok: true },
           success: {
@@ -50,6 +88,7 @@ describe("exchanges routes", () => {
               userID: userMock.id,
               base: exchangeInfo.base,
               converted: exchangeInfo.convert,
+              status: "PENDING",
               createdAt: new Date(),
             },
           },
