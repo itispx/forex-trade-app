@@ -64,7 +64,9 @@ export const addExchangeQueueAction = async (
   throw APIError.internal();
 };
 
-export const processExchangeAction = async (exchange: IExchange) => {
+export const processExchangeAction = async (
+  exchange: IExchange,
+): Promise<IQuery & { success: { doc: IExchange } }> => {
   try {
     // Check if user has enough credit to perform exchange
     const { success } = await getUserAction(exchange.userID);
@@ -72,14 +74,8 @@ export const processExchangeAction = async (exchange: IExchange) => {
     if (success.doc && success.doc.wallet) {
       // User credit is insufficient to perform exchange
       if (success.doc.wallet[exchange.base.currency] < exchange.base.amount) {
-        await updateExchangeStatusQuery(exchange.id, "FAILED");
-
         throw new APIError(403, "Insufficient money");
       }
-    } else {
-      await updateExchangeStatusQuery(exchange.id, "FAILED");
-
-      throw APIError.notFound();
     }
 
     // Remove balance from user wallet
@@ -105,6 +101,12 @@ export const processExchangeAction = async (exchange: IExchange) => {
   } catch (error) {
     //  If error is thrown update exchange status to "FAILED"
     await updateExchangeStatusQuery(exchange.id, "FAILED");
+
+    if (error instanceof APIError) {
+      throw new APIError(error.code, error.message);
+    }
+
+    throw new Error("Something went wrong processing the exchange");
   }
 };
 

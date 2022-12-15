@@ -1,3 +1,5 @@
+import { IExchange, TStatus } from "interfaces-common";
+
 export const userMock = {
   id: "01234567890",
   username: "test_username",
@@ -14,4 +16,15 @@ export const userMock = {
 export const userServerResponseMock = {
   doc: userMock,
   token: "123_token_123",
+};
+
+export const exchangeMock = (status: TStatus): IExchange => {
+  return {
+    id: "random_exchange_id_123",
+    userID: userMock.id,
+    base: { currency: "USD", amount: 5 },
+    converted: { currency: "GBP", amount: 12 },
+    status,
+    createdAt: new Date(),
+  };
 };
