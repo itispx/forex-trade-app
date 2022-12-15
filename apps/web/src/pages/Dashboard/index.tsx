@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
 import React, { useState, useEffect } from "react";
-import styles from "./DashboardPage.module.scss";
+import styles from "./Dashboard.module.scss";
 
 import exchangesListener, { socket } from "../../queries/websockets/exchangesListener";
 

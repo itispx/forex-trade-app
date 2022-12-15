@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import styles from "./ExchangesPage.module.scss";
+import styles from "./Exchanges.module.scss";
 
 import { toast } from "react-toastify";
 
