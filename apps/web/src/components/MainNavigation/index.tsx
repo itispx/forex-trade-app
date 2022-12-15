@@ -22,14 +22,14 @@ const MainNavigation: React.FC = () => {
       <div className={styles["inner-container"]}>
         {data ? (
           <div className={styles["signed"]}>
-            {pathname === "/exchanges" ? (
+            {pathname === "/Exchanges" ? (
               <Link href="/" className={styles["route-link"]}>
                 <span data-testid="link" className={styles["link"]}>
                   Home
                 </span>
               </Link>
             ) : (
-              <Link href="/exchanges" className={styles["route-link"]}>
+              <Link href="/Exchanges" className={styles["route-link"]}>
                 <span data-testid="link" className={styles["link"]}>
                   {data.doc.username}
                 </span>

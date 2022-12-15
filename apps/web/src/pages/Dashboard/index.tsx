@@ -11,28 +11,28 @@ import Loading from "../../components/Loading";
 import { IExchangeConversion } from "interfaces-common";
 
 const DashboardPage: NextPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [rates, setRates] = useState<IExchangeConversion[]>([
-    { base: "USD", converted: "GBP", exchangeRate: 0.81586 },
-    { base: "GBP", converted: "USD", exchangeRate: 1.2257 },
+    // { base: "USD", converted: "GBP", exchangeRate: 0.81586 },
+    // { base: "GBP", converted: "USD", exchangeRate: 1.2257 },
   ]);
 
-  // const exchangesListenerHandler = (data: IExchangeConversion[]) => {
-  //   setRates(data);
+  const exchangesListenerHandler = (data: IExchangeConversion[]) => {
+    setRates(data);
 
-  //   if (isLoading) {
-  //     setIsLoading(false);
-  //   }
-  // };
+    if (isLoading) {
+      setIsLoading(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   exchangesListener(exchangesListenerHandler);
+  useEffect(() => {
+    exchangesListener(exchangesListenerHandler);
 
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <div className={styles["page-container"]}>
