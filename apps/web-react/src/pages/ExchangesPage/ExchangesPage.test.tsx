@@ -22,6 +22,7 @@ const mockedExchanges: IExchange[] = [
     userID: userMock.doc.id,
     base: { currency: "GBP", amount: 10 },
     converted: { currency: "USD", amount: 15 },
+    status: "SUCCESSFUL",
     createdAt: new Date(),
   },
   {
@@ -29,6 +30,7 @@ const mockedExchanges: IExchange[] = [
     userID: userMock.doc.id,
     base: { currency: "USD", amount: 20 },
     converted: { currency: "GBP", amount: 30 },
+    status: "SUCCESSFUL",
     createdAt: new Date(),
   },
   {
@@ -36,6 +38,7 @@ const mockedExchanges: IExchange[] = [
     userID: userMock.doc.id,
     base: { currency: "GBP", amount: 30 },
     converted: { currency: "USD", amount: 45 },
+    status: "SUCCESSFUL",
     createdAt: new Date(),
   },
   {
@@ -43,6 +46,7 @@ const mockedExchanges: IExchange[] = [
     userID: userMock.doc.id,
     base: { currency: "USD", amount: 40 },
     converted: { currency: "GBP", amount: 60 },
+    status: "SUCCESSFUL",
     createdAt: new Date(),
   },
   {
@@ -50,6 +54,7 @@ const mockedExchanges: IExchange[] = [
     userID: userMock.doc.id,
     base: { currency: "GBP", amount: 50 },
     converted: { currency: "USD", amount: 75 },
+    status: "SUCCESSFUL",
     createdAt: new Date(),
   },
 ];
