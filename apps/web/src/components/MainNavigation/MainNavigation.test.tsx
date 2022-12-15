@@ -5,9 +5,7 @@ import MainNavigation from ".";
 
 import useFetchUser from "../../queries/hooks/useFetchUser";
 
-import { useLocation } from "react-router-dom";
-
-import { TCurrencies } from "interfaces-common";
+import { useRouter, NextRouter } from "next/router";
 
 jest.mock("../../queries/hooks/useFetchUser");
 
@@ -20,21 +18,21 @@ const userData = {
   },
 };
 
-jest.mock("react-router-dom", () => {
-  const original = jest.requireActual("react-router-dom");
+jest.mock("next/router", () => {
+  const original = jest.requireActual("next/router");
   return {
     ...original,
-    useLocation: jest.fn(),
+    useRouter: jest.fn(),
   };
 });
 
-const useLocationMocked = jest.mocked(useLocation, true);
+const useRouterMocked = jest.mocked(useRouter, true);
 
 describe("main navigation component", () => {
   beforeAll(() => {
-    useLocationMocked.mockImplementation(() => {
-      const pathname = "/";
-      return { pathname, hash: "", key: "default", search: "", state: null };
+    useRouterMocked.mockImplementation(() => {
+      const mocked = { pathname: "/" } as NextRouter;
+      return mocked;
     });
   });
 
@@ -78,9 +76,9 @@ describe("main navigation component", () => {
     });
 
     it("should display exchanges link", () => {
-      useLocationMocked.mockImplementation(() => {
-        const pathname = "/";
-        return { pathname, hash: "", key: "default", search: "", state: null };
+      useRouterMocked.mockImplementation(() => {
+        const mocked = { pathname: "/" } as NextRouter;
+        return mocked;
       });
 
       render(<MainNavigation />);
@@ -91,9 +89,9 @@ describe("main navigation component", () => {
     });
 
     it("should display home link", () => {
-      useLocationMocked.mockImplementation(() => {
-        const pathname = "/exchanges";
-        return { pathname, hash: "", key: "default", search: "", state: null };
+      useRouterMocked.mockImplementation(() => {
+        const mocked = { pathname: "/Exchanges" } as NextRouter;
+        return mocked;
       });
 
       render(<MainNavigation />);

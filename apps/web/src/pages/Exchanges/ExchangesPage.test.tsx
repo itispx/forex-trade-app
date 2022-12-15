@@ -1,5 +1,7 @@
+/* eslint-disable testing-library/no-wait-for-side-effects */
+/* eslint-disable testing-library/no-unnecessary-act */
 import { screen, act, fireEvent, waitFor } from "@testing-library/react";
-import { render } from "../../utilities/testing";
+import { render, userMock, exchangeMock } from "../../utilities/testing";
 
 import "intersection-observer";
 
@@ -8,55 +10,20 @@ import ExchangesPage from ".";
 import { getExchangesQuery } from "../../queries/exchangesQueries";
 import useUserQueryData from "../../queries/hooks/useUserQueryData";
 
-import { userMock } from "../../utilities/testing";
-
 import { IExchange } from "interfaces-common";
 
 jest.mock("../../queries/exchangesQueries");
 
 const getExchangesQueryMocked = jest.mocked(getExchangesQuery, true);
 
+const mockedExchange = exchangeMock("SUCCESSFUL");
+
 const mockedExchanges: IExchange[] = [
-  {
-    id: "1",
-    userID: userMock.doc.id,
-    base: { currency: "GBP", amount: 10 },
-    converted: { currency: "USD", amount: 15 },
-    status: "SUCCESSFUL",
-    createdAt: new Date(),
-  },
-  {
-    id: "2",
-    userID: userMock.doc.id,
-    base: { currency: "USD", amount: 20 },
-    converted: { currency: "GBP", amount: 30 },
-    status: "SUCCESSFUL",
-    createdAt: new Date(),
-  },
-  {
-    id: "3",
-    userID: userMock.doc.id,
-    base: { currency: "GBP", amount: 30 },
-    converted: { currency: "USD", amount: 45 },
-    status: "SUCCESSFUL",
-    createdAt: new Date(),
-  },
-  {
-    id: "4",
-    userID: userMock.doc.id,
-    base: { currency: "USD", amount: 40 },
-    converted: { currency: "GBP", amount: 60 },
-    status: "SUCCESSFUL",
-    createdAt: new Date(),
-  },
-  {
-    id: "5",
-    userID: userMock.doc.id,
-    base: { currency: "GBP", amount: 50 },
-    converted: { currency: "USD", amount: 75 },
-    status: "SUCCESSFUL",
-    createdAt: new Date(),
-  },
+  { ...mockedExchange, id: "1" },
+  { ...mockedExchange, id: "2" },
+  { ...mockedExchange, id: "3" },
+  { ...mockedExchange, id: "4" },
+  { ...mockedExchange, id: "5" },
 ];
 
 getExchangesQueryMocked.mockResolvedValue({
@@ -73,37 +40,41 @@ jest.mock("../../queries/hooks/useUserQueryData");
 
 const useUserQueryDataMocked = jest.mocked(useUserQueryData, true);
 
-const useNavigateMocked = jest.fn();
+import { useRouter, NextRouter } from "next/router";
 
-jest.mock("react-router-dom", () => {
-  const original = jest.requireActual("react-router-dom");
-  return {
-    ...original,
-    useNavigate: () => useNavigateMocked,
-  };
-});
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}));
+
+const push = jest.fn();
+
+const useRouterMocked = jest.mocked(useRouter, true);
 
 describe("exchanges page", () => {
   describe("redirect user if not logged in", () => {
-    beforeEach(() => {
-      useNavigateMocked.mockReset();
-    });
-
     it("should redirect user to home page", async () => {
       useUserQueryDataMocked.mockImplementation(() => undefined);
 
-      // eslint-disable-next-line testing-library/no-unnecessary-act
+      useRouterMocked.mockImplementation(() => {
+        const mocked = { push } as unknown as NextRouter;
+        return mocked;
+      });
+
       await act(async () => {
         render(<ExchangesPage />);
       });
 
-      expect(useNavigateMocked).toHaveBeenCalledWith("/");
+      expect(push).toHaveBeenCalledWith("/");
     });
 
     it("should allow user to remain in page", async () => {
+      push.mockReset();
       useUserQueryDataMocked.mockImplementation(() => userMock);
+      useRouterMocked.mockImplementation(() => {
+        const mocked = { push } as unknown as NextRouter;
+        return mocked;
+      });
 
-      // eslint-disable-next-line testing-library/no-unnecessary-act
       await act(async () => {
         render(<ExchangesPage />);
       });
@@ -111,7 +82,7 @@ describe("exchanges page", () => {
       const page = screen.queryByTestId("exchanges-page");
 
       expect(page).toBeVisible();
-      expect(useNavigateMocked).not.toHaveBeenCalled();
+      expect(push).not.toHaveBeenCalled();
     });
   });
 
@@ -121,7 +92,6 @@ describe("exchanges page", () => {
     });
 
     it("should render the list of exchanges", async () => {
-      // eslint-disable-next-line testing-library/no-unnecessary-act
       await act(async () => {
         render(<ExchangesPage />);
       });
@@ -133,7 +103,6 @@ describe("exchanges page", () => {
     });
 
     it("should render loading", async () => {
-      // eslint-disable-next-line testing-library/no-unnecessary-act
       await act(async () => {
         render(<ExchangesPage />);
       });
@@ -141,7 +110,6 @@ describe("exchanges page", () => {
       const exchanges = screen.queryAllByTestId("exchange");
 
       await waitFor(() => {
-        // eslint-disable-next-line testing-library/no-wait-for-side-effects
         fireEvent.scroll(exchanges[4]);
 
         const loading = screen.getByTestId("loading");

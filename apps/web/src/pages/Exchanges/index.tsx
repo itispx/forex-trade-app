@@ -16,15 +16,17 @@ import Exchange from "../../components/Exchange";
 import { IExchange } from "interfaces-common";
 
 const ExchangesPage: NextPage = () => {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const userQueryData = useUserQueryData();
 
   useEffect(() => {
     if (!userQueryData) {
-      router.push("/");
+      console.log("I GOT HERE");
+
+      push("/");
     }
-  }, []);
+  }, [userQueryData, push]);
 
   const page = useRef(0);
   const hasMore = useRef(true);

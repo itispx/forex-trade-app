@@ -6,6 +6,8 @@ import user from "@testing-library/user-event";
 import { QueryClientProvider } from "react-query";
 import queryClient from "./queryClient";
 
+import { IUserServerResponse, TStatus, IExchange } from "interfaces-common";
+
 const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 };
@@ -15,8 +17,6 @@ const customRender = (ui: React.ReactElement, options?: RenderOptions) => {
 };
 
 export { customRender as render };
-
-import { IUserServerResponse } from "interfaces-common";
 
 export const userMock: IUserServerResponse = {
   doc: {
@@ -32,6 +32,17 @@ export const userMock: IUserServerResponse = {
     createdAt: new Date(),
   },
   token: "123_token_123",
+};
+
+export const exchangeMock = (status: TStatus): IExchange => {
+  return {
+    id: "random_exchange_id_123",
+    userID: userMock.doc.id,
+    base: { currency: "USD", amount: 5 },
+    converted: { currency: "GBP", amount: 12 },
+    status,
+    createdAt: new Date(),
+  };
 };
 
 export const typeNtab = async (input: HTMLElement, text: string) => {
