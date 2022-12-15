@@ -1,7 +1,8 @@
 import {
+  addExchangeQuery,
+  updateExchangeStatusQuery,
   getCurrentExchangeValues,
   getExchangesQuery,
-  makeExchangeQuery,
 } from "../exchangesQueries";
 
 import { userMock } from "../../util/testing";
@@ -9,6 +10,8 @@ import { userMock } from "../../util/testing";
 import { ICurrencyInfo } from "interfaces-common";
 
 import axios from "axios";
+
+import { Exchange } from "@prisma/client";
 
 jest.mock("axios");
 
@@ -20,7 +23,7 @@ describe("exchanges queries", () => {
   const base: ICurrencyInfo = { currency: "USD", amount: 5 };
   const convert: ICurrencyInfo = { currency: "GBP", amount: 15 };
 
-  const exchange = {
+  const baseExchange = {
     id: "123_exchange_id_123",
     userID: userMock.id,
     baseCurrency: base.currency,
@@ -32,6 +35,7 @@ describe("exchanges queries", () => {
 
   beforeEach(() => {
     prisma.exchange.create = jest.fn();
+    prisma.exchange.update = jest.fn();
     prisma.exchange.findMany = jest.fn();
   });
 
@@ -85,9 +89,11 @@ describe("exchanges queries", () => {
 
   describe("make exchange", () => {
     it("should make exchange", async () => {
-      jest.spyOn(prisma.exchange, "create").mockResolvedValue(exchange);
+      jest
+        .spyOn(prisma.exchange, "create")
+        .mockResolvedValue({ ...baseExchange, status: "PENDING" });
 
-      const response = await makeExchangeQuery(userMock.id, base, convert);
+      const response = await addExchangeQuery(userMock.id, base, convert);
 
       expect(prisma.exchange.create).toHaveBeenCalledWith({
         data: {
@@ -96,7 +102,50 @@ describe("exchanges queries", () => {
           baseAmount: base.amount,
           convertedCurrency: convert.currency,
           convertedAmount: convert.amount,
+          status: "PENDING",
         },
+      });
+      expect(response.status.code).toBe(201);
+      expect(response.status.ok).toBe(true);
+      expect(response.data.userID).toBe(userMock.id);
+      expect(response.data.base.currency).toBe(base.currency);
+      expect(response.data.base.amount).toBe(base.amount);
+      expect(response.data.converted.currency).toBe(convert.currency);
+      expect(response.data.converted.amount).toBe(convert.amount);
+    });
+  });
+
+  describe("update exchange", () => {
+    it("should update exchange with SUCCESSFUL status", async () => {
+      const exchange: Exchange = { ...baseExchange, status: "SUCCESSFUL" };
+
+      jest.spyOn(prisma.exchange, "update").mockResolvedValue(exchange);
+
+      const response = await updateExchangeStatusQuery(exchange.id, "SUCCESSFUL");
+
+      expect(prisma.exchange.update).toHaveBeenCalledWith({
+        where: { id: exchange.id },
+        data: { status: "SUCCESSFUL" },
+      });
+      expect(response.status.code).toBe(201);
+      expect(response.status.ok).toBe(true);
+      expect(response.data.userID).toBe(userMock.id);
+      expect(response.data.base.currency).toBe(base.currency);
+      expect(response.data.base.amount).toBe(base.amount);
+      expect(response.data.converted.currency).toBe(convert.currency);
+      expect(response.data.converted.amount).toBe(convert.amount);
+    });
+
+    it("should update exchange with FAILED status", async () => {
+      const exchange: Exchange = { ...baseExchange, status: "FAILED" };
+
+      jest.spyOn(prisma.exchange, "update").mockResolvedValue(exchange);
+
+      const response = await updateExchangeStatusQuery(exchange.id, "FAILED");
+
+      expect(prisma.exchange.update).toHaveBeenCalledWith({
+        where: { id: exchange.id },
+        data: { status: "FAILED" },
       });
       expect(response.status.code).toBe(201);
       expect(response.status.ok).toBe(true);
@@ -110,6 +159,8 @@ describe("exchanges queries", () => {
 
   describe("get exchanges", () => {
     it("should get exchanges", async () => {
+      const exchange: Exchange = { ...baseExchange, status: "SUCCESSFUL" };
+
       jest
         .spyOn(prisma.exchange, "findMany")
         .mockResolvedValue([exchange, exchange, exchange, exchange, exchange]);
