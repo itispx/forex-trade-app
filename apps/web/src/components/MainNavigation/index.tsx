@@ -1,7 +1,8 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
+
 import React from "react";
 import styles from "./MainNavigation.module.scss";
-
-import { Link, useLocation } from "react-router-dom";
 
 import useFetchUser from "../../queries/hooks/useFetchUser";
 
@@ -12,7 +13,7 @@ import Currency from "../Currency";
 import { TCurrencies } from "interfaces-common";
 
 const MainNavigation: React.FC = () => {
-  const { pathname } = useLocation();
+  const { pathname } = useRouter();
 
   const { data } = useFetchUser();
 
@@ -22,13 +23,13 @@ const MainNavigation: React.FC = () => {
         {data ? (
           <div className={styles["signed"]}>
             {pathname === "/exchanges" ? (
-              <Link to="/" className={styles["route-link"]}>
+              <Link href="/" className={styles["route-link"]}>
                 <span data-testid="link" className={styles["link"]}>
                   Home
                 </span>
               </Link>
             ) : (
-              <Link to="/exchanges" className={styles["route-link"]}>
+              <Link href="/exchanges" className={styles["route-link"]}>
                 <span data-testid="link" className={styles["link"]}>
                   {data.doc.username}
                 </span>

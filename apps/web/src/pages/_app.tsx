@@ -1,20 +1,19 @@
-import React from "react";
+import "../styles/globals.scss";
+import type { AppProps } from "next/app";
 
 import { QueryClientProvider } from "react-query";
-import queryClient from "../../utilities/queryClient";
-
-import { BrowserRouter } from "react-router-dom";
+import queryClient from "../utilities/queryClient";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import Layout from "../Layout";
+import Layout from "../components/Layout";
 
-const App: React.FC = () => {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename="/">
-        <Layout />
+      <Layout>
+        <Component {...pageProps} />;
         <ToastContainer
           containerId="toast-container"
           position="top-center"
@@ -28,7 +27,7 @@ const App: React.FC = () => {
           pauseOnHover
           theme="dark"
         />
-      </BrowserRouter>
+      </Layout>
     </QueryClientProvider>
   );
 };

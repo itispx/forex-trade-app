@@ -36,18 +36,20 @@ const BuyForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => {
       >
         {(fprops) => (
           <div className={styles["container"]}>
-            <TextFormField
-              id="amount"
-              name="amount"
-              type="number"
-              placeholder="Amount"
-              value={fprops.values.amount}
-              onChange={fprops.handleChange("amount")}
-              onBlur={fprops.handleBlur("amount")}
-              touched={fprops.touched.amount}
-              errors={fprops.errors.amount}
-              inputProps={{ step: 0.1, min: 0.01 }}
-            />
+            <div className={styles["input"]}>
+              <TextFormField
+                id="amount"
+                name="amount"
+                type="number"
+                placeholder="Amount"
+                value={fprops.values.amount}
+                onChange={fprops.handleChange("amount")}
+                onBlur={fprops.handleBlur("amount")}
+                touched={fprops.touched.amount}
+                errors={fprops.errors.amount}
+                inputProps={{ step: 0.1, min: 0.01 }}
+              />
+            </div>
 
             {isLoading ? (
               <div className={styles["loading-container"]}>

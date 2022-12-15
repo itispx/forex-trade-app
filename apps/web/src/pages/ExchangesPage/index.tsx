@@ -1,7 +1,8 @@
+import { NextPage } from "next";
+import { useRouter } from "next/router";
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./ExchangesPage.module.scss";
-
-import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
@@ -14,14 +15,14 @@ import Exchange from "../../components/Exchange";
 
 import { IExchange } from "interfaces-common";
 
-const ExchangesPage: React.FC = () => {
-  const navigate = useNavigate();
+const ExchangesPage: NextPage = () => {
+  const router = useRouter();
 
   const userQueryData = useUserQueryData();
 
   useEffect(() => {
     if (!userQueryData) {
-      navigate("/");
+      router.push("/");
     }
   }, []);
 
