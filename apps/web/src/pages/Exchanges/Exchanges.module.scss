@@ -1,10 +1,68 @@
+@import "../../styles/colors";
+
+$padding: 16px;
+
+@mixin padding {
+  padding-top: $padding;
+  padding-right: $padding * 1.5;
+  padding-bottom: $padding;
+  padding-left: $padding * 1.5;
+}
+
+@mixin border {
+  border: solid;
+  border-width: 2px;
+  border-color: $accent;
+}
+
 .page-container {
   display: flex;
   flex: 1;
   flex-direction: column;
+  margin: 60px 0;
   align-items: center;
 
   .loading-container {
     margin: 50px;
+  }
+
+  table {
+    border-collapse: collapse;
+    color: #fff;
+  }
+
+  tr {
+    @include border;
+  }
+
+  th {
+    font-size: 22px;
+    @include padding;
+  }
+
+  td {
+    @include padding;
+    text-align: center;
+    font-size: 18px;
+
+    .id-field {
+      font-weight: 500;
+    }
+
+    .status-field {
+      font-weight: 700;
+
+      &.successful {
+        color: #19ff14;
+      }
+
+      &.pending {
+        color: #ffff00;
+      }
+
+      &.failed {
+        color: #ee4b2b;
+      }
+    }
   }
 }

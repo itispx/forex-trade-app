@@ -17,7 +17,7 @@ import useUserQueryData from "../../queries/hooks/useUserQueryData";
 import Loading from "../../components/Loading";
 import Exchange from "../../components/Exchange";
 
-import { IExchange, TStatus } from "interfaces-common";
+import { TStatus } from "interfaces-common";
 
 interface IParsedExchange {
   id: string;
@@ -87,15 +87,27 @@ const ExchangesPage: NextPage = () => {
     getExchangesHandler();
   }, [refetch]);
 
-  const exchangesData = useMemo(() => [...data, data], [data]);
+  const exchangesData = useMemo(() => [...data], [data]);
 
   const columns: Array<Column> = useMemo(
     () => [
-      { Header: "Id", accessor: "id" },
+      {
+        Header: "ID",
+        accessor: "id",
+        Cell: ({ value }) => <td className={styles["id-field"]}>{value}</td>,
+      },
       { Header: "Currency", accessor: "currency" },
       { Header: "Base", accessor: "base" },
       { Header: "Converted", accessor: "converted" },
-      { Header: "Status", accessor: "status" },
+      {
+        Header: "Status",
+        accessor: "status",
+        Cell: ({ value }) => (
+          <td className={`${styles["status-field"]} ${styles[value.toLowerCase()]}`}>
+            {value}
+          </td>
+        ),
+      },
       { Header: "Date", accessor: "date" },
       { Header: "Time", accessor: "time" },
     ],
