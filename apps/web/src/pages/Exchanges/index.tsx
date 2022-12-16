@@ -172,6 +172,8 @@ const ExchangesPage: NextPage = () => {
           })}
         </tbody>
       </table>
+
+      {isLoading ? <Loading /> : null}
     </div>
   );
 };
