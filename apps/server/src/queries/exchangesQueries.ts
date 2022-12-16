@@ -113,25 +113,7 @@ export const getExchangesQuery = async (
     const exchangesArr: IExchange[] = [];
 
     for (let i = 0; i < exchanges.length; i++) {
-      const {
-        baseCurrency,
-        baseAmount,
-        convertedCurrency,
-        convertedAmount,
-        ...remExchange
-      } = exchanges[0];
-
-      exchangesArr.push({
-        ...remExchange,
-        base: {
-          currency: baseCurrency,
-          amount: baseAmount,
-        },
-        converted: {
-          currency: convertedCurrency,
-          amount: convertedAmount,
-        },
-      });
+      exchangesArr.push(makeExchangeObj(exchanges[i]));
     }
 
     return { status: { code: 200, ok: true }, data: exchangesArr };
