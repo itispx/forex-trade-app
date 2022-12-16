@@ -1,10 +1,14 @@
+// Eslint will complain if you don't use key or if you do use key
+/* eslint-disable react/jsx-key */
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import styles from "./Exchanges.module.scss";
 
 import { toast } from "react-toastify";
+
+import { useTable, Column } from "react-table";
 
 import { getExchangesQuery } from "../../queries/exchangesQueries";
 
@@ -13,7 +17,18 @@ import useUserQueryData from "../../queries/hooks/useUserQueryData";
 import Loading from "../../components/Loading";
 import Exchange from "../../components/Exchange";
 
-import { IExchange } from "interfaces-common";
+import { IExchange, TStatus } from "interfaces-common";
+
+interface IParsedExchange {
+  id: string;
+  userID: string;
+  currency: string;
+  base: string;
+  converted: string;
+  status: TStatus;
+  date: string;
+  time: string;
+}
 
 const ExchangesPage: NextPage = () => {
   const { push } = useRouter();
@@ -30,7 +45,7 @@ const ExchangesPage: NextPage = () => {
   const hasMore = useRef(true);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<IExchange[]>([]);
+  const [data, setData] = useState<IParsedExchange[]>([]);
   const [refetch, setRefetch] = useState(false);
 
   const getExchangesHandler = async () => {
@@ -45,7 +60,20 @@ const ExchangesPage: NextPage = () => {
         }
 
         for (let i = 0; i < success.docs.length; i++) {
-          setData((prev) => [...prev, success.docs[i]]);
+          const exchange = success.docs[i];
+
+          const parsedExchange: IParsedExchange = {
+            id: exchange.id,
+            userID: exchange.userID,
+            currency: `${exchange.base.currency}/${exchange.converted.currency}`,
+            base: exchange.base.amount.toFixed(3),
+            converted: exchange.converted.amount.toFixed(3),
+            status: exchange.status,
+            date: new Date(exchange.createdAt).toLocaleDateString(),
+            time: new Date(exchange.createdAt).toLocaleTimeString(),
+          };
+
+          setData((prev) => [...prev, parsedExchange]);
         }
       }
     } catch (error) {
@@ -59,9 +87,29 @@ const ExchangesPage: NextPage = () => {
     getExchangesHandler();
   }, [refetch]);
 
+  const exchangesData = useMemo(() => [...data, data], [data]);
+
+  const columns: Array<Column> = useMemo(
+    () => [
+      { Header: "Id", accessor: "id" },
+      { Header: "Currency", accessor: "currency" },
+      { Header: "Base", accessor: "base" },
+      { Header: "Converted", accessor: "converted" },
+      { Header: "Status", accessor: "status" },
+      { Header: "Date", accessor: "date" },
+      { Header: "Time", accessor: "time" },
+    ],
+    [],
+  );
+
+  const tableInstance = useTable({ columns, data: exchangesData });
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    tableInstance;
+
   const observer = useRef<IntersectionObserver | null>();
   const lastItemRef = useCallback(
-    (node: HTMLDivElement) => {
+    (node: HTMLTableRowElement) => {
       if (observer.current) {
         observer.current.disconnect();
       }
@@ -84,22 +132,34 @@ const ExchangesPage: NextPage = () => {
 
   return (
     <div data-testid="exchanges-page" className={styles["page-container"]}>
-      {data.map((exchange, index) => {
-        return (
-          <Exchange
-            innerRef={data.length === index + 1 ? lastItemRef : null}
-            key={exchange.id}
-            base={exchange.base}
-            converted={exchange.converted}
-            createdAt={exchange.createdAt}
-          />
-        );
-      })}
-      {isLoading && (
-        <div className={styles["loading-container"]}>
-          <Loading />
-        </div>
-      )}
+      <table {...getTableProps()}>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row, index) => {
+            prepareRow(row);
+
+            return (
+              <tr
+                ref={data.length === index + 1 ? lastItemRef : null}
+                {...row.getRowProps()}
+              >
+                {row.cells.map((cell) => (
+                  <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };
