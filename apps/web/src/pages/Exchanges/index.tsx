@@ -15,7 +15,6 @@ import { getExchangesQuery } from "../../queries/exchangesQueries";
 import useUserQueryData from "../../queries/hooks/useUserQueryData";
 
 import Loading from "../../components/Loading";
-import Exchange from "../../components/Exchange";
 
 import { TStatus } from "interfaces-common";
 
