@@ -27,13 +27,13 @@ export const consumeExchangesMessageChannel = async () => {
 
   connection.consume("exchanges", async (exchange) => {
     if (exchange) {
-      // Process exchange
-      const exchangeObj = JSON.parse(exchange.content.toString());
-      console.log("Exchanged received:", exchangeObj.id);
-
-      await processExchangeAction(exchangeObj);
-
       setTimeout(async () => {
+        // Process exchange
+        const exchangeObj = JSON.parse(exchange.content.toString());
+        console.log("Exchanged received:", exchangeObj.id);
+
+        await processExchangeAction(exchangeObj);
+
         // Tell RabbitMQ message was received
         connection.ack(exchange);
         console.log("Acked");
