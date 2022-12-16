@@ -85,7 +85,7 @@ describe("main navigation component", () => {
 
       const link = screen.getByTestId("link").textContent;
 
-      expect(link).toBe(userData.data.doc.username);
+      expect(link).toBe("View exchanges");
     });
 
     it("should display home link", () => {

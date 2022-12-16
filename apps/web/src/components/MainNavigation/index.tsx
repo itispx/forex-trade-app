@@ -31,7 +31,7 @@ const MainNavigation: React.FC = () => {
             ) : (
               <Link href="/Exchanges" className={styles["route-link"]}>
                 <span data-testid="link" className={styles["link"]}>
-                  {data.doc.username}
+                  View exchanges
                 </span>
               </Link>
             )}
