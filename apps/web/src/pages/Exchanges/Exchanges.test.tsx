@@ -91,31 +91,14 @@ describe("exchanges page", () => {
       useUserQueryDataMocked.mockImplementation(() => userMock);
     });
 
-    it("should render the list of exchanges", async () => {
+    it("should render page", async () => {
       await act(async () => {
         render(<ExchangesPage />);
       });
 
-      const exchanges = screen.queryAllByTestId("exchange");
+      const page = screen.queryByTestId("exchanges-page");
 
-      expect(exchanges[0]).toBeInTheDocument();
-      expect(exchanges.length).toBe(mockedExchanges.length);
-    });
-
-    it("should render loading", async () => {
-      await act(async () => {
-        render(<ExchangesPage />);
-      });
-
-      const exchanges = screen.queryAllByTestId("exchange");
-
-      await waitFor(() => {
-        fireEvent.scroll(exchanges[4]);
-
-        const loading = screen.getByTestId("loading");
-
-        expect(loading).toBeVisible();
-      });
+      expect(page).toBeInTheDocument();
     });
   });
 });
