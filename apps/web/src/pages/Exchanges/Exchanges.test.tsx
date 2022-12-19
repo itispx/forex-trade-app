@@ -8,7 +8,7 @@ import "intersection-observer";
 import ExchangesPage from ".";
 
 import { getExchangesQuery } from "../../queries/exchangesQueries";
-import useUserQueryData from "../../queries/hooks/useUserQueryData";
+import getUserQueryData from "../../queries/getUserQueryData";
 
 import { IExchange } from "interfaces-common";
 
@@ -36,9 +36,9 @@ getExchangesQueryMocked.mockResolvedValue({
   },
 });
 
-jest.mock("../../queries/hooks/useUserQueryData");
+jest.mock("../../queries/getUserQueryData");
 
-const useUserQueryDataMocked = jest.mocked(useUserQueryData, true);
+const getUserQueryDataMocked = jest.mocked(getUserQueryData, true);
 
 import { useRouter, NextRouter } from "next/router";
 
@@ -55,7 +55,7 @@ const columns = ["ID", "Currency", "Base", "Converted", "Status", "Date", "Time"
 describe("exchanges page", () => {
   describe("redirect user if not logged in", () => {
     it("should redirect user to home page", async () => {
-      useUserQueryDataMocked.mockImplementation(() => undefined);
+      getUserQueryDataMocked.mockImplementation(() => undefined);
 
       useRouterMocked.mockImplementation(() => {
         const mocked = { push } as unknown as NextRouter;
@@ -71,7 +71,7 @@ describe("exchanges page", () => {
 
     it("should allow user to remain in page", async () => {
       push.mockReset();
-      useUserQueryDataMocked.mockImplementation(() => userMock);
+      getUserQueryDataMocked.mockImplementation(() => userMock);
       useRouterMocked.mockImplementation(() => {
         const mocked = { push } as unknown as NextRouter;
         return mocked;
@@ -90,7 +90,7 @@ describe("exchanges page", () => {
 
   describe("render exchanges", () => {
     beforeAll(() => {
-      useUserQueryDataMocked.mockImplementation(() => userMock);
+      getUserQueryDataMocked.mockImplementation(() => userMock);
     });
 
     it("should render page", async () => {

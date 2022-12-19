@@ -1,16 +1,16 @@
 import getUserToken from "../getUserToken";
 
-import useUserQueryData from "../../queries/hooks/useUserQueryData";
+import getUserQueryData from "../../queries/getUserQueryData";
 
 import { userMock } from "../testing";
 
-jest.mock("../../queries/hooks/useUserQueryData");
+jest.mock("../../queries/getUserQueryData");
 
-const useUserQueryDataMocked = jest.mocked(useUserQueryData, true);
+const getUserQueryDataMocked = jest.mocked(getUserQueryData, true);
 
 describe("get user token function", () => {
   it("should return undefined", async () => {
-    useUserQueryDataMocked.mockImplementation(() => undefined);
+    getUserQueryDataMocked.mockImplementation(() => undefined);
 
     const token = getUserToken();
 
@@ -18,7 +18,7 @@ describe("get user token function", () => {
   });
 
   it("should return token", async () => {
-    useUserQueryDataMocked.mockImplementation(() => userMock);
+    getUserQueryDataMocked.mockImplementation(() => userMock);
 
     const token = getUserToken();
 

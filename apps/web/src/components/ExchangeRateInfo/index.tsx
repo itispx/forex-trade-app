@@ -3,7 +3,7 @@ import styles from "./ExchangeRateInfo.module.scss";
 
 import { useTranslation } from "next-i18next";
 
-import useUserQueryData from "../../queries/hooks/useUserQueryData";
+import getUserQueryData from "../../queries/getUserQueryData";
 
 import { toast } from "react-toastify";
 
@@ -30,8 +30,7 @@ const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
   }
 
   const buyHandler = async () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const data = useUserQueryData();
+    const data = getUserQueryData();
 
     if (!data || !data.token || !data.doc) {
       toast.error(tToast("not_signed_in"));

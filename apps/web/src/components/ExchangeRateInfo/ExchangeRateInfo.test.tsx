@@ -1,13 +1,13 @@
 import { screen, waitFor } from "@testing-library/react";
 import { render, userMock } from "../../utilities/testing";
 
-import useUserQueryData from "../../queries/hooks/useUserQueryData";
+import getUserQueryData from "../../queries/getUserQueryData";
 
 import ExchangeRateInfo, { Props } from ".";
 
-jest.mock("../../queries/hooks/useUserQueryData");
+jest.mock("../../queries/getUserQueryData");
 
-const useUserQueryDataMocked = jest.mocked(useUserQueryData, true);
+const getUserQueryDataMocked = jest.mocked(getUserQueryData, true);
 
 describe("exchange rate info component", () => {
   const exchangeRateInfo: Props = {
@@ -55,7 +55,7 @@ describe("exchange rate info component", () => {
   });
 
   it("should not open modal because user is not logged in", async () => {
-    useUserQueryDataMocked.mockImplementation(() => undefined);
+    getUserQueryDataMocked.mockImplementation(() => undefined);
 
     render(<ExchangeRateInfo {...exchangeRateInfo} />);
 
@@ -69,7 +69,7 @@ describe("exchange rate info component", () => {
   });
 
   it("should open modal", async () => {
-    useUserQueryDataMocked.mockImplementation(() => userMock);
+    getUserQueryDataMocked.mockImplementation(() => userMock);
 
     render(<ExchangeRateInfo {...exchangeRateInfo} />);
 

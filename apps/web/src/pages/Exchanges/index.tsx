@@ -15,7 +15,7 @@ import { useTable, Column } from "react-table";
 
 import { getExchangesQuery } from "../../queries/exchangesQueries";
 
-import useUserQueryData from "../../queries/hooks/useUserQueryData";
+import getUserQueryData from "../../queries/getUserQueryData";
 
 import Loading from "../../components/Loading";
 
@@ -46,7 +46,7 @@ const ExchangesPage: NextPage = () => {
 
   const { push } = useRouter();
 
-  const userQueryData = useUserQueryData();
+  const userQueryData = getUserQueryData();
 
   useEffect(() => {
     if (!userQueryData) {
@@ -61,46 +61,45 @@ const ExchangesPage: NextPage = () => {
   const [data, setData] = useState<IParsedExchange[]>([]);
   const [refetch, setRefetch] = useState(false);
 
-  const getExchangesHandler = useCallback(() => {
-    async () => {
-      try {
-        setIsLoading(true);
+  const getExchangesHandler = async () => {
+    try {
+      setIsLoading(true);
 
-        const { status, success } = await getExchangesQuery(page.current);
+      const { status, success } = await getExchangesQuery(page.current);
 
-        if (status.ok) {
-          if (success.docs.length < 5 && hasMore.current) {
-            hasMore.current = false;
-          }
-
-          for (let i = 0; i < success.docs.length; i++) {
-            const exchange = success.docs[i];
-
-            const parsedExchange: IParsedExchange = {
-              id: exchange.id,
-              userID: exchange.userID,
-              currency: `${exchange.base.currency}/${exchange.converted.currency}`,
-              base: exchange.base.amount.toFixed(3),
-              converted: exchange.converted.amount.toFixed(3),
-              status: exchange.status,
-              date: new Date(exchange.createdAt).toLocaleDateString(),
-              time: new Date(exchange.createdAt).toLocaleTimeString(),
-            };
-
-            setData((prev) => [...prev, parsedExchange]);
-          }
+      if (status.ok) {
+        if (success.docs.length < 5 && hasMore.current) {
+          hasMore.current = false;
         }
-      } catch (error) {
-        toast.error(tToast("something_went_wrong"));
-      } finally {
-        setIsLoading(false);
+
+        for (let i = 0; i < success.docs.length; i++) {
+          const exchange = success.docs[i];
+
+          const parsedExchange: IParsedExchange = {
+            id: exchange.id,
+            userID: exchange.userID,
+            currency: `${exchange.base.currency}/${exchange.converted.currency}`,
+            base: exchange.base.amount.toFixed(3),
+            converted: exchange.converted.amount.toFixed(3),
+            status: exchange.status,
+            date: new Date(exchange.createdAt).toLocaleDateString(),
+            time: new Date(exchange.createdAt).toLocaleTimeString(),
+          };
+
+          setData((prev) => [...prev, parsedExchange]);
+        }
       }
-    };
-  }, [tToast]);
+    } catch (error) {
+      toast.error(tToast("something_went_wrong"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     getExchangesHandler();
-  }, [getExchangesHandler, refetch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refetch]);
 
   const exchangesData = useMemo(() => [...data], [data]);
 
