@@ -24,7 +24,7 @@ import { TStatus } from "interfaces-common";
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale as string, ["common", "auth"])),
+      ...(await serverSideTranslations(locale as string, ["common", "toast"])),
     },
   };
 };
@@ -41,7 +41,8 @@ interface IParsedExchange {
 }
 
 const ExchangesPage: NextPage = () => {
-  const { t } = useTranslation("common");
+  const { t: tCommon } = useTranslation("common");
+  const { t: tToast } = useTranslation("toast");
 
   const { push } = useRouter();
 
@@ -89,7 +90,7 @@ const ExchangesPage: NextPage = () => {
         }
       }
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error(tToast("something_went_wrong"));
     } finally {
       setIsLoading(false);
     }
@@ -104,26 +105,26 @@ const ExchangesPage: NextPage = () => {
   const columns: Array<Column> = useMemo(
     () => [
       {
-        Header: t("id") as string,
+        Header: tCommon("id") as string,
         accessor: "id",
         Cell: ({ value }) => <span className={styles["id-field"]}>{value}</span>,
       },
-      { Header: t("currency") as string, accessor: "currency" },
-      { Header: t("base") as string, accessor: "base" },
-      { Header: t("converted") as string, accessor: "converted" },
+      { Header: tCommon("currency") as string, accessor: "currency" },
+      { Header: tCommon("base") as string, accessor: "base" },
+      { Header: tCommon("converted") as string, accessor: "converted" },
       {
-        Header: t("status") as string,
+        Header: tCommon("status") as string,
         accessor: "status",
         Cell: ({ value }) => (
           <span className={`${styles["status-field"]} ${styles[value.toLowerCase()]}`}>
-            {t(`${value}`.toLowerCase()).toUpperCase()}
+            {tCommon(`${value}`.toLowerCase()).toUpperCase()}
           </span>
         ),
       },
-      { Header: t("date") as string, accessor: "date" },
-      { Header: t("time") as string, accessor: "time" },
+      { Header: tCommon("date") as string, accessor: "date" },
+      { Header: tCommon("time") as string, accessor: "time" },
     ],
-    [t],
+    [tCommon],
   );
 
   const tableInstance = useTable({ columns, data: exchangesData });

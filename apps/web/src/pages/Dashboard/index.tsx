@@ -15,7 +15,7 @@ import { IExchangeConversion } from "interfaces-common";
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale as string, ["common", "auth"])),
+      ...(await serverSideTranslations(locale as string, ["common", "auth", "toast"])),
     },
   };
 };

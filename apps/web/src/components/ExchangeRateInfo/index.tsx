@@ -16,7 +16,8 @@ export interface Props {
 }
 
 const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
-  const { t } = useTranslation("common");
+  const { t: tCommon } = useTranslation("common");
+  const { t: tToast } = useTranslation("toast");
 
   const [showModal, setShowModal] = useState(false);
 
@@ -33,9 +34,9 @@ const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
     const data = useUserQueryData();
 
     if (!data || !data.token || !data.doc) {
-      toast.error("User not signed in");
+      toast.error(tToast("not_signed_in"));
     } else if (!data.doc.wallet || data.doc.wallet[exchangeInfo.base] <= 0) {
-      toast.error("You don't have enough money");
+      toast.error(tToast("insufficient_money"));
     } else {
       openModal();
     }
@@ -70,7 +71,7 @@ const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
           onClick={buyHandler}
         >
           <div className={styles["buy-button"]}>
-            <h1 className={styles["buy-title"]}>{t("buy").toUpperCase()}</h1>
+            <h1 className={styles["buy-title"]}>{tCommon("buy").toUpperCase()}</h1>
           </div>
         </div>
       </div>

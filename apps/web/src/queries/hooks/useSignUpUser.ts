@@ -6,17 +6,21 @@ import { signUpUserQuery } from "../usersQueries";
 
 import { toast } from "react-toastify";
 
+import { useTranslation } from "next-i18next";
+
 const useSignUpUser = (close: () => void) => {
+  const { t: tToast } = useTranslation("toast");
+
   const { mutate, isLoading } = useMutation(signUpUserQuery, {
     onSuccess: (data) => {
       if (data.status.code === 201) {
         queryClient.setQueryData("user", data);
-        toast.success("Sign up successful!");
+        toast.success(tToast("sign_up_successful"));
         close();
       }
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error(tToast("something_went_wrong"));
     },
   });
 

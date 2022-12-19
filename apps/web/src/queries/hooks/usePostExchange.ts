@@ -6,16 +6,20 @@ import { performExchangeQuery } from "../exchangesQueries";
 
 import { toast } from "react-toastify";
 
+import { useTranslation } from "next-i18next";
+
 const usePostExchange = (close: () => void) => {
+  const { t: tToast } = useTranslation("toast");
+
   const { mutate, isLoading } = useMutation(performExchangeQuery, {
     onSuccess: (data) => {
       if (data.status.code === 201) {
-        toast.success("Exchange successful!");
+        toast.success(tToast("exchange_successful"));
         close();
       }
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error(tToast("something_went_wrong"));
     },
     onSettled: () => {
       queryClient.invalidateQueries("user");

@@ -1,0 +1,8 @@
+{
+  "something_went_wrong": "Algo deu errado",
+  "not_signed_in": "Usuário não está logado",
+  "insufficient_money": "Você não tem dinheiro o suficiente",
+  "exchange_successful": "Transação bem sucedida!",
+  "sign_up_successful": "Registro bem sucedido",
+  "sign_in_successful": "Login bem sucedido"
+}
