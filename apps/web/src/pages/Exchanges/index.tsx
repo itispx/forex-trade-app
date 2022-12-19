@@ -93,7 +93,7 @@ const ExchangesPage: NextPage = () => {
       {
         Header: "ID",
         accessor: "id",
-        Cell: ({ value }) => <td className={styles["id-field"]}>{value}</td>,
+        Cell: ({ value }) => <span className={styles["id-field"]}>{value}</span>,
       },
       { Header: "Currency", accessor: "currency" },
       { Header: "Base", accessor: "base" },
@@ -102,9 +102,9 @@ const ExchangesPage: NextPage = () => {
         Header: "Status",
         accessor: "status",
         Cell: ({ value }) => (
-          <td className={`${styles["status-field"]} ${styles[value.toLowerCase()]}`}>
+          <span className={`${styles["status-field"]} ${styles[value.toLowerCase()]}`}>
             {value}
-          </td>
+          </span>
         ),
       },
       { Header: "Date", accessor: "date" },
@@ -148,7 +148,12 @@ const ExchangesPage: NextPage = () => {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                <th
+                  data-testid={`table-header-cell-${column.Header?.toString()}`}
+                  {...column.getHeaderProps()}
+                >
+                  {column.render("Header")}
+                </th>
               ))}
             </tr>
           ))}
@@ -164,7 +169,12 @@ const ExchangesPage: NextPage = () => {
                 {...row.getRowProps()}
               >
                 {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  <td
+                    data-testid={`table-data-cell-${cell.value}`}
+                    {...cell.getCellProps()}
+                  >
+                    {cell.render("Cell")}
+                  </td>
                 ))}
               </tr>
             );
