@@ -1,4 +1,16 @@
 {
   "buy": "Buy",
-  "submit": "Submit"
+  "submit": "Submit",
+  "dashboard": "Dashboard",
+  "view_exchanges": "View exchanges",
+  "id": "ID",
+  "currency": "Currency",
+  "base": "Base",
+  "converted": "Converted",
+  "date": "Date",
+  "time": "Time",
+  "status": "Status",
+  "successful": "Successful",
+  "pending": "Pending",
+  "failed": "Failed"
 }

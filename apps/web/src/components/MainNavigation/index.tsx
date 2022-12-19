@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import { useTranslation } from "next-i18next";
+
 import React from "react";
 import styles from "./MainNavigation.module.scss";
 
@@ -13,6 +15,8 @@ import Currency from "../Currency";
 import { TCurrencies } from "interfaces-common";
 
 const MainNavigation: React.FC = () => {
+  const { t } = useTranslation("common");
+
   const { pathname } = useRouter();
 
   const { data } = useFetchUser();
@@ -23,15 +27,15 @@ const MainNavigation: React.FC = () => {
         {data ? (
           <div className={styles["signed"]}>
             {pathname === "/Exchanges" ? (
-              <Link href="/" className={styles["route-link"]}>
+              <Link href="/Dashboard" className={styles["route-link"]}>
                 <span data-testid="link" className={styles["link"]}>
-                  Home
+                  {t("dashboard")}
                 </span>
               </Link>
             ) : (
               <Link href="/Exchanges" className={styles["route-link"]}>
                 <span data-testid="link" className={styles["link"]}>
-                  View exchanges
+                  {t("view_exchanges")}
                 </span>
               </Link>
             )}

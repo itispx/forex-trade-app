@@ -1,4 +1,16 @@
 {
   "buy": "Comprar",
-  "submit": "Enviar"
+  "submit": "Enviar",
+  "dashboard": "Painel",
+  "view_exchanges": "Ver transações",
+  "id": "ID",
+  "currency": "Moeda",
+  "base": "Base",
+  "converted": "Convertido",
+  "date": "Data",
+  "time": "Horário",
+  "status": "Status",
+  "successful": "Sucesso",
+  "pending": "Pendente",
+  "failed": "Falha"
 }

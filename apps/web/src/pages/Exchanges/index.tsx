@@ -1,7 +1,10 @@
 // Eslint will complain if you don't use key or if you do use key
 /* eslint-disable react/jsx-key */
-import { NextPage } from "next";
+import { NextPage, GetStaticProps } from "next";
 import { useRouter } from "next/router";
+
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import styles from "./Exchanges.module.scss";
@@ -18,6 +21,14 @@ import Loading from "../../components/Loading";
 
 import { TStatus } from "interfaces-common";
 
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale as string, ["common", "auth"])),
+    },
+  };
+};
+
 interface IParsedExchange {
   id: string;
   userID: string;
@@ -30,13 +41,15 @@ interface IParsedExchange {
 }
 
 const ExchangesPage: NextPage = () => {
+  const { t } = useTranslation("common");
+
   const { push } = useRouter();
 
   const userQueryData = useUserQueryData();
 
   useEffect(() => {
     if (!userQueryData) {
-      push("/");
+      push("/Dashboard");
     }
   }, [userQueryData, push]);
 
@@ -91,26 +104,26 @@ const ExchangesPage: NextPage = () => {
   const columns: Array<Column> = useMemo(
     () => [
       {
-        Header: "ID",
+        Header: t("id") as string,
         accessor: "id",
         Cell: ({ value }) => <span className={styles["id-field"]}>{value}</span>,
       },
-      { Header: "Currency", accessor: "currency" },
-      { Header: "Base", accessor: "base" },
-      { Header: "Converted", accessor: "converted" },
+      { Header: t("currency") as string, accessor: "currency" },
+      { Header: t("base") as string, accessor: "base" },
+      { Header: t("converted") as string, accessor: "converted" },
       {
-        Header: "Status",
+        Header: t("status") as string,
         accessor: "status",
         Cell: ({ value }) => (
           <span className={`${styles["status-field"]} ${styles[value.toLowerCase()]}`}>
-            {value}
+            {t(`${value}`.toLowerCase()).toUpperCase()}
           </span>
         ),
       },
-      { Header: "Date", accessor: "date" },
-      { Header: "Time", accessor: "time" },
+      { Header: t("date") as string, accessor: "date" },
+      { Header: t("time") as string, accessor: "time" },
     ],
-    [],
+    [t],
   );
 
   const tableInstance = useTable({ columns, data: exchangesData });

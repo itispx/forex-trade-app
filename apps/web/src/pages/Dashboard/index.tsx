@@ -20,11 +20,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-interface Props {
-  locale: string | undefined;
-}
-
-const DashboardPage: NextPage<Props> = ({ locale }) => {
+const DashboardPage: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [rates, setRates] = useState<IExchangeConversion[]>([
