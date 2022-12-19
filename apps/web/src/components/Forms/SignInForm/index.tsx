@@ -25,8 +25,11 @@ const SignInForm: React.FC<Props> = ({ isLoading, submitHandler, inputRef }) => 
   const { t: tCommon } = useTranslation("common");
 
   const signInSchema = yup.object({
-    username: yup.string().typeError("Invalid username").required("Username is required"),
-    password: yup.string().required("Password is required"),
+    username: yup
+      .string()
+      .typeError(tAuth("username_invalid") as string)
+      .required(tAuth("username_required") as string),
+    password: yup.string().required(tAuth("password_required") as string),
   });
 
   return (
