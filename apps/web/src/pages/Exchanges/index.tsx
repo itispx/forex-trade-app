@@ -148,10 +148,7 @@ const ExchangesPage: NextPage = () => {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th
-                  data-testid={`table-header-cell-${column.Header?.toString()}`}
-                  {...column.getHeaderProps()}
-                >
+                <th data-testid="table-header-cell" {...column.getHeaderProps()}>
                   {column.render("Header")}
                 </th>
               ))}
@@ -169,10 +166,7 @@ const ExchangesPage: NextPage = () => {
                 {...row.getRowProps()}
               >
                 {row.cells.map((cell) => (
-                  <td
-                    data-testid={`table-data-cell-${cell.value}`}
-                    {...cell.getCellProps()}
-                  >
+                  <td data-testid="table-data-cell" {...cell.getCellProps()}>
                     {cell.render("Cell")}
                   </td>
                 ))}

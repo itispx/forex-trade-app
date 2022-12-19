@@ -19,11 +19,11 @@ const getExchangesQueryMocked = jest.mocked(getExchangesQuery, true);
 const mockedExchange = exchangeMock("SUCCESSFUL");
 
 const mockedExchanges: IExchange[] = [
-  { ...mockedExchange, id: "1" },
-  { ...mockedExchange, id: "2" },
-  { ...mockedExchange, id: "3" },
-  { ...mockedExchange, id: "4" },
-  { ...mockedExchange, id: "5" },
+  { ...exchangeMock("SUCCESSFUL"), id: "1" },
+  { ...exchangeMock("PENDING"), id: "2" },
+  { ...exchangeMock("FAILED"), id: "3" },
+  { ...exchangeMock("SUCCESSFUL"), id: "4" },
+  { ...exchangeMock("SUCCESSFUL"), id: "5" },
 ];
 
 getExchangesQueryMocked.mockResolvedValue({
@@ -49,6 +49,8 @@ jest.mock("next/router", () => ({
 const push = jest.fn();
 
 const useRouterMocked = jest.mocked(useRouter, true);
+
+const columns = ["ID", "Currency", "Base", "Converted", "Status", "Date", "Time"];
 
 describe("exchanges page", () => {
   describe("redirect user if not logged in", () => {
@@ -99,6 +101,146 @@ describe("exchanges page", () => {
       const page = screen.queryByTestId("exchanges-page");
 
       expect(page).toBeInTheDocument();
+    });
+
+    it("should render table header cells", async () => {
+      await act(async () => {
+        render(<ExchangesPage />);
+      });
+
+      const headerCells = screen.queryAllByTestId("table-header-cell");
+
+      for (let i = 0; i < columns.length; i++) {
+        expect(headerCells[i].textContent).toBe(columns[i]);
+      }
+    });
+
+    it("should render id column", async () => {
+      await act(async () => {
+        render(<ExchangesPage />);
+      });
+
+      const rows = screen.queryAllByTestId("table-data-cell");
+
+      expect(rows[0].textContent).toBe(mockedExchanges[0].id);
+      expect(rows[7].textContent).toBe(mockedExchanges[1].id);
+      expect(rows[14].textContent).toBe(mockedExchanges[2].id);
+      expect(rows[21].textContent).toBe(mockedExchanges[3].id);
+      expect(rows[28].textContent).toBe(mockedExchanges[4].id);
+    });
+
+    it("should render currency column", async () => {
+      await act(async () => {
+        render(<ExchangesPage />);
+      });
+
+      const rows = screen.queryAllByTestId("table-data-cell");
+
+      expect(rows[1].textContent).toBe(
+        `${mockedExchanges[0].base.currency}/${mockedExchanges[0].converted.currency}`,
+      );
+      expect(rows[8].textContent).toBe(
+        `${mockedExchanges[1].base.currency}/${mockedExchanges[1].converted.currency}`,
+      );
+      expect(rows[15].textContent).toBe(
+        `${mockedExchanges[2].base.currency}/${mockedExchanges[2].converted.currency}`,
+      );
+      expect(rows[22].textContent).toBe(
+        `${mockedExchanges[3].base.currency}/${mockedExchanges[3].converted.currency}`,
+      );
+      expect(rows[29].textContent).toBe(
+        `${mockedExchanges[4].base.currency}/${mockedExchanges[4].converted.currency}`,
+      );
+    });
+
+    it("should render base column", async () => {
+      await act(async () => {
+        render(<ExchangesPage />);
+      });
+
+      const rows = screen.queryAllByTestId("table-data-cell");
+
+      expect(rows[2].textContent).toBe(mockedExchanges[0].base.amount.toFixed(3));
+      expect(rows[9].textContent).toBe(mockedExchanges[1].base.amount.toFixed(3));
+      expect(rows[16].textContent).toBe(mockedExchanges[2].base.amount.toFixed(3));
+      expect(rows[23].textContent).toBe(mockedExchanges[3].base.amount.toFixed(3));
+      expect(rows[30].textContent).toBe(mockedExchanges[4].base.amount.toFixed(3));
+    });
+
+    it("should render converted column", async () => {
+      await act(async () => {
+        render(<ExchangesPage />);
+      });
+
+      const rows = screen.queryAllByTestId("table-data-cell");
+
+      expect(rows[3].textContent).toBe(mockedExchanges[0].converted.amount.toFixed(3));
+      expect(rows[10].textContent).toBe(mockedExchanges[1].converted.amount.toFixed(3));
+      expect(rows[17].textContent).toBe(mockedExchanges[2].converted.amount.toFixed(3));
+      expect(rows[24].textContent).toBe(mockedExchanges[3].converted.amount.toFixed(3));
+      expect(rows[31].textContent).toBe(mockedExchanges[4].converted.amount.toFixed(3));
+    });
+
+    it("should render status column", async () => {
+      await act(async () => {
+        render(<ExchangesPage />);
+      });
+
+      const rows = screen.queryAllByTestId("table-data-cell");
+
+      expect(rows[4].textContent).toBe(mockedExchanges[0].status);
+      expect(rows[11].textContent).toBe(mockedExchanges[1].status);
+      expect(rows[18].textContent).toBe(mockedExchanges[2].status);
+      expect(rows[25].textContent).toBe(mockedExchanges[3].status);
+      expect(rows[32].textContent).toBe(mockedExchanges[4].status);
+    });
+
+    it("should render date column", async () => {
+      await act(async () => {
+        render(<ExchangesPage />);
+      });
+
+      const rows = screen.queryAllByTestId("table-data-cell");
+
+      expect(rows[5].textContent).toBe(
+        new Date(mockedExchanges[0].createdAt).toLocaleDateString(),
+      );
+      expect(rows[12].textContent).toBe(
+        new Date(mockedExchanges[1].createdAt).toLocaleDateString(),
+      );
+      expect(rows[19].textContent).toBe(
+        new Date(mockedExchanges[2].createdAt).toLocaleDateString(),
+      );
+      expect(rows[26].textContent).toBe(
+        new Date(mockedExchanges[3].createdAt).toLocaleDateString(),
+      );
+      expect(rows[33].textContent).toBe(
+        new Date(mockedExchanges[4].createdAt).toLocaleDateString(),
+      );
+    });
+
+    it("should render time column", async () => {
+      await act(async () => {
+        render(<ExchangesPage />);
+      });
+
+      const rows = screen.queryAllByTestId("table-data-cell");
+
+      expect(rows[6].textContent).toBe(
+        new Date(mockedExchanges[0].createdAt).toLocaleTimeString(),
+      );
+      expect(rows[13].textContent).toBe(
+        new Date(mockedExchanges[1].createdAt).toLocaleTimeString(),
+      );
+      expect(rows[20].textContent).toBe(
+        new Date(mockedExchanges[2].createdAt).toLocaleTimeString(),
+      );
+      expect(rows[27].textContent).toBe(
+        new Date(mockedExchanges[3].createdAt).toLocaleTimeString(),
+      );
+      expect(rows[34].textContent).toBe(
+        new Date(mockedExchanges[4].createdAt).toLocaleTimeString(),
+      );
     });
   });
 });
