@@ -1,0 +1,18 @@
+@import "../../styles/colors";
+
+.container {
+  position: absolute;
+  right: 0;
+
+  margin-right: 60px;
+}
+
+.control {
+  border: none;
+  border-radius: 15px;
+}
+
+.placeholder {
+  font-size: 18px;
+  color: $accent;
+}

@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next";
 import SignInModal from "../../Modals/SignInModal";
 
 const SignInButton: React.FC = () => {
-  const { t } = useTranslation("auth");
+  const { t, i18n } = useTranslation("auth");
 
   const [showModal, setShowModal] = useState(false);
 

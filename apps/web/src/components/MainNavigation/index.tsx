@@ -11,6 +11,7 @@ import useFetchUser from "../../queries/hooks/useFetchUser";
 import SignInButton from "../Buttons/SignInButton";
 import SignUpButton from "../Buttons/SignUpButton";
 import Currency from "../Currency";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 import { TCurrencies } from "interfaces-common";
 
@@ -63,6 +64,7 @@ const MainNavigation: React.FC = () => {
           </div>
         )}
       </div>
+      <LanguageSwitcher />
     </div>
   );
 };
