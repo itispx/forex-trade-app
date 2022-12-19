@@ -21,7 +21,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 };
 
 const DashboardPage: NextPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [rates, setRates] = useState<IExchangeConversion[]>([
     // { base: "USD", converted: "GBP", exchangeRate: 0.81586 },
