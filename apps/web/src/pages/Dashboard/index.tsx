@@ -3,7 +3,6 @@ import { NextPage, GetStaticProps } from "next";
 import React, { useState, useEffect } from "react";
 import styles from "./Dashboard.module.scss";
 
-import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import exchangesListener, { socket } from "../../queries/websockets/exchangesListener";
@@ -16,7 +15,7 @@ import { IExchangeConversion } from "interfaces-common";
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale as string, ["common"])),
+      ...(await serverSideTranslations(locale as string, ["common", "auth"])),
     },
   };
 };
@@ -26,8 +25,6 @@ interface Props {
 }
 
 const DashboardPage: NextPage<Props> = ({ locale }) => {
-  const { t } = useTranslation("common");
-
   const [isLoading, setIsLoading] = useState(false);
 
   const [rates, setRates] = useState<IExchangeConversion[]>([

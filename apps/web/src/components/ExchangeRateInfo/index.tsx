@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styles from "./ExchangeRateInfo.module.scss";
 
+import { useTranslation } from "next-i18next";
+
 import useUserQueryData from "../../queries/hooks/useUserQueryData";
 
 import { toast } from "react-toastify";
@@ -14,6 +16,8 @@ export interface Props {
 }
 
 const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
+  const { t } = useTranslation("common");
+
   const [showModal, setShowModal] = useState(false);
 
   function openModal() {
@@ -25,6 +29,7 @@ const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
   }
 
   const buyHandler = async () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const data = useUserQueryData();
 
     if (!data || !data.token || !data.doc) {
@@ -65,7 +70,7 @@ const ExchangeRateInfo: React.FC<Props> = ({ exchangeInfo }) => {
           onClick={buyHandler}
         >
           <div className={styles["buy-button"]}>
-            <h1 className={styles["buy-title"]}>BUY</h1>
+            <h1 className={styles["buy-title"]}>{t("buy").toUpperCase()}</h1>
           </div>
         </div>
       </div>

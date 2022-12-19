@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import styles from "./SignInButton.module.scss";
 
+import { useTranslation } from "next-i18next";
+
 import SignInModal from "../../Modals/SignInModal";
 
 const SignInButton: React.FC = () => {
+  const { t } = useTranslation("auth");
+
   const [showModal, setShowModal] = useState(false);
 
   function openModal() {
@@ -21,7 +25,7 @@ const SignInButton: React.FC = () => {
         className={styles["container"]}
         onClick={openModal}
       >
-        <span className={styles["text"]}>Sign In</span>
+        <span className={styles["text"]}>{t("sign_in")}</span>
       </div>
 
       <SignInModal show={showModal} close={closeModal} />

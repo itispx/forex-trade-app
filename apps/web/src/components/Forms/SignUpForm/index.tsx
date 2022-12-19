@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./SignUpForm.module.scss";
 
+import { useTranslation } from "next-i18next";
+
 import { Formik, FormikProps } from "formik";
 import * as yup from "yup";
 
@@ -19,22 +21,28 @@ interface Props {
 }
 
 const SignUpForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => {
+  const { t: tAuth } = useTranslation("auth");
+  const { t: tCommon } = useTranslation("common");
+
   const signUpSchema = yup.object({
     username: yup
       .string()
-      .typeError("Invalid username")
-      .min(3, "Must have at least 3 characters")
-      .required("Username is required"),
+      .typeError(tAuth("username_invalid") as string)
+      .min(3, tAuth("username_length_requirement") as string)
+      .required(tAuth("username_required") as string),
     password: yup
       .string()
-      .required("Password is required")
-      .min(6, "Must have at least 6 characters")
-      .matches(/^(?=.*[A-Za-z])/, "Password must contain a letter")
-      .matches(/^(?=.*[(0-9])/, "Password must contain a number"),
+      .required(tAuth("password_required") as string)
+      .min(6, tAuth("password_length_requirement") as string)
+      .matches(/^(?=.*[A-Za-z])/, tAuth("password_letter_requirement") as string)
+      .matches(/^(?=.*[(0-9])/, tAuth("password_number_requirement") as string),
     confirmPassword: yup
       .string()
-      .required("Please confirm your password")
-      .oneOf([yup.ref("password"), null], "Password must match"),
+      .required(tAuth("confirm_password_required") as string)
+      .oneOf(
+        [yup.ref("password"), null],
+        tAuth("confirm_password_match_requirement") as string,
+      ),
   });
 
   return (
@@ -50,7 +58,7 @@ const SignUpForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => 
               id="username"
               name="username"
               type="text"
-              placeholder="Username"
+              placeholder={tAuth("username")}
               value={fprops.values.username}
               onChange={fprops.handleChange("username")}
               onBlur={fprops.handleBlur("username")}
@@ -61,7 +69,7 @@ const SignUpForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => 
               id="password"
               name="password"
               type="password"
-              placeholder="Password"
+              placeholder={tAuth("password")}
               value={fprops.values.password}
               onChange={fprops.handleChange("password")}
               onBlur={fprops.handleBlur("password")}
@@ -72,7 +80,7 @@ const SignUpForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => 
               id="confirmPassword"
               name="confirmPassword"
               type="password"
-              placeholder="Confirm Password"
+              placeholder={tAuth("confirm_password")}
               value={fprops.values.confirmPassword}
               onChange={fprops.handleChange("confirmPassword")}
               onBlur={fprops.handleBlur("confirmPassword")}
@@ -90,7 +98,7 @@ const SignUpForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => 
                 className={styles["submit"]}
                 onClick={() => fprops.submitForm()}
               >
-                <h2>Submit</h2>
+                <h2>{tCommon("submit")}</h2>
               </div>
             )}
           </div>
