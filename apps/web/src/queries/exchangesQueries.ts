@@ -1,10 +1,6 @@
 import http from "./http-common";
 
-import { IExchange, IQuery } from "interfaces-common";
-
-import { QueryFunctionContext } from "react-query";
-
-import { IExchangeInfo } from "interfaces-common";
+import { IExchange, IExchangeInfo, IQuery } from "interfaces-common";
 
 export const performExchangeQuery = async ({
   base,

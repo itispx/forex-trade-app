@@ -13,7 +13,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       <Layout>
-        <Component {...pageProps} />;
+        <Component {...pageProps} />
         <ToastContainer
           containerId="toast-container"
           position="top-center"
