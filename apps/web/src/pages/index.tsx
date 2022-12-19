@@ -1,7 +1,7 @@
-import DashboardPage from "./Dashboard";
+import { NextPage } from "next";
 
-const IndexPage = () => {
-  return <DashboardPage />;
+const HomePage: NextPage = () => {
+  return null;
 };
 
-export default IndexPage;
+export default HomePage;

@@ -1,7 +1,10 @@
-import { NextPage } from "next";
+import { NextPage, GetStaticProps } from "next";
 
 import React, { useState, useEffect } from "react";
 import styles from "./Dashboard.module.scss";
+
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import exchangesListener, { socket } from "../../queries/websockets/exchangesListener";
 
@@ -10,30 +13,44 @@ import Loading from "../../components/Loading";
 
 import { IExchangeConversion } from "interfaces-common";
 
-const DashboardPage: NextPage = () => {
-  const [isLoading, setIsLoading] = useState(true);
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale as string, ["common"])),
+    },
+  };
+};
+
+interface Props {
+  locale: string | undefined;
+}
+
+const DashboardPage: NextPage<Props> = ({ locale }) => {
+  const { t } = useTranslation("common");
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [rates, setRates] = useState<IExchangeConversion[]>([
-    // { base: "USD", converted: "GBP", exchangeRate: 0.81586 },
-    // { base: "GBP", converted: "USD", exchangeRate: 1.2257 },
+    { base: "USD", converted: "GBP", exchangeRate: 0.81586 },
+    { base: "GBP", converted: "USD", exchangeRate: 1.2257 },
   ]);
 
-  const exchangesListenerHandler = (data: IExchangeConversion[]) => {
-    setRates(data);
+  // const exchangesListenerHandler = (data: IExchangeConversion[]) => {
+  //   setRates(data);
 
-    if (isLoading) {
-      setIsLoading(false);
-    }
-  };
+  //   if (isLoading) {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    exchangesListener(exchangesListenerHandler);
+  // useEffect(() => {
+  //   exchangesListener(exchangesListenerHandler);
 
-    return () => {
-      socket.disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <div className={styles["page-container"]}>
