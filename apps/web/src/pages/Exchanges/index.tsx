@@ -3,11 +3,11 @@
 import { NextPage, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import styles from "./Exchanges.module.scss";
+
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { toast } from "react-toastify";
 
@@ -61,44 +61,46 @@ const ExchangesPage: NextPage = () => {
   const [data, setData] = useState<IParsedExchange[]>([]);
   const [refetch, setRefetch] = useState(false);
 
-  const getExchangesHandler = async () => {
-    try {
-      setIsLoading(true);
+  const getExchangesHandler = useCallback(() => {
+    async () => {
+      try {
+        setIsLoading(true);
 
-      const { status, success } = await getExchangesQuery(page.current);
+        const { status, success } = await getExchangesQuery(page.current);
 
-      if (status.ok) {
-        if (success.docs.length < 5 && hasMore.current) {
-          hasMore.current = false;
+        if (status.ok) {
+          if (success.docs.length < 5 && hasMore.current) {
+            hasMore.current = false;
+          }
+
+          for (let i = 0; i < success.docs.length; i++) {
+            const exchange = success.docs[i];
+
+            const parsedExchange: IParsedExchange = {
+              id: exchange.id,
+              userID: exchange.userID,
+              currency: `${exchange.base.currency}/${exchange.converted.currency}`,
+              base: exchange.base.amount.toFixed(3),
+              converted: exchange.converted.amount.toFixed(3),
+              status: exchange.status,
+              date: new Date(exchange.createdAt).toLocaleDateString(),
+              time: new Date(exchange.createdAt).toLocaleTimeString(),
+            };
+
+            setData((prev) => [...prev, parsedExchange]);
+          }
         }
-
-        for (let i = 0; i < success.docs.length; i++) {
-          const exchange = success.docs[i];
-
-          const parsedExchange: IParsedExchange = {
-            id: exchange.id,
-            userID: exchange.userID,
-            currency: `${exchange.base.currency}/${exchange.converted.currency}`,
-            base: exchange.base.amount.toFixed(3),
-            converted: exchange.converted.amount.toFixed(3),
-            status: exchange.status,
-            date: new Date(exchange.createdAt).toLocaleDateString(),
-            time: new Date(exchange.createdAt).toLocaleTimeString(),
-          };
-
-          setData((prev) => [...prev, parsedExchange]);
-        }
+      } catch (error) {
+        toast.error(tToast("something_went_wrong"));
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      toast.error(tToast("something_went_wrong"));
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
+  }, [tToast]);
 
   useEffect(() => {
     getExchangesHandler();
-  }, [refetch]);
+  }, [getExchangesHandler, refetch]);
 
   const exchangesData = useMemo(() => [...data], [data]);
 
