@@ -3,6 +3,25 @@ import { render } from "../../utilities/testing";
 
 import Layout from ".";
 
+import { useRouter, NextRouter } from "next/router";
+
+jest.mock("next/router", () => {
+  const original = jest.requireActual("next/router");
+  return {
+    ...original,
+    useRouter: jest.fn(),
+  };
+});
+
+const useRouterMocked = jest.mocked(useRouter, true);
+
+beforeAll(() => {
+  useRouterMocked.mockImplementation(() => {
+    const mocked = { pathname: "/" } as NextRouter;
+    return mocked;
+  });
+});
+
 describe("layout", () => {
   it("should render layout", () => {
     render(<Layout />);

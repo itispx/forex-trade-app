@@ -5,8 +5,6 @@ import MainNavigation from ".";
 
 import useFetchUser from "../../queries/hooks/useFetchUser";
 
-import { useRouter, NextRouter } from "next/router";
-
 jest.mock("../../queries/hooks/useFetchUser");
 
 const useFetchUserMocked = jest.mocked(useFetchUser, true);
@@ -17,6 +15,8 @@ const userData = {
     ...userMock,
   },
 };
+
+import { useRouter, NextRouter } from "next/router";
 
 jest.mock("next/router", () => {
   const original = jest.requireActual("next/router");
