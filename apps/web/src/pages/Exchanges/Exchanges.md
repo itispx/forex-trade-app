@@ -1,19 +1,27 @@
-This is a Next.js page that displays a list of exchanges made by a user. It uses the `useTable` hook from `react-table` to display the exchanges in a table.
+The code provided is a Next.js page component that displays a list of exchanges made by a user.
 
-The `ExchangesPage` function uses the `useRouter` hook to navigate to the dashboard page if the user is not authenticated.
+## Imported variables and functions:
 
-It initializes a few state variables: `isLoading`, `data`, and `refetch`. `isLoading` is a boolean that indicates whether the page is currently loading data from the server. `data` is an array of `IParsedExchange` objects that represent the exchanges to be displayed in the table. refetch is a boolean that, when set to `true`, triggers a refetch of the data from the server.
+- `useRouter` from `next/router` which allows the component to access the Next.js router and perform actions such as navigating to different pages.
+- `useTranslation` from `next-i18next` which allows the component to access translations for different languages
+- `toast` from `react-toastify` which allows the component to display notifications to the user
+- `useTable` and `Column` from `react-table` which allow the component to display a table of data
+- `getExchangesQuery` which is a function that fetches a list of exchanges from the server.
 
-The `getExchangesHandler` function makes a request to the server for a list of exchanges made by the user. It parses the data received from the server and stores it in the data state variable.
+The component then defines a `getStaticProps` function that is used to fetch translations for the component at build time. This allows the component to display translations for different languages without the need to make a request to the server at runtime.
 
-The page uses the `useEffect` hook to call `getExchangesHandler` when the component is mounted, and to refetch the data when the refetch state variable changes.
+The functional component start by using the `useTranslation` hook to get the `t` function, which allows the component to access translations for different languages. It also uses the `useRouter` hook to get the `push` function, which allows the component to navigate to different pages.
 
-The `exchangesData` variable is a memoized version of the `data` state variable, which ensures that the data is not unnecessarily re-computed.
+The component then uses the `getUserQueryData` function to fetch the data for the currently logged-in user. If the user's data is not available, the component uses the `push` function to navigate to the dashboard page.
 
-The `columns` array defines the columns that will be displayed in the table. Each element of the array is a `Column` object that specifies the header text, accessor function, and cell renderer for the column.
+The component then defines a number of state variables using the `useState` hook, including `isLoading`, which indicates whether the component is currently fetching data from the server, `data`, which stores the list of exchanges to be displayed in the table, and `refetch`, which is used to trigger a refetch of the exchanges data when necessary.
 
-The `tableInstance` variable is obtained by calling the `useTable` hook with the `columns` and `exchangesData` variables as arguments. It contains various properties and functions that can be used to render the table.
+The component then defines the `getExchangesHandler` function, which is used to fetch a list of exchanges from the server. This function sets the `isLoading` state variable to `true` while it is fetching the data, and then makes a request to the server using the `getExchangesQuery` function. If the request is successful, the function parses the data and adds it to the `data` state variable. If the request fails, the function displays an error notification to the user using the `toast.error` function.
 
-The remaining code in the function uses the `tableInstance` variable to render the table and its contents. The `getTableProps`, `getTableBodyProps`, and `headerGroups` properties are used to apply props to the `table`, `tbody`, and `thead` elements, respectively. The `rows` property is an array of objects that represent the rows of the table, and the `prepareRow` function is used to prepare a row for rendering.
+The component then uses the `useEffect` hook to trigger the `getExchangesHandler` function when the component mounts or when the refetch state variable changes.
 
-The `/* eslint-disable react/jsx-key */` comment at the top of the file disables the ESLint rule that requires a unique `key` prop to be specified for each element in a list because the `key` prop is passed automatically by react-table.
+The component then defines the `exchangesData` variable using the `useMemo` hook, which is used to create a copy of the `data` state variable to prevent unnecessary re-renders of the component.
+
+The component then defines the `columns` variable using the `useMemo` hook, which is used to define the columns of the data table that will be displayed to the user.
+
+The component then uses the `useTable` hook to create a table component with the specified columns and data. The component has the ability to load more data when the user scrolls to the bottom of the page.

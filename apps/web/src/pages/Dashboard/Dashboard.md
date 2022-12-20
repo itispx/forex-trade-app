@@ -1,9 +1,5 @@
-This is a Next.js page component that displays a list of exchange rates for various currency pairs. It does so by using a web socket connection to listen for updates from the server, which are then displayed using the `ExchangeRateInfo` component.
+The `DashboardPage` component is a Next.js page that displays a list of currency exchange rates. It fetches the data for these exchange rates via websockets using the `exchangesListener` function, which listens for updates to the exchange rates and updates the component's state when new data is received. The component also displays a loading spinner while the data is being fetched.
 
-The component uses the `useState` hook to define two state variables: `isLoading` and `rates`. The `isLoading` state variable is used to track whether or not the component is currently waiting for data from the server, and rates is an array of exchange rate data that will be displayed on the page.
+The `getStaticProps` function is a Next.js function that is called at build time to fetch the data that will be passed to the page as props. In this case, it is used to fetch the translations for the page using the `serverSideTranslations` function. These translations are then passed to the page as props.
 
-The `DashboardPage` component also defines a callback function called `exchangesListenerHandler` that updates the `rates` state variable with the data passed to it as an argument.
-
-The `useEffect` hook is then used to set up a web socket connection using the `exchangesListener` function and to register the `exchangesListenerHandler` callback to be called whenever new data is received. The `useEffect` hook also includes a clean-up function that disconnects the web socket when the component unmounts.
-
-Finally, the component returns JSX that either displays a loading spinner or a list of `ExchangeRateInfo` components, depending on the value of the `isLoading` state variable. The list of `ExchangeRateInfo` components is created by mapping over the `rates` array and rendering a new `ExchangeRateInfo` component for each item in the array.
+The page contains either a loading spinner or a list of `ExchangeRateInfo` components, each of which displays information about a single exchange rate. The exchange rate data is passed to these components as props.
