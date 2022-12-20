@@ -1,6 +1,6 @@
 import http from "./http-common";
 
-import { IQuery, IUserServerResponse, IUser } from "interfaces-common";
+import { IQuery, IUserServerResponse } from "interfaces-common";
 import getUserToken from "../utilities/getUserToken";
 
 export const signUpUserQuery = async ({
@@ -34,7 +34,7 @@ export const signInUserQuery = async ({
 export const getUserQuery = async (): Promise<
   (IQuery & IUserServerResponse) | undefined
 > => {
-  const token = await getUserToken();
+  const token = getUserToken();
 
   if (token) {
     const request = await http();
