@@ -15,7 +15,7 @@ describe("exchange rate info component", () => {
   };
 
   describe("render title", () => {
-    it("should display buy title in en-US", () => {
+    it("should display buy title (en-US)", () => {
       render(renderWithi18next(<ExchangeRateInfo {...exchangeRateInfo} />, "en-US"));
 
       const title = screen.getByText("BUY").textContent;
@@ -23,7 +23,7 @@ describe("exchange rate info component", () => {
       expect(title).toBeDefined();
     });
 
-    it("should display buy title in pt-BR", () => {
+    it("should display buy title (pt-BR)", () => {
       render(renderWithi18next(<ExchangeRateInfo {...exchangeRateInfo} />, "pt-BR"));
 
       const title = screen.getByText("COMPRAR").textContent;

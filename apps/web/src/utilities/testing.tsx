@@ -13,7 +13,12 @@ import Backend from "i18next-xhr-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next, I18nextProvider } from "react-i18next";
 
-import { IUserServerResponse, TStatus, IExchange } from "interfaces-common";
+import {
+  IUserServerResponse,
+  IExchange,
+  TStatus,
+  TTranslations,
+} from "interfaces-common";
 
 import enCommon from "../../public/locales/en-US/common.json";
 import enAuth from "../../public/locales/en-US/auth.json";
@@ -57,10 +62,7 @@ const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-export const renderWithi18next = (
-  Component: React.ReactElement,
-  lng: "en-US" | "pt-BR",
-) => {
+export const renderWithi18next = (Component: React.ReactElement, lng: TTranslations) => {
   i18n.changeLanguage(lng);
   return <I18nextProvider i18n={i18n}>{Component}</I18nextProvider>;
 };

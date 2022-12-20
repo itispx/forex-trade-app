@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./BuyForm.module.scss";
 
+import { useTranslation } from "next-i18next";
+
 import { Formik, FormikProps } from "formik";
 import * as yup from "yup";
 
@@ -18,12 +20,14 @@ interface Props {
 }
 
 const BuyForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => {
+  const { t: tCommon } = useTranslation("common");
+
   const buySchema = yup.object({
     amount: yup
       .number()
-      .typeError("Invalid amount")
-      .min(0.1, "Minimal amount of 0.1")
-      .required("Amount is required"),
+      .typeError(tCommon("amount_invalid") as string)
+      .required(tCommon("amount_required") as string)
+      .min(0.1, tCommon("amount_minimal") as string),
   });
 
   return (
@@ -41,7 +45,7 @@ const BuyForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => {
                 id="amount"
                 name="amount"
                 type="number"
-                placeholder="Amount"
+                placeholder={tCommon("amount")}
                 value={fprops.values.amount}
                 onChange={fprops.handleChange("amount")}
                 onBlur={fprops.handleBlur("amount")}
@@ -61,7 +65,7 @@ const BuyForm: React.FC<Props> = ({ submitHandler, isLoading, inputRef }) => {
                 className={styles["submit"]}
                 onClick={() => fprops.submitForm()}
               >
-                <h2>Submit</h2>
+                <h2>{tCommon("submit")}</h2>
               </div>
             )}
           </div>

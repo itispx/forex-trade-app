@@ -5,7 +5,7 @@ import SignUpButton from ".";
 
 describe("sign up button component", () => {
   describe("render title", () => {
-    it("should render sign up title in en-US", () => {
+    it("should render sign up title (en-US)", () => {
       render(renderWithi18next(<SignUpButton />, "en-US"));
 
       const title = screen.getByText("Sign Up");
@@ -13,7 +13,7 @@ describe("sign up button component", () => {
       expect(title).toBeVisible();
     });
 
-    it("should render sign up title in pt-BR", () => {
+    it("should render sign up title (pt-BR)", () => {
       render(renderWithi18next(<SignUpButton />, "pt-BR"));
 
       const title = screen.getByText("Cadastrar");

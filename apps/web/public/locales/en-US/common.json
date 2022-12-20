@@ -1,6 +1,10 @@
 {
   "buy": "Buy",
   "submit": "Submit",
+  "amount": "Amount",
+  "amount_invalid": "Invalid amount",
+  "amount_required": "Amount is required",
+  "amount_minimal": "Minimal amount of 0.1",
   "dashboard": "Dashboard",
   "view_exchanges": "View exchanges",
   "id": "ID",

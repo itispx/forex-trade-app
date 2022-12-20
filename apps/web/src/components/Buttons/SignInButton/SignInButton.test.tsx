@@ -5,7 +5,7 @@ import SignInButton from ".";
 
 describe("sign in button component", () => {
   describe("render title", () => {
-    it("should render sign in title in en-US", () => {
+    it("should render sign in title (en-US)", () => {
       render(renderWithi18next(<SignInButton />, "en-US"));
 
       const title = screen.getByText("Sign In");
@@ -13,7 +13,7 @@ describe("sign in button component", () => {
       expect(title).toBeVisible();
     });
 
-    it("should render sign in title in pt-BR", () => {
+    it("should render sign in title (pt-BR)", () => {
       render(renderWithi18next(<SignInButton />, "pt-BR"));
 
       const title = screen.getByText("Entrar");

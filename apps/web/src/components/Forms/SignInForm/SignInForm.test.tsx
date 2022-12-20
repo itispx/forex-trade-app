@@ -1,8 +1,18 @@
+/* eslint-disable testing-library/no-unnecessary-act */
+/* eslint-disable testing-library/no-node-access */
+/* eslint-disable testing-library/no-container */
 import { screen, act } from "@testing-library/react";
-import { render, typeNtab, clickNtab } from "../../../utilities/testing";
+import {
+  render,
+  renderWithi18next,
+  typeNtab,
+  clickNtab,
+} from "../../../utilities/testing";
 import user from "@testing-library/user-event";
 
 import SignInForm from ".";
+
+import { TTranslations } from "interfaces-common";
 
 describe("sign in form", () => {
   describe("sign in form render", () => {
@@ -12,26 +22,68 @@ describe("sign in form", () => {
       expect(getUsernameInput(container)).toBeVisible();
     });
 
+    it("should render username placeholder (en-US)", () => {
+      renderComp("en-US");
+
+      const pc = screen.getByPlaceholderText("Username");
+
+      expect(pc).toBeDefined();
+    });
+
+    it("should render username placeholder (pt-BR)", () => {
+      renderComp("pt-BR");
+
+      const pc = screen.getByPlaceholderText("Nome de usuário");
+
+      expect(pc).toBeDefined();
+    });
+
     it("should render password input", () => {
       const { container } = renderComp();
 
       expect(getPasswordInput(container)).toBeVisible();
     });
 
-    it("should render submit button", () => {
-      renderComp();
+    it("should render password placeholder (en-US)", () => {
+      renderComp("en-US");
 
-      expect(getSubmitButton()).toBeVisible();
+      const pc = screen.getByPlaceholderText("Password");
+
+      expect(pc).toBeDefined();
+    });
+
+    it("should render password placeholder (pt-BR)", () => {
+      renderComp("pt-BR");
+
+      const pc = screen.getByPlaceholderText("Senha");
+
+      expect(pc).toBeDefined();
+    });
+
+    it("should render submit button (en-US)", () => {
+      renderComp("en-US");
+
+      const submit = screen.getByText("Submit");
+
+      expect(submit).toBeDefined();
+    });
+
+    it("should render submit button (pt-BR)", () => {
+      renderComp("pt-BR");
+
+      const submit = screen.getByText("Enviar");
+
+      expect(submit).toBeDefined();
     });
 
     it("should not render submit button", () => {
-      renderComp(true);
+      renderComp("en-US", true);
 
       expect(getSubmitButton()).toBe(null);
     });
 
     it("should render loading component", () => {
-      renderComp(true);
+      renderComp("en-US", true);
 
       expect(getLoadingComponent()).toBeVisible();
     });
@@ -53,12 +105,20 @@ describe("sign in form", () => {
         expect(getUsernameError()).toBe("");
       });
 
-      it("should fail because username is empty", async () => {
-        const { container } = renderComp();
+      it("should fail because username is empty (en-US)", async () => {
+        const { container } = renderComp("en-US");
 
         await clickNtab(getUsernameInput(container));
 
         expect(getUsernameError()).toBe("Username is required");
+      });
+
+      it("should fail because username is empty (pt-BR)", async () => {
+        const { container } = renderComp("pt-BR");
+
+        await clickNtab(getUsernameInput(container));
+
+        expect(getUsernameError()).toBe("Nome de usuário obrigatório");
       });
     });
 
@@ -71,24 +131,31 @@ describe("sign in form", () => {
         expect(getPasswordError()).toBe("");
       });
 
-      it("should fail because password is empty", async () => {
-        const { container } = renderComp();
+      it("should fail because password is empty (en-US)", async () => {
+        const { container } = renderComp("en-US");
 
         await clickNtab(getPasswordInput(container));
 
         expect(getPasswordError()).toBe("Password is required");
+      });
+
+      it("should fail because password is empty (pt-BR)", async () => {
+        const { container } = renderComp("pt-BR");
+
+        await clickNtab(getPasswordInput(container));
+
+        expect(getPasswordError()).toBe("Senha obrigatória");
       });
     });
 
     it("should successfully call submit handler function", async () => {
       const submitHandlerMock = jest.fn();
 
-      const { container } = renderComp(false, submitHandlerMock);
+      const { container } = renderComp("en-US", false, submitHandlerMock);
 
       await typeNtab(getUsernameInput(container), "itspx");
       await typeNtab(getPasswordInput(container), "password123");
 
-      // eslint-disable-next-line testing-library/no-unnecessary-act
       await act(() => {
         user.click(getSubmitButton());
       });
@@ -99,8 +166,17 @@ describe("sign in form", () => {
   });
 });
 
-const renderComp = (isLoading = false, submitHandler = () => {}) => {
-  return render(<SignInForm isLoading={isLoading} submitHandler={submitHandler} />);
+const renderComp = (
+  lng: TTranslations = "en-US",
+  isLoading = false,
+  submitHandler = () => {},
+) => {
+  return render(
+    renderWithi18next(
+      <SignInForm isLoading={isLoading} submitHandler={submitHandler} />,
+      lng,
+    ),
+  );
 };
 
 const getUsernameInput = (container: HTMLElement) => {
