@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from "react";
 import styles from "./BuyModal.module.scss";
 
+import { useTranslation } from "next-i18next";
+
 import usePostExchange from "../../../queries/hooks/usePostExchange";
 
 import { FormikProps } from "formik";
@@ -20,6 +22,8 @@ interface Props {
 }
 
 const BuyModal: React.FC<Props> = ({ show, close, exchangeInfo }) => {
+  const { t } = useTranslation("common");
+
   const { mutate: performExchange, isLoading } = usePostExchange(close);
 
   const [amount, setAmount] = useState(1);
@@ -51,7 +55,7 @@ const BuyModal: React.FC<Props> = ({ show, close, exchangeInfo }) => {
       overlayClassName={styles["modal-overlay"]}
     >
       <div className={styles["container"]}>
-        <h1 className={styles["title"]}>Buy</h1>
+        <h1 className={styles["title"]}>{t("buy")}</h1>
 
         <div className={styles["display-converted-container"]}>
           <span data-testid="currencies-display" className={styles["currencies"]}>
