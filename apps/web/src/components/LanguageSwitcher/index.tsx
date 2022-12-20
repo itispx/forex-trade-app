@@ -19,13 +19,14 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   return (
-    <div className={styles["container"]}>
+    <div data-testid="language-switcher-container" className={styles["container"]}>
       <Dropdown
+        data-testid="language-switcher-dropdown"
         controlClassName={styles["control"]}
         placeholderClassName={styles["placeholder"]}
         options={lngs}
         onChange={(lngObj) => handleChange(lngObj)}
-        value={lngs[0]}
+        value={lngs.find((lng) => i18n.language === lng.value)}
         placeholder="Select an language"
       />
     </div>
