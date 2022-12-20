@@ -3,7 +3,7 @@ import React from "react";
 import MainNavigation from "../MainNavigation";
 
 interface Props {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const Layout: React.FC<Props> = ({ children }) => {

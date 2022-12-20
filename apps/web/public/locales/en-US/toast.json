@@ -1,0 +1,8 @@
+{
+  "something_went_wrong": "Something went wrong",
+  "not_signed_in": "User not signed in",
+  "insufficient_money": "You don't have enough money",
+  "exchange_successful": "Exchange successful!",
+  "sign_up_successful": "Sign up successful",
+  "sign_in_successful": "Sign in successful"
+}

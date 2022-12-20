@@ -1,15 +1,25 @@
 import { screen, waitFor } from "@testing-library/react";
-import { render } from "../../../utilities/testing";
+import { render, renderWithi18next } from "../../../utilities/testing";
 
 import SignInButton from ".";
 
 describe("sign in button component", () => {
-  it("should render sign in title", () => {
-    render(<SignInButton />);
+  describe("render title", () => {
+    it("should render sign in title (en-US)", () => {
+      render(renderWithi18next(<SignInButton />, "en-US"));
 
-    const title = screen.getByText("Sign In");
+      const title = screen.getByText("Sign In");
 
-    expect(title).toBeVisible();
+      expect(title).toBeVisible();
+    });
+
+    it("should render sign in title (pt-BR)", () => {
+      render(renderWithi18next(<SignInButton />, "pt-BR"));
+
+      const title = screen.getByText("Entrar");
+
+      expect(title).toBeVisible();
+    });
   });
 
   it("should open modal", async () => {

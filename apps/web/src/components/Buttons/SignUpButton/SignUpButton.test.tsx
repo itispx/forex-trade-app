@@ -1,15 +1,25 @@
-import { screen, fireEvent, waitFor } from "@testing-library/react";
-import { render } from "../../../utilities/testing";
+import { screen, waitFor } from "@testing-library/react";
+import { render, renderWithi18next } from "../../../utilities/testing";
 
 import SignUpButton from ".";
 
 describe("sign up button component", () => {
-  it("should render sign in title", () => {
-    render(<SignUpButton />);
+  describe("render title", () => {
+    it("should render sign up title (en-US)", () => {
+      render(renderWithi18next(<SignUpButton />, "en-US"));
 
-    const title = screen.getByText("Sign Up");
+      const title = screen.getByText("Sign Up");
 
-    expect(title).toBeVisible();
+      expect(title).toBeVisible();
+    });
+
+    it("should render sign up title (pt-BR)", () => {
+      render(renderWithi18next(<SignUpButton />, "pt-BR"));
+
+      const title = screen.getByText("Cadastrar");
+
+      expect(title).toBeVisible();
+    });
   });
 
   it("should open modal", async () => {

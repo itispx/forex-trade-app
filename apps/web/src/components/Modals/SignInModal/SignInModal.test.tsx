@@ -1,5 +1,5 @@
 import { screen, fireEvent } from "@testing-library/react";
-import { render } from "../../../utilities/testing";
+import { render, renderWithi18next } from "../../../utilities/testing";
 
 import SignInModal from ".";
 
@@ -7,10 +7,18 @@ describe("sign in modal component", () => {
   describe("modal visibility", () => {
     const handleClose = jest.fn();
 
-    it("should have title", () => {
-      render(<SignInModal show={true} close={handleClose} />);
+    it("should have title (en-US)", () => {
+      render(renderWithi18next(<SignInModal show={true} close={handleClose} />, "en-US"));
 
       const title = screen.getByText("Sign In");
+
+      expect(title).toBeVisible();
+    });
+
+    it("should have title (pt-BR)", () => {
+      render(renderWithi18next(<SignInModal show={true} close={handleClose} />, "pt-BR"));
+
+      const title = screen.getByText("Entrar");
 
       expect(title).toBeVisible();
     });

@@ -1,6 +1,9 @@
 import "../styles/globals.scss";
 import type { AppProps } from "next/app";
 
+import { appWithTranslation } from "next-i18next";
+import i18nextConfig from "../../next-i18next.config";
+
 import { QueryClientProvider } from "react-query";
 import queryClient from "../utilities/queryClient";
 
@@ -32,4 +35,4 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default App;
+export default appWithTranslation(App, i18nextConfig);

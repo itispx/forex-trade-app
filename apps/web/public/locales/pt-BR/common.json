@@ -1,0 +1,20 @@
+{
+  "buy": "Comprar",
+  "submit": "Enviar",
+  "amount": "Valor",
+  "amount_invalid": "Valor inválido",
+  "amount_required": "Valor obrigatório",
+  "amount_minimal": "Valor mínimo de 0.1",
+  "dashboard": "Painel",
+  "view_exchanges": "Ver transações",
+  "id": "ID",
+  "currency": "Moeda",
+  "base": "Base",
+  "converted": "Convertido",
+  "date": "Data",
+  "time": "Horário",
+  "status": "Status",
+  "successful": "Sucesso",
+  "pending": "Pendente",
+  "failed": "Falha"
+}

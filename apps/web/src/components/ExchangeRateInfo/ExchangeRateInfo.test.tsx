@@ -1,25 +1,35 @@
 import { screen, waitFor } from "@testing-library/react";
-import { render, userMock } from "../../utilities/testing";
+import { render, renderWithi18next, userMock } from "../../utilities/testing";
 
-import useUserQueryData from "../../queries/hooks/useUserQueryData";
+import getUserQueryData from "../../queries/getUserQueryData";
 
 import ExchangeRateInfo, { Props } from ".";
 
-jest.mock("../../queries/hooks/useUserQueryData");
+jest.mock("../../queries/getUserQueryData");
 
-const useUserQueryDataMocked = jest.mocked(useUserQueryData, true);
+const getUserQueryDataMocked = jest.mocked(getUserQueryData, true);
 
 describe("exchange rate info component", () => {
   const exchangeRateInfo: Props = {
     exchangeInfo: { base: "USD", converted: "GBP", exchangeRate: 0.6 },
   };
 
-  it("should display title", () => {
-    render(<ExchangeRateInfo {...exchangeRateInfo} />);
+  describe("render title", () => {
+    it("should display buy title (en-US)", () => {
+      render(renderWithi18next(<ExchangeRateInfo {...exchangeRateInfo} />, "en-US"));
 
-    const title = screen.getByText("BUY").textContent;
+      const title = screen.getByText("BUY").textContent;
 
-    expect(title).toBe("BUY");
+      expect(title).toBeDefined();
+    });
+
+    it("should display buy title (pt-BR)", () => {
+      render(renderWithi18next(<ExchangeRateInfo {...exchangeRateInfo} />, "pt-BR"));
+
+      const title = screen.getByText("COMPRAR").textContent;
+
+      expect(title).toBeDefined();
+    });
   });
 
   it("should display base currency", () => {
@@ -55,7 +65,7 @@ describe("exchange rate info component", () => {
   });
 
   it("should not open modal because user is not logged in", async () => {
-    useUserQueryDataMocked.mockImplementation(() => undefined);
+    getUserQueryDataMocked.mockImplementation(() => undefined);
 
     render(<ExchangeRateInfo {...exchangeRateInfo} />);
 
@@ -69,7 +79,7 @@ describe("exchange rate info component", () => {
   });
 
   it("should open modal", async () => {
-    useUserQueryDataMocked.mockImplementation(() => userMock);
+    getUserQueryDataMocked.mockImplementation(() => userMock);
 
     render(<ExchangeRateInfo {...exchangeRateInfo} />);
 

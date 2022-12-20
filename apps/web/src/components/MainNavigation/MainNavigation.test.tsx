@@ -1,11 +1,9 @@
 import { screen } from "@testing-library/react";
-import { render, userMock } from "../../utilities/testing";
+import { render, renderWithi18next, userMock } from "../../utilities/testing";
 
 import MainNavigation from ".";
 
 import useFetchUser from "../../queries/hooks/useFetchUser";
-
-import { useRouter, NextRouter } from "next/router";
 
 jest.mock("../../queries/hooks/useFetchUser");
 
@@ -17,6 +15,8 @@ const userData = {
     ...userMock,
   },
 };
+
+import { useRouter, NextRouter } from "next/router";
 
 jest.mock("next/router", () => {
   const original = jest.requireActual("next/router");
@@ -75,30 +75,56 @@ describe("main navigation component", () => {
       expect(currencies[1].textContent).toBe("USD: 1000.000");
     });
 
-    it("should display exchanges link", () => {
+    it("should display exchanges link (en-US)", () => {
       useRouterMocked.mockImplementation(() => {
         const mocked = { pathname: "/" } as NextRouter;
         return mocked;
       });
 
-      render(<MainNavigation />);
+      render(renderWithi18next(<MainNavigation />, "en-US"));
 
       const link = screen.getByTestId("link").textContent;
 
       expect(link).toBe("View exchanges");
     });
 
-    it("should display home link", () => {
+    it("should display exchanges link (pt-BR)", () => {
+      useRouterMocked.mockImplementation(() => {
+        const mocked = { pathname: "/" } as NextRouter;
+        return mocked;
+      });
+
+      render(renderWithi18next(<MainNavigation />, "pt-BR"));
+
+      const link = screen.getByTestId("link").textContent;
+
+      expect(link).toBe("Ver transações");
+    });
+
+    it("should display dashboard link (en-US)", () => {
       useRouterMocked.mockImplementation(() => {
         const mocked = { pathname: "/Exchanges" } as NextRouter;
         return mocked;
       });
 
-      render(<MainNavigation />);
+      render(renderWithi18next(<MainNavigation />, "en-US"));
 
       const link = screen.getByTestId("link").textContent;
 
-      expect(link).toBe("Home");
+      expect(link).toBe("Dashboard");
+    });
+
+    it("should display dashboard link (pt-BR)", () => {
+      useRouterMocked.mockImplementation(() => {
+        const mocked = { pathname: "/Exchanges" } as NextRouter;
+        return mocked;
+      });
+
+      render(renderWithi18next(<MainNavigation />, "pt-BR"));
+
+      const link = screen.getByTestId("link").textContent;
+
+      expect(link).toBe("Painel");
     });
   });
 });

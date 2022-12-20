@@ -1,7 +1,7 @@
-import useUserQueryData from "../queries/hooks/useUserQueryData";
+import getUserQueryData from "../queries/getUserQueryData";
 
 const getUserToken = (): string | undefined => {
-  const data = useUserQueryData();
+  const data = getUserQueryData();
 
   if (data) {
     return data.token;

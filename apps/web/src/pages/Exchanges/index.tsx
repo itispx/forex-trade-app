@@ -1,10 +1,13 @@
 // Eslint will complain if you don't use key or if you do use key
 /* eslint-disable react/jsx-key */
-import { NextPage } from "next";
+import { NextPage, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import styles from "./Exchanges.module.scss";
+
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { toast } from "react-toastify";
 
@@ -12,11 +15,19 @@ import { useTable, Column } from "react-table";
 
 import { getExchangesQuery } from "../../queries/exchangesQueries";
 
-import useUserQueryData from "../../queries/hooks/useUserQueryData";
+import getUserQueryData from "../../queries/getUserQueryData";
 
 import Loading from "../../components/Loading";
 
 import { TStatus } from "interfaces-common";
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale as string, ["common", "toast"])),
+    },
+  };
+};
 
 interface IParsedExchange {
   id: string;
@@ -30,13 +41,16 @@ interface IParsedExchange {
 }
 
 const ExchangesPage: NextPage = () => {
+  const { t: tCommon } = useTranslation("common");
+  const { t: tToast } = useTranslation("toast");
+
   const { push } = useRouter();
 
-  const userQueryData = useUserQueryData();
+  const userQueryData = getUserQueryData();
 
   useEffect(() => {
     if (!userQueryData) {
-      push("/");
+      push("/Dashboard");
     }
   }, [userQueryData, push]);
 
@@ -76,7 +90,7 @@ const ExchangesPage: NextPage = () => {
         }
       }
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error(tToast("something_went_wrong"));
     } finally {
       setIsLoading(false);
     }
@@ -84,6 +98,7 @@ const ExchangesPage: NextPage = () => {
 
   useEffect(() => {
     getExchangesHandler();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch]);
 
   const exchangesData = useMemo(() => [...data], [data]);
@@ -91,26 +106,26 @@ const ExchangesPage: NextPage = () => {
   const columns: Array<Column> = useMemo(
     () => [
       {
-        Header: "ID",
+        Header: tCommon("id") as string,
         accessor: "id",
         Cell: ({ value }) => <span className={styles["id-field"]}>{value}</span>,
       },
-      { Header: "Currency", accessor: "currency" },
-      { Header: "Base", accessor: "base" },
-      { Header: "Converted", accessor: "converted" },
+      { Header: tCommon("currency") as string, accessor: "currency" },
+      { Header: tCommon("base") as string, accessor: "base" },
+      { Header: tCommon("converted") as string, accessor: "converted" },
       {
-        Header: "Status",
+        Header: tCommon("status") as string,
         accessor: "status",
         Cell: ({ value }) => (
           <span className={`${styles["status-field"]} ${styles[value.toLowerCase()]}`}>
-            {value}
+            {tCommon(`${value}`.toLowerCase()).toUpperCase()}
           </span>
         ),
       },
-      { Header: "Date", accessor: "date" },
-      { Header: "Time", accessor: "time" },
+      { Header: tCommon("date") as string, accessor: "date" },
+      { Header: tCommon("time") as string, accessor: "time" },
     ],
-    [],
+    [tCommon],
   );
 
   const tableInstance = useTable({ columns, data: exchangesData });

@@ -18,6 +18,8 @@ import QueryInterface from "./interfaces/QueryInterface";
 
 import APIErrorInterface from "./interfaces/APIErrorInterface";
 
+import TranslationsTypes from "./interfaces/Translations";
+
 export type IUserServerResponse = UserServerResponseInterface;
 export type IUser = UserInterface;
 export type IWallet = WalletInterface;
@@ -33,5 +35,7 @@ export type ICurrencyInfo = CurrencyInfoInterface;
 export type IQuery = QueryInterface;
 
 export type IAPIError = APIErrorInterface;
+
+export type TTranslations = TranslationsTypes;
 
 export const OCurrency = CurrencyOptions;

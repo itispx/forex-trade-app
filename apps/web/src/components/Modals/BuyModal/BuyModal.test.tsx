@@ -1,5 +1,5 @@
 import { screen, fireEvent } from "@testing-library/react";
-import { render } from "../../../utilities/testing";
+import { render, renderWithi18next } from "../../../utilities/testing";
 
 import BuyModal from ".";
 
@@ -15,12 +15,28 @@ describe("buy modal component", () => {
   const handleCloseMock = jest.fn();
 
   describe("modal visibility", () => {
-    it("should have title", () => {
+    it("should have title (en-US)", () => {
       render(
-        <BuyModal show={true} close={handleCloseMock} exchangeInfo={exchangeInfo} />,
+        renderWithi18next(
+          <BuyModal show={true} close={handleCloseMock} exchangeInfo={exchangeInfo} />,
+          "en-US",
+        ),
       );
 
       const title = screen.getByText("Buy");
+
+      expect(title).toBeVisible();
+    });
+
+    it("should have title (pt-BR)", () => {
+      render(
+        renderWithi18next(
+          <BuyModal show={true} close={handleCloseMock} exchangeInfo={exchangeInfo} />,
+          "pt-BR",
+        ),
+      );
+
+      const title = screen.getByText("Comprar");
 
       expect(title).toBeVisible();
     });

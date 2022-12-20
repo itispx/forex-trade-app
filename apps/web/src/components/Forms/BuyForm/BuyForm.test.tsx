@@ -1,17 +1,37 @@
+/* eslint-disable testing-library/no-node-access */
+/* eslint-disable testing-library/no-container */
 /* eslint-disable testing-library/no-unnecessary-act */
 /* eslint-disable testing-library/no-wait-for-side-effects */
 import { screen, fireEvent, act } from "@testing-library/react";
-import { render } from "../../../utilities/testing";
+import { render, renderWithi18next } from "../../../utilities/testing";
 import user from "@testing-library/user-event";
 
 import BuyForm from ".";
 
+import { TTranslations } from "interfaces-common";
+
 describe("buy form", () => {
   describe("buy form render", () => {
-    it("should render username input", () => {
+    it("should render amount input", () => {
       const { container } = renderComp();
 
       expect(getAmountInput(container)).toBeVisible();
+    });
+
+    it("should render amount placeholder (en-US)", () => {
+      renderComp("en-US");
+
+      const input = screen.getByPlaceholderText("Amount");
+
+      expect(input).toBeDefined();
+    });
+
+    it("should render amount placeholder (pt-BR)", () => {
+      renderComp("pt-BR");
+
+      const input = screen.getByPlaceholderText("Valor");
+
+      expect(input).toBeDefined();
     });
 
     it("should render submit button", () => {
@@ -20,23 +40,39 @@ describe("buy form", () => {
       expect(getSubmitButton()).toBeVisible();
     });
 
+    it("should render submit button (en-US)", () => {
+      renderComp("en-US");
+
+      const submit = screen.getByText("Submit");
+
+      expect(submit).toBeDefined();
+    });
+
+    it("should render submit button (pt-BR)", () => {
+      renderComp("pt-BR");
+
+      const submit = screen.getByText("Enviar");
+
+      expect(submit).toBeDefined();
+    });
+
     it("should not render submit button", () => {
-      renderComp(true);
+      renderComp("en-US", true);
 
       expect(getSubmitButton()).toBe(null);
     });
+  });
 
-    it("should render loading component", () => {
-      renderComp(true);
+  it("should render loading component", () => {
+    renderComp("en-US", true);
 
-      expect(getLoadingComponent()).toBeVisible();
-    });
+    expect(getLoadingComponent()).toBeVisible();
+  });
 
-    it("should not render loading component", () => {
-      renderComp();
+  it("should not render loading component", () => {
+    renderComp();
 
-      expect(getLoadingComponent()).toBe(null);
-    });
+    expect(getLoadingComponent()).toBe(null);
   });
 
   describe("amount validation", () => {
@@ -52,8 +88,8 @@ describe("buy form", () => {
       expect(getAmountError()).toBe("");
     });
 
-    it("should fail because amount is empty", async () => {
-      const { container } = renderComp();
+    it("should fail because amount is empty (en-US)", async () => {
+      const { container } = renderComp("en-US");
 
       await act(async () => {
         fireEvent.change(getAmountInput(container), { target: { value: "" } });
@@ -64,8 +100,20 @@ describe("buy form", () => {
       expect(getAmountError()).toBe("Amount is required");
     });
 
-    it("should fail because amount is 0", async () => {
-      const { container } = renderComp();
+    it("should fail because amount is empty (pt-BR)", async () => {
+      const { container } = renderComp("pt-BR");
+
+      await act(async () => {
+        fireEvent.change(getAmountInput(container), { target: { value: "" } });
+
+        user.click(getSubmitButton());
+      });
+
+      expect(getAmountError()).toBe("Valor obrigatório");
+    });
+
+    it("should fail because amount is 0 (en-US)", async () => {
+      const { container } = renderComp("en-US");
 
       await act(async () => {
         fireEvent.change(getAmountInput(container), { target: { value: 0 } });
@@ -76,10 +124,22 @@ describe("buy form", () => {
       expect(getAmountError()).toBe("Minimal amount of 0.1");
     });
 
+    it("should fail because amount is 0 (pt-BR)", async () => {
+      const { container } = renderComp("pt-BR");
+
+      await act(async () => {
+        fireEvent.change(getAmountInput(container), { target: { value: 0 } });
+
+        user.click(getSubmitButton());
+      });
+
+      expect(getAmountError()).toBe("Valor mínimo de 0.1");
+    });
+
     it("should successfully call submit handler function", async () => {
       const submitHandlerMock = jest.fn();
 
-      const { container } = renderComp(false, submitHandlerMock);
+      const { container } = renderComp("en-US", false, submitHandlerMock);
 
       await act(async () => {
         fireEvent.change(getAmountInput(container), { target: { value: 10 } });
@@ -92,8 +152,17 @@ describe("buy form", () => {
   });
 });
 
-const renderComp = (isLoading = false, submitHandler = () => {}) => {
-  return render(<BuyForm isLoading={isLoading} submitHandler={submitHandler} />);
+const renderComp = (
+  lng: TTranslations = "en-US",
+  isLoading = false,
+  submitHandler = () => {},
+) => {
+  return render(
+    renderWithi18next(
+      <BuyForm isLoading={isLoading} submitHandler={submitHandler} />,
+      lng,
+    ),
+  );
 };
 
 const getAmountInput = (container: HTMLElement) => {

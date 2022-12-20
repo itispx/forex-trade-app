@@ -1,7 +1,9 @@
-import { NextPage } from "next";
+import { NextPage, GetStaticProps } from "next";
 
 import React, { useState, useEffect } from "react";
 import styles from "./Dashboard.module.scss";
+
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import exchangesListener, { socket } from "../../queries/websockets/exchangesListener";
 
@@ -9,6 +11,14 @@ import ExchangeRateInfo from "../../components/ExchangeRateInfo";
 import Loading from "../../components/Loading";
 
 import { IExchangeConversion } from "interfaces-common";
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale as string, ["common", "auth", "toast"])),
+    },
+  };
+};
 
 const DashboardPage: NextPage = () => {
   const [isLoading, setIsLoading] = useState(true);
