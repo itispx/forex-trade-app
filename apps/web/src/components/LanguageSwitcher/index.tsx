@@ -19,17 +19,16 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   return (
-    <Dropdown
-      className={styles["container"]}
-      controlClassName={styles["control"]}
-      placeholderClassName={styles["placeholder"]}
-      menuClassName={styles["menu"]}
-      arrowClassName={styles["arrow"]}
-      options={lngs}
-      onChange={(lngObj) => handleChange(lngObj)}
-      value={lngs[0]}
-      placeholder="Select an language"
-    />
+    <div className={styles["container"]}>
+      <Dropdown
+        controlClassName={styles["control"]}
+        placeholderClassName={styles["placeholder"]}
+        options={lngs}
+        onChange={(lngObj) => handleChange(lngObj)}
+        value={lngs[0]}
+        placeholder="Select an language"
+      />
+    </div>
   );
 };
 

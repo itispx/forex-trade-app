@@ -3,13 +3,13 @@
 .container {
   position: absolute;
   right: 0;
-
   margin-right: 60px;
+  border-radius: 15px;
+  overflow: hidden;
 }
 
 .control {
   border: none;
-  border-radius: 15px;
 }
 
 .placeholder {
