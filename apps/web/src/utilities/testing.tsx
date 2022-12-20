@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/no-named-as-default-member */
 import React from "react";
 import { render, RenderOptions, act } from "@testing-library/react";
 import user from "@testing-library/user-event";
@@ -6,10 +8,61 @@ import user from "@testing-library/user-event";
 import { QueryClientProvider } from "react-query";
 import queryClient from "./queryClient";
 
+import i18n from "i18next";
+import Backend from "i18next-xhr-backend";
+import LanguageDetector from "i18next-browser-languagedetector";
+import { initReactI18next, I18nextProvider } from "react-i18next";
+
 import { IUserServerResponse, TStatus, IExchange } from "interfaces-common";
 
+import enCommon from "../../public/locales/en-US/common.json";
+import enAuth from "../../public/locales/en-US/auth.json";
+import enToast from "../../public/locales/en-US/toast.json";
+import ptCommon from "../../public/locales/pt-BR/common.json";
+import ptAuth from "../../public/locales/pt-BR/auth.json";
+import ptToast from "../../public/locales/pt-BR/toast.json";
+
+const translations = {
+  "en-US": {
+    common: enCommon,
+    auth: enAuth,
+    toast: enToast,
+  },
+  "pt-BR": {
+    common: ptCommon,
+    auth: ptAuth,
+    toast: ptToast,
+  },
+};
+
+i18n
+  .use(Backend)
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    lng: "en-US",
+    debug: false,
+    resources: translations,
+    interpolation: {
+      escapeValue: false,
+    },
+  });
+
 const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  return (
+    // Component will always load with default language as "en-US" unless specified otherwise
+    <I18nextProvider i18n={i18n}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </I18nextProvider>
+  );
+};
+
+export const renderWithi18next = (
+  Component: React.ReactElement,
+  lng: "en-US" | "pt-BR",
+) => {
+  i18n.changeLanguage(lng);
+  return <I18nextProvider i18n={i18n}>{Component}</I18nextProvider>;
 };
 
 const customRender = (ui: React.ReactElement, options?: RenderOptions) => {
