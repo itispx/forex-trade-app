@@ -21,29 +21,29 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 };
 
 const DashboardPage: NextPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [rates, setRates] = useState<IExchangeConversion[]>([
-    { base: "USD", converted: "GBP", exchangeRate: 0.81586 },
-    { base: "GBP", converted: "USD", exchangeRate: 1.2257 },
+    // { base: "USD", converted: "GBP", exchangeRate: 0.81586 },
+    // { base: "GBP", converted: "USD", exchangeRate: 1.2257 },
   ]);
 
-  // const exchangesListenerHandler = (data: IExchangeConversion[]) => {
-  //   setRates(data);
+  const exchangesListenerHandler = (data: IExchangeConversion[]) => {
+    setRates(data);
 
-  //   if (isLoading) {
-  //     setIsLoading(false);
-  //   }
-  // };
+    if (isLoading) {
+      setIsLoading(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   exchangesListener(exchangesListenerHandler);
+  useEffect(() => {
+    exchangesListener(exchangesListenerHandler);
 
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+    return () => {
+      socket.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles["page-container"]}>

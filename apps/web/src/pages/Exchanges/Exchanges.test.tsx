@@ -1,7 +1,12 @@
 /* eslint-disable testing-library/no-wait-for-side-effects */
 /* eslint-disable testing-library/no-unnecessary-act */
-import { screen, act, fireEvent, waitFor } from "@testing-library/react";
-import { render, userMock, exchangeMock } from "../../utilities/testing";
+import { screen, act } from "@testing-library/react";
+import {
+  render,
+  renderWithi18next,
+  userMock,
+  exchangeMock,
+} from "../../utilities/testing";
 
 import "intersection-observer";
 
@@ -15,8 +20,6 @@ import { IExchange } from "interfaces-common";
 jest.mock("../../queries/exchangesQueries");
 
 const getExchangesQueryMocked = jest.mocked(getExchangesQuery, true);
-
-const mockedExchange = exchangeMock("SUCCESSFUL");
 
 const mockedExchanges: IExchange[] = [
   { ...exchangeMock("SUCCESSFUL"), id: "1" },
@@ -50,7 +53,8 @@ const push = jest.fn();
 
 const useRouterMocked = jest.mocked(useRouter, true);
 
-const columns = ["ID", "Currency", "Base", "Converted", "Status", "Date", "Time"];
+const columns_en_US = ["ID", "Currency", "Base", "Converted", "Status", "Date", "Time"];
+const columns_pt_BR = ["ID", "Moeda", "Base", "Convertido", "Status", "Data", "Horário"];
 
 describe("exchanges page", () => {
   describe("redirect user if not logged in", () => {
@@ -66,7 +70,7 @@ describe("exchanges page", () => {
         render(<ExchangesPage />);
       });
 
-      expect(push).toHaveBeenCalledWith("/");
+      expect(push).toHaveBeenCalledWith("/Dashboard");
     });
 
     it("should allow user to remain in page", async () => {
@@ -103,15 +107,27 @@ describe("exchanges page", () => {
       expect(page).toBeInTheDocument();
     });
 
-    it("should render table header cells", async () => {
+    it("should render table header cells (en-US)", async () => {
       await act(async () => {
-        render(<ExchangesPage />);
+        render(renderWithi18next(<ExchangesPage />, "en-US"));
       });
 
       const headerCells = screen.queryAllByTestId("table-header-cell");
 
-      for (let i = 0; i < columns.length; i++) {
-        expect(headerCells[i].textContent).toBe(columns[i]);
+      for (let i = 0; i < columns_en_US.length; i++) {
+        expect(headerCells[i].textContent).toBe(columns_en_US[i]);
+      }
+    });
+
+    it("should render table header cells (pt-BR)", async () => {
+      await act(async () => {
+        render(renderWithi18next(<ExchangesPage />, "pt-BR"));
+      });
+
+      const headerCells = screen.queryAllByTestId("table-header-cell");
+
+      for (let i = 0; i < columns_pt_BR.length; i++) {
+        expect(headerCells[i].textContent).toBe(columns_pt_BR[i]);
       }
     });
 
@@ -181,18 +197,32 @@ describe("exchanges page", () => {
       expect(rows[31].textContent).toBe(mockedExchanges[4].converted.amount.toFixed(3));
     });
 
-    it("should render status column", async () => {
+    it("should render status column (en-US)", async () => {
       await act(async () => {
-        render(<ExchangesPage />);
+        render(renderWithi18next(<ExchangesPage />, "en-US"));
       });
 
       const rows = screen.queryAllByTestId("table-data-cell");
 
-      expect(rows[4].textContent).toBe(mockedExchanges[0].status);
-      expect(rows[11].textContent).toBe(mockedExchanges[1].status);
-      expect(rows[18].textContent).toBe(mockedExchanges[2].status);
-      expect(rows[25].textContent).toBe(mockedExchanges[3].status);
-      expect(rows[32].textContent).toBe(mockedExchanges[4].status);
+      expect(rows[4].textContent).toBe("SUCCESSFUL");
+      expect(rows[11].textContent).toBe("PENDING");
+      expect(rows[18].textContent).toBe("FAILED");
+      expect(rows[25].textContent).toBe("SUCCESSFUL");
+      expect(rows[32].textContent).toBe("SUCCESSFUL");
+    });
+
+    it("should render status column (pt-BR)", async () => {
+      await act(async () => {
+        render(renderWithi18next(<ExchangesPage />, "pt-BR"));
+      });
+
+      const rows = screen.queryAllByTestId("table-data-cell");
+
+      expect(rows[4].textContent).toBe("SUCESSO");
+      expect(rows[11].textContent).toBe("PENDENTE");
+      expect(rows[18].textContent).toBe("FALHA");
+      expect(rows[25].textContent).toBe("SUCESSO");
+      expect(rows[32].textContent).toBe("SUCESSO");
     });
 
     it("should render date column", async () => {
