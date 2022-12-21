@@ -10,7 +10,7 @@ interface Props {
 const Loading: React.FC<Props> = ({ height = 50 }) => {
   return (
     <div data-testid="loading">
-      <TailSpin height={height} width={height} color="#0b4f6c" />;
+      <TailSpin height={height} width={height} color="#0b4f6c" />
     </div>
   );
 };
