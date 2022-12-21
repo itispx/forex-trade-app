@@ -1,23 +1,18 @@
 /* eslint-disable testing-library/no-wait-for-side-effects */
 /* eslint-disable testing-library/no-unnecessary-act */
 import { screen, act } from "@testing-library/react";
-import {
-  render,
-  renderWithi18next,
-  userMock,
-  exchangeMock,
-} from "../../utilities/testing";
+import { render, renderWithi18next, userMock, exchangeMock } from "../utilities/testing";
 
 import "intersection-observer";
 
-import ExchangesPage from ".";
+import ExchangesPage from "../pages/Exchanges";
 
-import { getExchangesQuery } from "../../queries/exchangesQueries";
-import getUserQueryData from "../../queries/getUserQueryData";
+import { getExchangesQuery } from "../queries/exchangesQueries";
+import getUserQueryData from "../queries/getUserQueryData";
 
 import { IExchange } from "interfaces-common";
 
-jest.mock("../../queries/exchangesQueries");
+jest.mock("../queries/exchangesQueries");
 
 const getExchangesQueryMocked = jest.mocked(getExchangesQuery, true);
 
@@ -39,7 +34,7 @@ getExchangesQueryMocked.mockResolvedValue({
   },
 });
 
-jest.mock("../../queries/getUserQueryData");
+jest.mock("../queries/getUserQueryData");
 
 const getUserQueryDataMocked = jest.mocked(getUserQueryData, true);
 

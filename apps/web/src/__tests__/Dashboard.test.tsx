@@ -1,16 +1,16 @@
 /* eslint-disable testing-library/no-unnecessary-act */
 import { screen, act } from "@testing-library/react";
-import { render } from "../../utilities/testing";
+import { render } from "../utilities/testing";
 
-import DashboardPage from ".";
+import DashboardPage from "../pages/Dashboard";
 
 import "setimmediate";
 
-import exchangesListener from "../../queries/websockets/exchangesListener";
+import exchangesListener from "../queries/websockets/exchangesListener";
 
 import { IExchangeConversion } from "interfaces-common";
 
-jest.mock("../../queries/websockets/exchangesListener");
+jest.mock("../queries/websockets/exchangesListener");
 
 const exchangesListenerMocked = jest.mocked(exchangesListener, true);
 
