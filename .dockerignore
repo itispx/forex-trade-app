@@ -4,3 +4,4 @@ coverage
 Dockerfile
 .dockerignore
 .eslintrc.js
+.prettierrc

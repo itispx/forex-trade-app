@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
+    "build": "npm run db:push && webpack --env env=dev",
     "start": "npm run bundle:dev",
     "bundle:dev": "webpack --env env=dev --watch",
     "bundle:prod": "webpack --env env=prod",
     "db:migrate": "dotenv -e .env.dev prisma migrate dev",
     "db:generate": "prisma generate",
-    "db:push": "dotenv -e .env.dev prisma db push --skip-generate",
+    "db:push": "prisma db push",
     "test": "jest",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
