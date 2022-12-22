@@ -1,6 +1,6 @@
 import { IExchange } from "interfaces-common";
 
-import { Exchange } from "@prisma/client";
+import { Exchange } from "../../dist";
 
 export const makeExchangeObj = (exchange: Exchange): IExchange => {
   const { baseCurrency, baseAmount, convertedCurrency, convertedAmount, ...remExchange } =
