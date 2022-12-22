@@ -8,7 +8,7 @@ const server = http.createServer(app);
 import { consumeExchangesMessageChannel } from "./src/messages/messageChannel";
 
 server.listen(port, async () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running at port: ${port}`);
 
   // Consume messages from RabbitMQ
   consumeExchangesMessageChannel();
