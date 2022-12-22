@@ -14,7 +14,7 @@ RUN npm install
 # Copy app source
 COPY . .
  
-EXPOSE 8080
+EXPOSE 3001
 
 WORKDIR /usr/src/app/apps/server/
 
