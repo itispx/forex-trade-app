@@ -10,8 +10,7 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      api:
-        condition: service_healthy
+      - api
     networks:
       - app_network
 
@@ -24,10 +23,8 @@ services:
     ports:
       - 3001:3001
     depends_on:
-      rabbitmq:
-        condition: service_healthy
-      db:
-        condition: service_healthy
+      - rabbitmq
+      - db
     networks:
       - app_network
     healthcheck:
@@ -54,7 +51,7 @@ services:
   rabbitmq:
     hostname: "myrabbit"
     container_name: rabbitmq
-    restart: always
+    restart: on-failure
     build: ./apps/rabbitmq
     ports:
       - 5672:5672
