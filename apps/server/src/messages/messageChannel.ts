@@ -15,6 +15,7 @@ export const createExchangesMessageChannel = async (): Promise<Channel> => {
     console.log("Connected to rabbitMQ");
     return channel;
   } catch (error) {
+    console.log("Error connecting to rabbitMQ:", error);
     throw new Error("Error connecting to rabbitMQ");
   }
 };
@@ -30,13 +31,11 @@ export const consumeExchangesMessageChannel = async () => {
       setTimeout(async () => {
         // Process exchange
         const exchangeObj = JSON.parse(exchange.content.toString());
-        console.log("Exchanged received:", exchangeObj.id);
 
         await processExchangeAction(exchangeObj);
 
         // Tell RabbitMQ message was received
         connection.ack(exchange);
-        console.log("Acked");
       }, 10000);
     }
   });

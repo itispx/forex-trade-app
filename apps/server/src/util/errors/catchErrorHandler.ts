@@ -3,8 +3,6 @@ import { Prisma } from "../../../dist";
 import APIError from "./APIError";
 
 const catchErrorHandler = async (error: Error) => {
-  console.log("Error:", error);
-
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     throw new APIError(error.code, error.message);
   }

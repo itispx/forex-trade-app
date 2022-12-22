@@ -56,8 +56,6 @@ export const addExchangeQueueAction = async (
     const dataJson = JSON.stringify(data);
     messageChannel.sendToQueue("exchanges", Buffer.from(dataJson));
 
-    console.log("Exchange added to queue");
-
     return { status, success: { doc: data } };
   }
 
@@ -94,8 +92,6 @@ export const processExchangeAction = async (
 
     // Update exchange status to "SUCCESSFUL"
     const { status, data } = await updateExchangeStatusQuery(exchange.id, "SUCCESSFUL");
-
-    console.log("Exchange processed successfully");
 
     return { status, success: { doc: data } };
   } catch (error) {
