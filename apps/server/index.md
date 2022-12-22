@@ -6,4 +6,4 @@ This file also imports the `consumeExchangesMessageChannel` calls it after the s
 
 This file then creates a Socket.io server using the `Server` class from the `socket.io` module and attaches it to the HTTP server. It also sets the `cors` option to allow connections from any origin.
 
-Finally, the code creates a Socket.io namespace called `/v1/exchanges` and sets up a connection event listener. When a client connects to this namespace, the `getRealTimeExchangeValuesAction` function is called and passed the `exchangeIo` object, which is the Socket.io namespace. This function is expected to handle the logic for getting real-time exchange values and emitting them to connected clients.
+Finally, it creates a Socket.io namespace called `/v1/exchanges` and sets up a connection event listener. When a client connects to this namespace, the `getRealTimeExchangeValuesAction` function is called and passed the `exchangeIo` object, which is the Socket.io namespace. This function is expected to handle the logic for getting real-time exchange values and emitting them to connected clients.

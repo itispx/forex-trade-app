@@ -1,4 +1,4 @@
-The code above defines a middleware function for checking the authenticity of an access token.
+This file defines a middleware function for checking the authenticity of an access token.
 
 The middleware function is of the `RequestHandler` type, which is a type provided by the `express` module for request handling middlewares. It takes four arguments: the request object, the response object, the next middleware function in the chain, and a type parameter for the request data.
 

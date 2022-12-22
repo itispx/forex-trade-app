@@ -1,4 +1,4 @@
-The code above defines a middleware function for setting up Cross-Origin Resource Sharing (CORS) headers in the server's responses.
+This file defines a middleware function for setting up Cross-Origin Resource Sharing (CORS) headers in the server's responses.
 
 The middleware function is of the `RequestHandler` type, which is a type provided by the `express` module for request handling middlewares. It takes three arguments: the request object, the response object, and the next middleware function in the chain.
 

@@ -1,4 +1,4 @@
-The code above defines an error handling middleware function for handling errors thrown by the Express app.
+This file defines an error handling middleware function for handling errors thrown by the Express app.
 
 The middleware function is of the `ErrorRequestHandler` type, which is a type provided by the `express` module for error handling middlewares. It takes four arguments: an error object, the request object, the response object, and the next middleware function in the chain.
 
