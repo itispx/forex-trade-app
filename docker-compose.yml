@@ -9,23 +9,25 @@ services:
       dockerfile: ./apps/web/Dockerfile
     ports:
       - 3000:3000
+    depends_on:
+      - api
     networks:
       - app_network
-  #api:
-  #  container_name: api
-  #  restart: always
-  #  build:
-  #    context: .
-  #    dockerfile: ./apps/server/Dockerfile
-  #  ports:
-  #    - 3001:3001
-  #  depends_on:
-  #    rabbitmq:
-  #      condition: service_healthy
-  #    db:
-  #      condition: service_healthy
-  #  networks:
-  #    - app_network
+  api:
+    container_name: api
+    restart: always
+    build:
+      context: .
+      dockerfile: ./apps/server/Dockerfile
+    ports:
+      - 3001:3001
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    networks:
+      - app_network
   db:
     container_name: db
     restart: always
