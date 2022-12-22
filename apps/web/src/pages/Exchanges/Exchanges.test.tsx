@@ -1,14 +1,19 @@
 /* eslint-disable testing-library/no-wait-for-side-effects */
 /* eslint-disable testing-library/no-unnecessary-act */
 import { screen, act } from "@testing-library/react";
-import { render, renderWithi18next, userMock, exchangeMock } from "../utilities/testing";
+import {
+  render,
+  renderWithi18next,
+  userMock,
+  exchangeMock,
+} from "../../utilities/testing";
 
 import "intersection-observer";
 
-import ExchangesPage from "../pages/Exchanges/index.page";
+import ExchangesPage from "./index.page";
 
-import { getExchangesQuery } from "../queries/exchangesQueries";
-import getUserQueryData from "../queries/getUserQueryData";
+import { getExchangesQuery } from "../../queries/exchangesQueries";
+import getUserQueryData from "../../queries/getUserQueryData";
 
 import { IExchange } from "interfaces-common";
 

@@ -1,12 +1,12 @@
 /* eslint-disable testing-library/no-unnecessary-act */
 import { screen, act } from "@testing-library/react";
-import { render } from "../utilities/testing";
+import { render } from "../../utilities/testing";
 
-import DashboardPage from "../pages/Dashboard/index.page";
+import DashboardPage from "./index.page";
 
 import "setimmediate";
 
-import exchangesListener from "../queries/websockets/exchangesListener";
+import exchangesListener from "../../queries/websockets/exchangesListener";
 
 import { IExchangeConversion } from "interfaces-common";
 
