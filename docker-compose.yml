@@ -1,28 +1,46 @@
 version: "3.8"
 
 services:
-  #nextjs-web:
-  express-api:
-    container_name: express-api
+  web:
+    container_name: web
     restart: always
     build:
       context: .
-      dockerfile: ./apps/server/Dockerfile
+      dockerfile: ./apps/web/Dockerfile
     ports:
-      - 3001:3001
-    depends_on:
-      - rabbitmq
-      - postgresql-db
+      - 3000:3000
     networks:
       - app_network
-  postgresql-db:
-    container_name: postgresql-db
+  #api:
+  #  container_name: api
+  #  restart: always
+  #  build:
+  #    context: .
+  #    dockerfile: ./apps/server/Dockerfile
+  #  ports:
+  #    - 3001:3001
+  #  depends_on:
+  #    rabbitmq:
+  #      condition: service_healthy
+  #    db:
+  #      condition: service_healthy
+  #  networks:
+  #    - app_network
+  db:
+    container_name: db
     restart: always
     build: ./apps/postgresql
     ports:
       - 5432:5432
     networks:
       - app_network
+    volumes:
+      - db:/app/db/postgresql/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5432"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   rabbitmq:
     container_name: rabbitmq
     restart: always
@@ -33,8 +51,9 @@ services:
     networks:
       - app_network
 
-# Define a network, which allows containers to communicate
-# with each other, by using their container name as a hostname
+volumes:
+  db:
 networks:
   app_network:
-    external: true
+    external: false
+    driver: bridge

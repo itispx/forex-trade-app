@@ -5,3 +5,4 @@ Dockerfile
 .dockerignore
 .eslintrc.js
 .prettierrc
+.next
