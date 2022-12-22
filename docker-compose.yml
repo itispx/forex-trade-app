@@ -14,6 +14,7 @@ services:
         condition: service_healthy
     networks:
       - app_network
+
   api:
     container_name: api
     restart: always
@@ -34,6 +35,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+
   db:
     container_name: db
     restart: always
@@ -48,6 +50,7 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
+
   rabbitmq:
     hostname: "myrabbit"
     container_name: rabbitmq
