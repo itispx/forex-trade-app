@@ -65,45 +65,51 @@ export const addExchangeQueueAction = async (
 export const processExchangeAction = async (
   exchange: IExchange,
 ): Promise<IQuery & { success: { doc: IExchange } }> => {
-  try {
-    // Check if user has enough credit to perform exchange
-    const { success } = await getUserAction(exchange.userID);
+  let retries = 5;
+  while (retries) {
+    try {
+      // Check if user has enough credit to perform exchange
+      const { success } = await getUserAction(exchange.userID);
 
-    if (success.doc && success.doc.wallet) {
-      // User credit is insufficient to perform exchange
-      if (success.doc.wallet[exchange.base.currency] < exchange.base.amount) {
-        throw new APIError(403, "Insufficient money");
+      if (success.doc && success.doc.wallet) {
+        // User credit is insufficient to perform exchange
+        if (success.doc.wallet[exchange.base.currency] < exchange.base.amount) {
+          throw new APIError(403, "Insufficient money");
+        }
       }
+
+      // Remove balance from user wallet
+      await removeBalanceAction(
+        exchange.userID,
+        exchange.base.currency,
+        exchange.base.amount,
+      );
+
+      // Add balance from user wallet
+      await addBalanceAction(
+        exchange.userID,
+        exchange.converted.currency,
+        exchange.converted.amount,
+      );
+
+      // Update exchange status to "SUCCESSFUL"
+      const { status, data } = await updateExchangeStatusQuery(exchange.id, "SUCCESSFUL");
+
+      return { status, success: { doc: data } };
+    } catch (error) {
+      //  If error is thrown update exchange status to "FAILED"
+      await updateExchangeStatusQuery(exchange.id, "FAILED");
+
+      if (error instanceof APIError) {
+        throw new APIError(error.code, error.message);
+      }
+
+      retries -= 1;
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait for 5 seconds before retrying
     }
-
-    // Remove balance from user wallet
-    await removeBalanceAction(
-      exchange.userID,
-      exchange.base.currency,
-      exchange.base.amount,
-    );
-
-    // Add balance from user wallet
-    await addBalanceAction(
-      exchange.userID,
-      exchange.converted.currency,
-      exchange.converted.amount,
-    );
-
-    // Update exchange status to "SUCCESSFUL"
-    const { status, data } = await updateExchangeStatusQuery(exchange.id, "SUCCESSFUL");
-
-    return { status, success: { doc: data } };
-  } catch (error) {
-    //  If error is thrown update exchange status to "FAILED"
-    await updateExchangeStatusQuery(exchange.id, "FAILED");
-
-    if (error instanceof APIError) {
-      throw new APIError(error.code, error.message);
-    }
-
-    throw new Error("Something went wrong processing the exchange");
   }
+
+  throw new Error("Something went wrong processing the exchange");
 };
 
 export const getExchangesAction = async (
