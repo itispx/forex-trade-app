@@ -1,43 +1,28 @@
-FROM node:16.16-alpine AS builder
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
-RUN apk update
-# Set working directory
-WORKDIR /app
-RUN npm install -g turbo
-COPY . .
-RUN turbo prune --scope=server --docker
-
-FROM node:16.16-alpine AS installer
-RUN apk add --no-cache libc6-compat
-RUN apk update
-WORKDIR /app
+FROM node:16
+ 
+WORKDIR /usr/src/app
+ 
+# Copy root package.json and lockfile
+COPY package.json ./
+COPY package-lock.json ./
+ 
+# Copy the server package.json
+COPY apps/server/package.json ./apps/server/package.json
 
 # TODO Load this
 ENV NODE_ENV=dev
 ENV JWT_KEY=secret
 ENV FOREX_API_KEY=ae3f7c4ba5-ece928b9b4-rn8liw
-ENV DATABASE_URL=postgresql://postgres:postgres@postgresql-db:5432/forex_trade
-ENV AMQP_SERVER=amqp://guest:guest@localhost:5672
+ENV DATABASE_URL=postgresql://postgres:postgres@db:5432/forex_trade?connect_timeout=300
+ENV AMQP_SERVER=amqp://guest:guest@rabbitmq:5672
 
-# First install dependencies (as they change less often)
-COPY .gitignore .gitignore
-COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/package-lock.json ./package-lock.json
 RUN npm install
+ 
+# Copy app source
+COPY . .
+ 
+EXPOSE 8080
 
-# Build the project and its dependencies
-COPY --from=builder /app/out/full/ .
-COPY turbo.json turbo.json
-RUN npx turbo run build --filter=server...
+WORKDIR /usr/src/app/apps/server/
 
-FROM node:16.16-alpine AS runner
-WORKDIR /app
-
-# Don't run production as root
-RUN addgroup --system --gid 1001 expressjs
-RUN adduser --system --uid 1001 expressjs
-USER expressjs
-COPY --from=installer /app .
-
-CMD node apps/server/dist/bundle.js
+CMD [ "npm", "start" ]
