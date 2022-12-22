@@ -42,9 +42,7 @@ describe("exchanges queries", () => {
   describe("get exchanges rates", () => {
     beforeAll(() => {
       axiosMocked.get.mockImplementation(async (url) => {
-        if (
-          url === `https://api.fastforex.io/fetch-one?from=USD&to=GBP&api_key=undefined`
-        ) {
+        if (url.substring(0, 43) == `https://api.fastforex.io/fetch-one?from=USD`) {
           return {
             data: {
               base: "USD",
