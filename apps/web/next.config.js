@@ -8,6 +8,7 @@ const nextConfig = {
     return [{ source: "/", destination: "/Dashboard", permanent: true }];
   },
   i18n,
+  pageExtensions: ["page.tsx"],
 };
 
 module.exports = nextConfig;

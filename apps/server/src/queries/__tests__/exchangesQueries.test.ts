@@ -11,7 +11,7 @@ import { ICurrencyInfo } from "interfaces-common";
 
 import axios from "axios";
 
-import { Exchange } from "@prisma/client";
+import { Exchange } from "../../../dist";
 
 jest.mock("axios");
 

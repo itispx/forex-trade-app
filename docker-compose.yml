@@ -1,0 +1,73 @@
+version: "3.8"
+
+services:
+  web:
+    container_name: web
+    restart: always
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - app_network
+
+  api:
+    container_name: api
+    restart: always
+    build:
+      context: .
+      dockerfile: ./apps/server/Dockerfile
+    ports:
+      - 3001:3001
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3001/v1/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  db:
+    container_name: db
+    restart: always
+    build: ./apps/postgresql
+    ports:
+      - 5432:5432
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+
+  rabbitmq:
+    hostname: "myrabbit"
+    container_name: rabbitmq
+    restart: always
+    build: ./apps/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:15672"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  app_network:
+    external: false
+    driver: bridge

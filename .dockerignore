@@ -1,0 +1,8 @@
+node_modules
+dist
+coverage
+Dockerfile
+.dockerignore
+.eslintrc.js
+.prettierrc
+.next

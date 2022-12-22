@@ -4,10 +4,15 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "npm run bundle:dev",
-    "bundle:dev": "webpack --env env=dev --watch",
+    "start": "npm run build && node dist/bundle.js",
+    "start:dev": "npm run bundle:dev",
+    "build": "npm run db:migrate && npm run bundle:dev",
+    "bundle:dev": "webpack --env env=dev",
+    "bundle:dev:watch": "webpack --env env=dev --watch",
     "bundle:prod": "webpack --env env=prod",
-    "migrate": "dotenv -e .env.dev prisma migrate dev",
+    "db:migrate": "prisma migrate dev init",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
     "test": "jest",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
@@ -21,11 +26,11 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
-    "prisma": "^4.7.1",
+    "@prisma/client": "^4.7.1",
     "socket.io": "^4.5.4"
   },
   "devDependencies": {
-    "@prisma/client": "^4.7.1",
+    "prisma": "^4.7.1",
     "@types/amqplib": "^0.10.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/express": "^4.17.14",
