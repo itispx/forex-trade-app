@@ -1,4 +1,4 @@
-The code provided is a Next.js page component that displays a list of exchanges made by a user.
+This file is a Next.js page component that displays a list of exchanges made by a user.
 
 ## Imported variables and functions:
 

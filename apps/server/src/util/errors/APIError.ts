@@ -50,9 +50,10 @@ function isOk(code: number | string) {
 }
 
 function checkCode(code: number | string) {
-  switch (code) {
-    default:
-      return code;
+  if (typeof code === "number") {
+    return code;
+  } else {
+    return 500;
   }
 }
 
