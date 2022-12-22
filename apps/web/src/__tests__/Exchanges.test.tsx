@@ -5,7 +5,7 @@ import { render, renderWithi18next, userMock, exchangeMock } from "../utilities/
 
 import "intersection-observer";
 
-import ExchangesPage from "../pages/Exchanges";
+import ExchangesPage from "../pages/Exchanges/index.page";
 
 import { getExchangesQuery } from "../queries/exchangesQueries";
 import getUserQueryData from "../queries/getUserQueryData";

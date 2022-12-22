@@ -2,7 +2,7 @@
 import { screen, act } from "@testing-library/react";
 import { render } from "../utilities/testing";
 
-import DashboardPage from "../pages/Dashboard";
+import DashboardPage from "../pages/Dashboard/index.page";
 
 import "setimmediate";
 

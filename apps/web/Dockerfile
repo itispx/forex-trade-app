@@ -1,6 +1,6 @@
 FROM node:16
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy root package.json and lockfile
 COPY package.json ./
@@ -16,6 +16,8 @@ COPY . .
 
 EXPOSE 3000
 
-WORKDIR /usr/src/app/apps/web/
+WORKDIR /app/apps/web/
+
+RUN npm run build
 
 CMD [ "npm", "start" ]
