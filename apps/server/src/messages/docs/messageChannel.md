@@ -1,0 +1,5 @@
+This file is a set of functions for creating and consuming a message channel in RabbitMQ. It exports two functions: `createExchangesMessageChannel` and `consumeExchangesMessageChannel`.
+
+The `createExchangesMessageChannel` function connects to a RabbitMQ server specified in the `AMQP_SERVER` environment variable, creates a channel and declares a queue with the name "exchanges". If successful, it returns the channel object. If an error occurs while connecting to the server, it throws an error with the message "Error connecting to rabbitMQ".
+
+The `consumeExchangesMessageChannel` function creates a connection to the RabbitMQ server using the `createExchangesMessageChannel` function. It then sets the connection's prefetch value to 1, meaning it will only process one message at a time. It then consumes messages from the "exchanges" queue and processes them using the `processExchangeAction` function. After the message has been processed, it sends an acknowledgement to RabbitMQ to indicate that the message was received.
