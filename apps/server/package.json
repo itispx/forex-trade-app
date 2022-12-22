@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "build": "npm run db:migrate && npm run bundle:dev",
     "start": "npm run build && node dist/bundle.js",
     "start:dev": "npm run bundle:dev",
+    "build": "npm run db:migrate && npm run bundle:dev",
     "bundle:dev": "webpack --env env=dev",
     "bundle:dev:watch": "webpack --env env=dev --watch",
     "bundle:prod": "webpack --env env=prod",
