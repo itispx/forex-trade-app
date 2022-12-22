@@ -17,7 +17,7 @@ import getUserQueryData from "../../queries/getUserQueryData";
 
 import { IExchange } from "interfaces-common";
 
-jest.mock("../queries/exchangesQueries");
+jest.mock("../../queries/exchangesQueries");
 
 const getExchangesQueryMocked = jest.mocked(getExchangesQuery, true);
 
@@ -39,7 +39,7 @@ getExchangesQueryMocked.mockResolvedValue({
   },
 });
 
-jest.mock("../queries/getUserQueryData");
+jest.mock("../../queries/getUserQueryData");
 
 const getUserQueryDataMocked = jest.mocked(getUserQueryData, true);
 

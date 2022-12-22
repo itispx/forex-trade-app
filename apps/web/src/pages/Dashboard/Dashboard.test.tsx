@@ -10,7 +10,7 @@ import exchangesListener from "../../queries/websockets/exchangesListener";
 
 import { IExchangeConversion } from "interfaces-common";
 
-jest.mock("../queries/websockets/exchangesListener");
+jest.mock("../../queries/websockets/exchangesListener");
 
 const exchangesListenerMocked = jest.mocked(exchangesListener, true);
 
