@@ -1,5 +1,7 @@
 # Forex Trading Application
 
+Made during WestPoint Junior Academy Program
+
 <table align="center">
 
 <tr align="center">
