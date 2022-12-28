@@ -28,14 +28,32 @@ Made during WestPoint Junior Academy Program
 <td>Express</td>
 <td>Webpack</td>
 <td>MongoDB</td>
+
 </tr>
 
 <tr align="center">
+
 <td height="50px"><img alt="ESLint" width="32px" src="https://raw.githubusercontent.com/itispx/assets/c052cefbdd66dd1d2bac93ce601dd06e20c91764/svgs/eslint.svg"/>
 <td height="50px"><img alt="NodeJS" width="32px" src="https://raw.githubusercontent.com/itispx/assets/128f0eab23fb9497474f51fd3cac40664e8368db/svgs/nodejs.svg"/>
 <td height="50px"><img alt="Express" width="32px" src="https://raw.githubusercontent.com/itispx/assets/128f0eab23fb9497474f51fd3cac40664e8368db/svgs/express.svg"/>
 <td height="50px"><img alt="Webpack" width="32px" src="https://raw.githubusercontent.com/itispx/assets/128f0eab23fb9497474f51fd3cac40664e8368db/svgs/webpack.svg"/>
 <td height="50px"><img alt="MongoDB" width="32px" src="https://raw.githubusercontent.com/itispx/assets/128f0eab23fb9497474f51fd3cac40664e8368db/svgs/mongodb.svg"/>
+
+</tr>
+
+<tr align="center">
+
+<td>PostgreSQL</td>
+<td>Prisma</td>
+<td>Docker</td>
+
+</tr>
+
+<tr align="center">
+
+<td height="50px"><img alt="PostgreSQL" width="32px" src="https://raw.githubusercontent.com/itispx/assets/a566a8f36835a89004331ea6882673de17b8c62e/svgs/postgresql.svg"/>
+<td height="50px"><img alt="Prisma" width="32px" src="https://raw.githubusercontent.com/itispx/assets/a566a8f36835a89004331ea6882673de17b8c62e/svgs/prisma.svg"/>
+<td height="50px"><img alt="Docker" width="32px" src="https://raw.githubusercontent.com/itispx/assets/a566a8f36835a89004331ea6882673de17b8c62e/svgs/docker.svg"/>
 
 </tr>
 
